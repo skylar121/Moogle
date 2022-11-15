@@ -1,28 +1,19 @@
 <template>
-  <div>
-    <div class="" 
-      style="width: 18rem;"
-      @mouseenter="showModal"
-      @mouseleave="isHovered=false"
-    >
-      <img 
-        :src="'https://image.tmdb.org/t/p/w300'+movie.poster_path" class="card-img-top" 
-        alt="" height="400px"
-        >
-      <div class="">
-        <h5 class="">{{ movie.title }}</h5>
-        <!-- <p class="">
-          {{movie.overview.substr(0, 100)}}...
-        </p> -->
-      </div>
+  <div class="div" @mouseenter="showModal" @mouseleave="isHovered=false">
+    <img 
+      :src="'https://image.tmdb.org/t/p/original'+movie.poster_path" class="card-img-top" 
+      alt=""
+      >
+    <div class="">
+      <h5 class="">{{ movie.title }}</h5>
+      <!-- <p class="">
+        {{movie.overview.substr(0, 100)}}...
+      </p> -->
     </div>
-    
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
-
 export default {
   name: 'MovieCard',
   props: {
@@ -46,10 +37,16 @@ export default {
 </script>
 
 <style>
-.card {
-  color: black;
+.div {
+  width: 300px;
 }
 
+img {
+	width: 100%;
+	pointer-events: none;
+	z-index: 999;
+	cursor: pointer;
+}
 .modal {
   position: fixed;
   top: 50%;

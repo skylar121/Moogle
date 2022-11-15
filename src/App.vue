@@ -25,16 +25,22 @@ export default ({
 
 
 <style>
-*{padding:0;margin:0; box-sizing: border-box;}
-ul,ol{list-style:none}
-a{text-decoration:none;color:#fff;font-size:15px}
-
+* { padding:0;margin:0; box-sizing: border-box;}
 
 body {
-  position: relative;
-  color: #fff;
+	padding: 0;
+	margin: 0;
+	height: 600vh;
+	width: 100vw;
+	font-family: "Nunito", sans-serif;
+  /* position: relative; */
   background-color: #191817;
+	/* background-color: #e34f37; */
+	color: white;
 }
+
+ul,ol{list-style:none}
+a{text-decoration:none;color:#fff;font-size:15px}
 
 #app {
   font-family: 'Poppins', Avenir, Helvetica, Arial, sans-serif;
