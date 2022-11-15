@@ -1,5 +1,5 @@
 <template>
-  <div class="div" @mouseenter="showModal" @mouseleave="isHovered=false">
+  <slide class="div" @mouseenter="showModal" @mouseleave="isHovered=false">
     <img 
       :src="'https://image.tmdb.org/t/p/original'+movie.poster_path" class="card-img-top" 
       alt=""
@@ -10,12 +10,16 @@
         {{movie.overview.substr(0, 100)}}...
       </p> -->
     </div>
-  </div>
+  </slide>
 </template>
 
 <script>
+import { Slide } from 'vue-carousel-3d'
 export default {
   name: 'MovieCard',
+  components: {
+    Slide,
+  },
   props: {
     movie: Object,
   },

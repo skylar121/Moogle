@@ -25,17 +25,13 @@ export default ({
 
 
 <style>
-* { padding:0;margin:0; box-sizing: border-box;}
+* { padding:0;margin:0; box-sizing: border-box; text-decoration: none;}
 
 body {
 	padding: 0;
 	margin: 0;
-	height: 600vh;
-	width: 100vw;
-	font-family: "Nunito", sans-serif;
-  /* position: relative; */
+  position: relative;
   background-color: #191817;
-	/* background-color: #e34f37; */
 	color: white;
 }
 
