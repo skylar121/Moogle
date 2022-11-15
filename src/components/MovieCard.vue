@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card" 
+    <div class="" 
       style="width: 18rem;"
       @mouseenter="showModal"
       @mouseleave="isHovered=false"
@@ -9,11 +9,11 @@
         :src="'https://image.tmdb.org/t/p/w300'+movie.poster_path" class="card-img-top" 
         alt="" height="400px"
         >
-      <div class="card-body">
-        <h5 class="card-title">{{ movie.title }}</h5>
-        <p class="card-text">
+      <div class="">
+        <h5 class="">{{ movie.title }}</h5>
+        <!-- <p class="">
           {{movie.overview.substr(0, 100)}}...
-        </p>
+        </p> -->
       </div>
     </div>
     
@@ -39,7 +39,7 @@ export default {
       this.videoUrl = `https://www.youtube.com/results?search_query=${this.movie.title} 공식 예고편`
       this.isHovered = true
       this.$emit('show-modal', this.isHovered, this.videoUrl)
-      console.log('MovieCard에서 감지')
+      // console.log('MovieCard에서 감지')
     },
   },
 }

@@ -7,13 +7,13 @@
     >
       <p>{{videoUrl}}</p>
     </div>
-    <div class="container">
-      <div class="row row-cols-3">
+    <div class="">
+      <div class="">
         <MovieCard
           v-for="movie in movieData"
           :key="movie.id"
           :movie="movie"
-          class="col m-3"
+          class=""
           @show-modal="showModal"
           />
       </div>
