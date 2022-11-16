@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MovieView from '@/views/MovieView'
+import MainView from '@/views/MainView'
 import SignUpView from '@/views/SignUpView'
 import LogInView from '@/views/LogInView'
 
@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    component: MovieView
+    component: MainView
   },
   {
     path: '/signup',

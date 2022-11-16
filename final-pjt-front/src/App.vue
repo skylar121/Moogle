@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <nav class="nav">
-      <router-link :to="{ name: 'index' }">Movie</router-link> |
       <router-link :to="{ name: 'SignUpView' }">회원가입</router-link> | 
       <router-link :to="{ name: 'LogInView' }">로그인</router-link>
     </nav>
@@ -42,7 +41,7 @@ a{text-decoration:none;color:#fff;font-size:15px}
   font-family: 'Poppins', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
 }
 
 nav {

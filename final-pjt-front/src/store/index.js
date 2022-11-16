@@ -13,7 +13,7 @@ export default new Vuex.Store({
     createPersistedState()
   ],
   state: {
-    movieData: null,
+    recommendMovies: null,
     token: null,
     isLogin: false,
   },
@@ -24,7 +24,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SAVE_MOVIE_DATA(state, payload) {
-      state.movieData = payload
+      state.recommendMovies = payload
     },
     // 회원가입 && 로그인
     SAVE_TOKEN(state, token) {
