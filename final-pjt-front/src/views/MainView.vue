@@ -5,66 +5,71 @@
       @mouseleave="isHovered = false">
       <p>{{ videoUrl }}</p>
     </div>
-    <!-- 1. 추천 인트로 -->
-    <div class="row-title">
-      {{ username }} 님을 위한 추천
-    </div>
-    <carousel-3d 
-      v-if="recommendMovies" 
-      :controls-visible="true" 
-      :inverse-scaling="200" 
-      :disable3d="false" 
-      :space="400" :display="9" 
-      :height="600" 
-      @mouseenter="showModal" 
-      autoplay 
-    >
-      <slide v-for="(movie, idx) in recommendMovies" :key="movie.id" :index="idx">
-        <!-- <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }"> -->
-        <template slot-scope="{ index }" >
-          <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-            <div class="movie-item" :data-index="index" @show-modal="showModal">
-              <!-- <img  :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="'https://image.tmdb.org/t/p/original'+movie.poster_path" > -->
-              <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" :height="500">
-              <div class="movie-swipe-big">
-                <div class="movie-title-big">{{ movie.title }} </div>
-                <div class="movie-rating-big">예상별점 ⭐{{ movie.vote_average }}</div>
-              </div>
-            </div>
-          </router-link>
-        </template>
-      </slide>
-    </carousel-3d>
 
-    <!-- 2. 상영중인 영화 -->
-    <div class="row-title">
-      현재 상영중인 영화
-    </div>
-    <carousel-3d 
-      v-if="nowPlayingMovies" 
-      :controls-visible="true" 
-      :inverse-scaling="200" 
-      :disable3d="true" 
-      :space="360" :display="9" 
-      :height="250" 
-      @mouseenter="showModal" 
-    >
-      <slide v-for="(movie, idx) in nowPlayingMovies" :key="movie.id" :index="idx">
-        <template slot-scope="{ index }" >
-          <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-            <div class="movie-item" :data-index="index" @show-modal="showModal">
-              <img :src="'https://image.tmdb.org/t/p/original' + movie.backdrop_path" :height="200">
-              <div class="movie-swipe-small">
-                <span class="movie-title-small">{{ movie.title }}</span>
-                <span>⭐{{ movie.vote_average }}</span>
+    <section class="display">
+      <!-- 1. 추천 인트로 -->
+      <div class="row-title">
+        {{ username }} 님을 위한 추천
+      </div>
+      <carousel-3d
+        v-if="recommendMovies"
+        :controls-visible="true"
+        :inverse-scaling="200"
+        :disable3d="false"
+        :space="400" :display="9"
+        :height="600"
+        @mouseenter="showModal"
+        autoplay
+      >
+        <slide v-for="(movie, idx) in recommendMovies" :key="movie.id" :index="idx">
+          <!-- <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }"> -->
+          <template slot-scope="{ index }" >
+            <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+              <div class="movie-item" :data-index="index" @show-modal="showModal">
+                <!-- <img  :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="'https://image.tmdb.org/t/p/original'+movie.poster_path" > -->
+                <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" :height="500">
+                <div class="movie-swipe-big">
+                  <div class="movie-title-big">{{ movie.title }} </div>
+                  <div class="movie-rating-big">예상별점 ⭐{{ movie.vote_average }}</div>
+                </div>
               </div>
-            </div>
-          </router-link>
-        </template>
-      </slide>
-    </carousel-3d>
+            </router-link>
+          </template>
+        </slide>
+      </carousel-3d>
+    </section>
 
-    <!-- 3. 최신 영화 -->
+    
+    <section class="display">
+      <!-- 2. 상영중인 영화 -->
+      <div class="row-title">
+        현재 상영중인 영화
+      </div>
+      <carousel-3d
+        v-if="nowPlayingMovies"
+        :controls-visible="true"
+        :inverse-scaling="200"
+        :disable3d="true"
+        :space="360" :display="9"
+        :height="200"
+        @mouseenter="showModal"
+      >
+        <slide v-for="(movie, idx) in nowPlayingMovies" :key="movie.id" :index="idx">
+          <template slot-scope="{ index }" >
+            <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+              <div class="movie-item" :data-index="index" @show-modal="showModal">
+                <img :src="'https://image.tmdb.org/t/p/original' + movie.backdrop_path" :height="180">
+                <div class="movie-swipe-small">
+                  <span class="movie-title-small">{{ movie.title }}</span>
+                  <span>⭐{{ movie.vote_average }}</span>
+                </div>
+              </div>
+            </router-link>
+          </template>
+        </slide>
+      </carousel-3d>
+      <!-- 3. 최신 영화 -->
+    </section>
     
 
   </div>
@@ -151,6 +156,9 @@ export default {
       -webkit-transition: all 0.5s;
       -o-transition: all 0.5s;
       text-decoration: none;
+      :hover{
+        color: $primary !important;
+      }
     }
     
     .movie-swipe-big {
@@ -161,9 +169,11 @@ export default {
       transform: translate(-50%, -50%);
       text-align: center;
       text-decoration: none;
+      :hover{
+        color: $primary !important;
+      }
     }
-    .movie-item:hover{
-    }
+    
 
     .movie-swipe-small {
       position: absolute;
@@ -200,7 +210,12 @@ export default {
 .row-title {
   font-size: 1.5rem;
   font-weight: 800;
-  margin-top: 1em;
+}
+
+.display {
+  padding: 1em;
+  /* height: 800px; */
+  /* background-image: url('../assets/display.png') ; */
 }
 
 </style>

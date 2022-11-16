@@ -1,0 +1,18 @@
+$borderRadius: 10px;
+$primary: #914fce;
+$body-bg: #21201E;
+$success: #914fce;
+
+$theme-colors: (
+  "primary": $primary,
+  // "secondary":  $secondary,
+  "success": $success,
+  // "info": $info,
+  // "warning": $warning,
+  // "danger": $danger,
+  // "light": $light,
+  // "dark": $dark,
+  "body-bg": $body-bg,
+  );
+
+// @import "../../node_modules/bootstrap/scss/bootstrap";

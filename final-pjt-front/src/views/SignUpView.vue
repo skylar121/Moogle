@@ -11,7 +11,7 @@
       <label for="password2"> 비밀번호 확인 </label>
       <input type="password" id="password2" v-model="password2">
       <br>
-      <input type="submit" value="회원가입">
+      <input type="submit" value="회원가입"  class="btn btn-primary">
     </form>
   </div>
 </template>
