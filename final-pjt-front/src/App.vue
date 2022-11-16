@@ -2,8 +2,8 @@
   <div id="app">
     <nav class="nav">
       <router-link :to="{ name: 'index' }">Movie</router-link> |
-      <router-link :to="{ name: 'random' }">Random</router-link> |
-      <router-link :to="{ name: 'watch' }">WatchList</router-link>
+      <router-link :to="{ name: 'SignUpView' }">회원가입</router-link> | 
+      <router-link :to="{ name: 'LogInView' }">로그인</router-link>
     </nav>
     <router-view />
   </div>

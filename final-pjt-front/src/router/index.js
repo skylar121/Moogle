@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MovieView from '@/views/MovieView'
-import RandomView from '@/views/RandomView'
-import WatchListView from '@/views/WatchListView'
+import SignUpView from '@/views/SignUpView'
+import LogInView from '@/views/LogInView'
 
 Vue.use(VueRouter)
 
@@ -13,14 +13,14 @@ const routes = [
     component: MovieView
   },
   {
-    path: '/random',
-    name: 'random',
-    component: RandomView
+    path: '/signup',
+    name: 'SignUpView',
+    component: SignUpView
   },
   {
-    path: '/watch-list',
-    name: 'watch',
-    component: WatchListView
+    path: '/login',
+    name: 'LogInView',
+    component: LogInView
   },
 ]
 
