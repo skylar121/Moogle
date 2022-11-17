@@ -24,16 +24,16 @@
         <slide v-for="(movie, idx) in recommendMovies" :key="movie.id" :index="idx">
           <!-- <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }"> -->
           <template slot-scope="{ index }" >
-            <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-              <div class="movie-item" :data-index="index" @show-modal="showModal">
+            <div class="movie-item" :data-index="index" @show-modal="showModal">
+              <router-link :to="{ name: 'DetailView', params: { movie_id: movie.id } }">
                 <!-- <img  :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="'https://image.tmdb.org/t/p/original'+movie.poster_path" > -->
                 <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" :height="500">
                 <div class="movie-swipe-big">
                   <div class="movie-title-big">{{ movie.title }} </div>
                   <div class="movie-rating-big">예상별점 ⭐{{ movie.vote_average }}</div>
                 </div>
-              </div>
-            </router-link>
+              </router-link>
+            </div>
           </template>
         </slide>
       </carousel-3d>
@@ -70,8 +70,6 @@
       </carousel-3d>
       <!-- 3. 최신 영화 -->
     </section>
-    
-
   </div>
 
 </template>
@@ -90,7 +88,6 @@ export default {
     return {
       videoUrl: null,
       isHovered: false,
-      username: 'user',
       nowPlayingMovies: null,
     }
   },
@@ -118,10 +115,13 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-    }
+    },
   },
   computed: {
     // 로그인시 username 가져오기 필요
+    username() {
+      return this.$store.state.username
+    },
     recommendMovies() {
       return this.$store.state.recommendMovies
     },

@@ -2,7 +2,7 @@
   <div id="app">
     <nav>
       <div class="logo">
-        <router-link :to="{ name: 'main' }"  class="navbar-brand">로고</router-link>
+        <router-link :to="{ name: 'MainView' }"  class="navbar-brand">로고</router-link>
       </div>
       <form class="search" role="search" @submit.prevent="showSearchPage">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="">

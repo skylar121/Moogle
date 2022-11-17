@@ -16,6 +16,7 @@ export default new Vuex.Store({
     recommendMovies: null,
     token: null,
     isLogin: false,
+    username: null,
   },
   getters: {
     isLogin(state) {
@@ -31,7 +32,8 @@ export default new Vuex.Store({
       state.token = token
       // 메인 페이지로 보내기
       state.isLogin = true
-      router.push({ name: 'index' })
+      state.username = 
+      router.push({ name: 'MainView' })
     },
     logout(state) {
       state.isLogin = false
@@ -41,17 +43,16 @@ export default new Vuex.Store({
   },
   actions: {
     fetchMovie(context) {
-      const MOVIE_URL = 'https://api.themoviedb.org/3/movie/top_rated'
+      const MOVIE_URL = 'https://api.themoviedb.org/3/movie/popular'
       axios.get(MOVIE_URL, {
         params: {
-        api_key : process.env.VUE_APP_TMDB,
-        language: 'ko-KR',
+          api_key : process.env.VUE_APP_TMDB,
+          language: 'ko-KR',
         }
       })
         .then((response) => {
           console.log(response.data.results)
           context.commit('SAVE_MOVIE_DATA', response.data.results)
-          
         })
         .catch((error) => {
           console.log(error)
