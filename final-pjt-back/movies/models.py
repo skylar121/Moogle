@@ -3,8 +3,9 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-# class Genre(models.Model):
-#     tmdb_id = models.IntegerField()
+class Genre(models.Model):
+    tmdb_id = models.IntegerField(primary_key=True)
+    name = models.TextField()
 
 
 
@@ -13,10 +14,10 @@ class Movie(models.Model):
     title = models.TextField()
     overview = models.TextField()
     # genres = models.ManyToManyField(Genre)
-    genres = models.TextField()
+    genres = models.ManyToManyField(Genre)
     release_date = models.TextField(null=True)
 
-    tmdb_id = models.IntegerField()
+    tmdb_id = models.IntegerField(primary_key=True)
     
     adult = models.BooleanField()
 
@@ -27,5 +28,5 @@ class Movie(models.Model):
     # youtube_key = models.TextField()
     backdrop_path = models.TextField(null=True)
 
-
-
+# class Community(models.Model):
+#     user = models.ForeignKey()
