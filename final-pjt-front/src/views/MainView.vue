@@ -149,6 +149,7 @@ export default {
     border: none;
 
     .movie-item {
+      color: #fff;
       position: relative;
       cursor: pointer;
       transition: all 0.5s;

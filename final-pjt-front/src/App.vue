@@ -1,31 +1,22 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-dark bg-dark">
-      <div class="container-fluid">
-        <router-link :to="{ name: 'main' }"  class="navbar-brand">메인</router-link>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        </form>
-        <router-link :to="{ name: 'SignUpView' }" class="text-white">회원가입</router-link> |
-        <router-link :to="{ name: 'LogInView' }" class="text-white">로그인</router-link>
+    <nav>
+      <div class="logo">
+        <router-link :to="{ name: 'main' }"  class="navbar-brand">로고</router-link>
       </div>
-
-      <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-          </li>
-        </ul>
-      </div> -->
+      <form class="search" role="search" @submit.prevent="showSearchPage">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="">
+      </form>
+      <div v-if="!isLogin" class="user-menu">
+        <router-link :to="{ name: 'SignUpView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
+        <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-right-to-bracket fa-lg"></i></router-link>
+      </div>
+      <div v-else>
+        <router-link :to="{ name: 'MyPageView' }" class="menu-items">My Page</router-link>
+        <span @click="logout">
+          <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+        </span>
+      </div>
     </nav>
     <router-view />
   </div>
@@ -42,12 +33,22 @@ export default ({
       isHovered: false,
     }
   },
+  computed: {
+    isLogin() {
+      return this.$store.state.isLogin
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.commit('logout')
+    },
+  }
 })
 </script>
 
 
 <style lang="scss">
-* { padding:0;margin:0; box-sizing: border-box; text-decoration: none !important; color: #fff;}
+* { padding:0; margin:0; box-sizing: border-box; text-decoration: none !important; transition: all 0.3s ease 0s !important;}
 
 a:hover {
   color: $primary !important;
@@ -57,28 +58,42 @@ body {
 	padding: 0;
 	margin: 0;
   position: relative;
-  background-color: #191817;
+  background-color: $body-bg;
+  color: #fff;
 }
 
 ul,li,ol{list-style:none}
-a{text-decoration:none;color:#fff;font-size:15px}
+
 
 #app {
   font-family: 'Poppins', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
+  color: #fff;
 }
 
-.nav {
+a {
+  text-decoration:none;
+  color:#fff;
+  font-size:15px;
+  cursor: pointer;
+}
+
+nav {
+  overflow:hidden;
+  height: 80px;
+  color: #fff;
+  background-color:#21201E;
+  margin:0 auto;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   position: sticky;
   top: 0;
   z-index: 1;
   padding: 30px;
-  background-color: #21201E;
 }
 
 .nav a {
@@ -91,7 +106,11 @@ a{text-decoration:none;color:#fff;font-size:15px}
   color: $primary;
 }
 
-.logo {
-  text-align: left;
+.user-menu {
+
+  .menu-items {
+    color: white;
+    margin-right: 1em;
+  }
 }
 </style>
