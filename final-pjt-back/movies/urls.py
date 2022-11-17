@@ -20,5 +20,5 @@ urlpatterns = [
     path('get_movie/',views.get_movie),
     path('get_genre/',views.get_genre),
     path('',views.movie_list, name='movie_list'),
-    path('<int:movie_id>/',views.movie_detail,name='movie_detail'),
+    path('<int:tmdb_id>/',views.movie_detail,name='movie_detail'),
 ]

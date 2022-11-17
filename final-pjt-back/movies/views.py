@@ -20,8 +20,8 @@ def movie_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def movie_detail(request,pk):
-    movie = get_object_or_404(Movie,pk=pk)
+def movie_detail(request,tmdb_id):
+    movie = get_object_or_404(Movie,tmdb_id=tmdb_id)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
 
