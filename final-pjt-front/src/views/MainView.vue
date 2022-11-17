@@ -25,7 +25,7 @@
           <!-- <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }"> -->
           <template slot-scope="{ index }" >
             <div class="movie-item" :data-index="index" @show-modal="showModal">
-              <router-link :to="{ name: 'DetailView', params: { movie_id: movie.id } }">
+              <router-link :to="{ name: 'DetailView', params: { id: movie.id } }">
                 <!-- <img  :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="'https://image.tmdb.org/t/p/original'+movie.poster_path" > -->
                 <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" :height="500">
                 <div class="movie-swipe-big">
@@ -56,7 +56,7 @@
       >
         <slide v-for="(movie, idx) in nowPlayingMovies" :key="movie.id" :index="idx">
           <template slot-scope="{ index }" >
-            <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+            <router-link :to="{ name: 'DetailView', params: { id: movie.id } }">
               <div class="movie-item" :data-index="index" @show-modal="showModal">
                 <img :src="'https://image.tmdb.org/t/p/original' + movie.backdrop_path" :height="180">
                 <div class="movie-swipe-small">
@@ -110,7 +110,6 @@ export default {
         .then((response) => {
           console.log(response.data.results)
           this.nowPlayingMovies = response.data.results
-          
         })
         .catch((error) => {
           console.log(error)

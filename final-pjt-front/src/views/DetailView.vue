@@ -1,23 +1,26 @@
 <template>
-  <section class="section">
-    <!-- <img class="section-left" :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" alt="" width="300"> -->
-    <div class="section-right">
-      <h1>{{ movie.title }}</h1>
-      <form @submit.prevent="signUp" class="form">
-        <label for="username">아이디 </label><br>
-        <input type="text" id="username" v-model="username" required>
-        <br>
-        <label for="password1"> 비밀번호 </label><br>
-        <input type="password" id="password1" v-model="password1" required minlength="8">
-        <br>
-        <label for="password2"> 비밀번호 확인 </label><br>
-        <input type="password" id="password2" v-model="password2" required minlength="8">
-        <br>
-        <input type="submit" value="회원가입"  class="btn btn-primary">
-        <router-link :to="{ name: 'LogInView' }" class="link">이미 회원이신가요? 로그인하기</router-link>
-      </form>
-    </div>
-  </section>
+  <div>
+    <p>뜨냐,,?</p>
+    <!-- <section class="section"> -->
+      <!-- <img class="section-left" :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" alt="" width="300"> -->
+      <!-- <div class="section-right">
+        <h1>{{ movie.title }}</h1>
+        <form @submit.prevent="signUp" class="form">
+          <label for="username">아이디 </label><br>
+          <input type="text" id="username" v-model="username" required>
+          <br>
+          <label for="password1"> 비밀번호 </label><br>
+          <input type="password" id="password1" v-model="password1" required minlength="8">
+          <br>
+          <label for="password2"> 비밀번호 확인 </label><br>
+          <input type="password" id="password2" v-model="password2" required minlength="8">
+          <br>
+          <input type="submit" value="회원가입"  class="btn btn-primary">
+          <router-link :to="{ name: 'LogInView' }" class="link">이미 회원이신가요? 로그인하기</router-link>
+        </form>
+      </div>
+    </section> -->
+  </div>
 </template>
 
 <script>
@@ -39,7 +42,7 @@ export default {
     getMovieDetail() {
       axios({
         method: 'get',
-        url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
+        url: `${MOVIE_URL}/${this.$route.params.id}`,
         params: {
           api_key: process.env.VUE_APP_TMDB,
           language: 'ko-KR',
@@ -54,7 +57,7 @@ export default {
       //   // },
       // })
         .then((res) => {
-          console.log(res)
+          console.log(res.data)
         })
         .catch((err) => {
           console.log(err)

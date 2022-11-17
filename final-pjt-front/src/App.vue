@@ -18,6 +18,7 @@
         </span>
       </div>
     </nav>
+    <router-link :to="{ name: 'DetailView' }"></router-link>
     <router-view />
   </div>
 </template>
@@ -36,7 +37,7 @@ export default ({
   computed: {
     isLogin() {
       return this.$store.state.isLogin
-    }
+    },
   },
   methods: {
     logout() {
@@ -88,7 +89,7 @@ nav {
   margin:0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
   flex-wrap: wrap;
   position: sticky;
   top: 0;
@@ -104,6 +105,10 @@ nav {
 
 .nav a.router-link-exact-active {
   color: $primary;
+}
+
+.search {
+  margin-top: -.4em;
 }
 
 .user-menu {
