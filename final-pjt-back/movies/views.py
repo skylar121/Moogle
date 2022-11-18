@@ -25,8 +25,8 @@ def movie_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def movie_detail(request,tmdb_id):
-    movie = get_object_or_404(Movie,tmdb_id=tmdb_id)
+def movie_detail(request,id):
+    movie = get_object_or_404(Movie,id=id)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
 
@@ -41,7 +41,7 @@ def get_movie(request):
             abc.title = movie['title']
             abc.overview = movie['overview']
             abc.release_date = movie.get('release_date')
-            abc.tmdb_id = movie['id']
+            abc.id = movie['id']
             abc.adult = movie['adult']
             abc.popularity = movie['popularity']
             abc.vote_average = movie['vote_average']
@@ -60,7 +60,7 @@ def get_genre(request):
     genres = requests.get(request_url).json()
     for genre in genres['genres']:
         jjang = Genre()
-        jjang.tmdb_id = genre['id']
+        jjang.id = genre['id']
         jjang.name = genre['name']
         jjang.save()
     return HttpResponse()
@@ -76,7 +76,7 @@ def goto_main(request):
         abc.title = movie['title']
         abc.overview = movie['overview'] 
         abc.release_date = movie.get('release_date')
-        abc.tmdb_id = movie.get('id')
+        abc.id = movie.get('id')
         abc.adult = movie['adult']
         abc.popularity = movie['popularity']
         abc.vote_average = movie['vote_average']
