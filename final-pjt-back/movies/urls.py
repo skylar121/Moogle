@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 from . import views
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('get_movie/',views.get_movie),
@@ -23,5 +24,8 @@ urlpatterns = [
     path('<int:tmdb_id>/',views.movie_detail),
     path('goto_main/',views.goto_main),
     path('action10',views.action10),
+    #drf-spectacular
+    path('schema/', SpectacularAPIView.as_view(),name='schema'),
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'),name='swagger-ui')
     # path('action20/',views.action20),
 ]
