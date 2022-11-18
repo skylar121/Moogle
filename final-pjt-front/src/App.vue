@@ -44,7 +44,6 @@ export default ({
     ...mapState([
       'isLogin',
     ])
-    
   },
   methods: {
     logout() {
@@ -74,7 +73,7 @@ ul,li,ol{list-style:none}
 
 
 #app {
-  font-family: 'Poppins', Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', 'Noto Sans KR', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */

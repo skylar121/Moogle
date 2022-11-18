@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <img class="section-left" :src="`https://source.unsplash.com/featured/?dessert`" alt="" width="300">
+    <img class="section-left" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
     <div class="section-right">
       <h1>로그인</h1>
       <form @submit.prevent="signUp" class="form">
@@ -10,10 +10,6 @@
         <br>
         <label for="password1"> 비밀번호 </label><br>
         <input type="password" id="password1" v-model="password1" required minlength="8">
-        <!-- <span class="underline"></span> -->
-        <br>
-        <label for="password2"> 비밀번호 확인 </label><br>
-        <input type="password" id="password2" v-model="password2" required minlength="8">
         <!-- <span class="underline"></span> -->
         <br>
         <input type="submit" value="로그인" class="btn btn-primary">
@@ -47,7 +43,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .section {
   width: 80%;
   height: 600px;
@@ -59,6 +55,7 @@ export default {
   align-items: center;
   text-align: center;
   flex: 20%;
+  border-radius: $borderRadius+3;
 }
 
 .section-left {
@@ -77,8 +74,8 @@ export default {
   flex-direction: column;
   text-align: center;
   margin: 0 auto;
-  
 }
+
 .section-right h1 {
   margin: 1em auto;
 }

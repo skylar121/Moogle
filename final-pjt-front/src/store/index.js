@@ -43,16 +43,18 @@ export default new Vuex.Store({
   },
   actions: {
     fetchMovie(context) {
-      const MOVIE_URL = 'https://api.themoviedb.org/3/movie/top_rated'
-      axios.get(MOVIE_URL, {
-        params: {
-          api_key : process.env.VUE_APP_TMDB,
-          language: 'ko-KR',
-        }
+      // const MOVIE_URL = 'https://api.themoviedb.org/3/movie/top_rated'
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies`,
+        // params: {
+        //   api_key : process.env.VUE_APP_TMDB,
+        //   language: 'ko-KR',
+        // }
       })
         .then((response) => {
-          console.log(response.data.results)
-          context.commit('SAVE_MOVIE_DATA', response.data.results)
+          console.log(response.data)
+          context.commit('SAVE_MOVIE_DATA', response.data)
         })
         .catch((error) => {
           console.log(error)

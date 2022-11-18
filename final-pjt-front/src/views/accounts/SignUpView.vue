@@ -1,11 +1,14 @@
 <template>
   <section class="section">
-    <img class="section-left" :src="`https://source.unsplash.com/featured/?dessert`" alt="" width="300">
+    <img class="section-left" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
     <div class="section-right">
       <h1>회원가입</h1>
       <form @submit.prevent="signUp" class="form">
-        <label for="username">아이디 </label><br>
-        <input type="text" id="username" v-model="username" required>
+        <label for="id">아이디 </label><br>
+        <input type="text" id="id" v-model="id" required  minlength="2" maxlength="12">
+        <br>
+        <label for="nickname">닉네임 </label><br>
+        <input type="text" id="nickname" v-model="nickname" required minlength="2" maxlength="10">
         <br>
         <label for="password1"> 비밀번호 </label><br>
         <input type="password" id="password1" v-model="password1" required minlength="8">
@@ -21,23 +24,29 @@
 </template>
 
 <script>
+// import UserForm from '@/components/accounts/UserForm'
+
 export default {
   name: 'SignUpView',
+  components: {
+    // UserForm,
+  },
   data() {
     return {
-      username: null,
+      id: null,
+      nickname: null,
       password1: null,
       password2: null,
     }
   },
   methods: {
     signUp() {
-      const username = this.username
+      const id = this.id
       const password1 = this.password1
       const password2 = this.password2
       // js 축약문법 (key, value 이름 같을 경우)
       // const payload = {
-      //   username, password1, password2
+      //   id, password1, password2
       // }
       if (password1 != password2) {
         alert('비밀번호가 같지 않습니다.')
@@ -46,7 +55,7 @@ export default {
         return
       }
       const payload = {
-        username: username,
+        id: id,
         password1: password1,
         password2: password2,
       }
@@ -68,6 +77,7 @@ export default {
   align-items: center;
   text-align: center;
   flex: 20%;
+  border-radius: $borderRadius+3;
 }
 
 .section-left {
