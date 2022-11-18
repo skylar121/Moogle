@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainView from '@/views/MainView'
-import SignUpView from '@/views/SignUpView'
-import LogInView from '@/views/LogInView'
-import DetailView from '@/views/DetailView'
+import SignUpView from '@/views/accounts/SignUpView'
+import LogInView from '@/views/accounts/LogInView'
+import DetailView from '@/views/search/DetailView'
 
 Vue.use(VueRouter)
 

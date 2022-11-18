@@ -13,10 +13,10 @@ export default new Vuex.Store({
     createPersistedState()
   ],
   state: {
-    recommendMovies: null,
     token: null,
     isLogin: false,
-    username: null,
+    userNickname: null,
+    recommendMovies: null,
   },
   getters: {
     isLogin(state) {

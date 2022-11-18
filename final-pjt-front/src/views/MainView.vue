@@ -53,6 +53,7 @@
         :space="360" :display="9"
         :height="200"
         @mouseenter="showModal"
+        autoplay
       >
         <slide v-for="(movie, idx) in nowPlayingMovies" :key="movie.id" :index="idx">
           <template slot-scope="{ index }" >

@@ -1,25 +1,13 @@
 <template>
   <div>
-    <p>뜨냐,,?</p>
-    <!-- <section class="section"> -->
-      <!-- <img class="section-left" :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" alt="" width="300"> -->
-      <!-- <div class="section-right">
+    <section class="section">
+      <img class="section-left" :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" alt="" width="300">
+      <div class="section-right">
         <h1>{{ movie.title }}</h1>
-        <form @submit.prevent="signUp" class="form">
-          <label for="username">아이디 </label><br>
-          <input type="text" id="username" v-model="username" required>
-          <br>
-          <label for="password1"> 비밀번호 </label><br>
-          <input type="password" id="password1" v-model="password1" required minlength="8">
-          <br>
-          <label for="password2"> 비밀번호 확인 </label><br>
-          <input type="password" id="password2" v-model="password2" required minlength="8">
-          <br>
-          <input type="submit" value="회원가입"  class="btn btn-primary">
-          <router-link :to="{ name: 'LogInView' }" class="link">이미 회원이신가요? 로그인하기</router-link>
+        <form @submit.prevent="createReview" class="form">
         </form>
       </div>
-    </section> -->
+    </section>
   </div>
 </template>
 
@@ -32,7 +20,7 @@ export default {
   name: 'DetailView',
   data() {
     return {
-      
+      movie: null,
     }
   },
   created() {
@@ -57,6 +45,7 @@ export default {
       //   // },
       // })
         .then((res) => {
+          this.movie = res.data
           console.log(res.data)
         })
         .catch((err) => {
@@ -85,8 +74,8 @@ export default {
   flex-basis: 40%;
   height: 100%;
   overflow: hidden;
-  object-fit: none; /* Do not scale the image */
-  object-position: center; /* Center the image within the element */
+  /* object-fit: none; Do not scale the image */
+  /* object-position: center; Center the image within the element */
 }
 
 .section-right {
