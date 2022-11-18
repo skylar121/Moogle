@@ -19,6 +19,9 @@ from . import views
 urlpatterns = [
     path('get_movie/',views.get_movie),
     path('get_genre/',views.get_genre),
-    path('',views.movie_list, name='movie_list'),
-    path('<int:tmdb_id>/',views.movie_detail,name='movie_detail'),
+    path('',views.movie_list),
+    path('<int:tmdb_id>/',views.movie_detail),
+    path('goto_main/',views.goto_main),
+    path('action10',views.action10),
+    # path('action20/',views.action20),
 ]
