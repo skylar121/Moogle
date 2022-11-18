@@ -1,23 +1,27 @@
 <template>
-  <div class="card-body p-4">
+  <div class="container">
     <h2 class="card-title my-3">{{ movie?.title }}</h2>
-    <h5 v-if="movie?.tagline">{{ movie?.tagline }}</h5>
-    <p class="card-text my-3">{{ movie?.overview }}</p>
-    <!-- 장르 -->
-    <div class="col mb-3 mt-3 genre">
-      <h6>장르</h6>
-      <span class="genre-list" v-for="genre in movie?.genres" :key="genre['id']">{{ genre['name'] }}</span>
-    </div>
-    <!-- 디테일 -->
+    <h5 v-if="movie?.tagline">
+      <i class="fa-solid fa-quote-left"></i>
+      <span> {{ movie?.tagline }} </span>
+      <i class="fa-solid fa-quote-right"></i> </h5>
+    <p class="card-text my-3 text-muted">{{ movie?.overview }} </p>
+    
     <div class="additional-details">
       <div class="row">
         <div class="col">
-          <h6>개봉일</h6>
-          <p>{{ movie?.release_date }}</p>
+          <h6>장르</h6>
+          <p class="mt-3 mb-4"><span class="genre-list" v-for="genre in movie?.genres" :key="genre['id']">{{ genre['name'] }}</span></p>
         </div>
+      </div>
+      <div class="row">
         <div class="col">
           <h6>평균 별점</h6>
           <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p>
+        </div>
+        <div class="col">
+          <h6>개봉일</h6>
+          <p>{{ movie?.release_date }}</p>
         </div>
       </div>
       <div class="row">
@@ -28,7 +32,7 @@
         <div class="col">
           <h6>배우</h6>
           <a v-for="actor in cast" :key="actor?.id" :href="`https://www.themoviedb.org/person/${actor?.id}`">
-            <img v-if="actor?.profile_path" class="rounded-circle actor-img" height="70" width ="70" :src="'https://image.tmdb.org/t/p/original' + actor?.profile_path" alt="">
+            <img v-if="actor?.profile_path" class="rounded-circle actor-img m-2" height="60" width ="60" :src="'https://image.tmdb.org/t/p/original' + actor?.profile_path" alt="">
           </a>
         </div>
       </div>
@@ -61,6 +65,8 @@ export default {
   }
   h6 {
     color: $primary;
+    font-weight: 600;
+    font-size: 1.1rem;
   }
   .genre .additional-details {
     font-size: 1.5em;
@@ -70,9 +76,10 @@ export default {
 .genre-list {
   background-color: $primary;
   border-radius: $borderRadius;
-  padding: .3em;
+  padding: .3em .7em;
   margin-right: .5em;
   text-align: center;
+  /* font-weight: 600; */
 }
 
 .actor-img {

@@ -149,13 +149,16 @@ export default {
 
     .movie-swipe-small {
       position: absolute;
-      width: 70%;
-      left: 50%;
-      bottom: -0.3em;
-      transform: translate(-50%, -50%);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
-      border: 2px solid $primary;
+      /* width: 70%; */
+      /* left: 50%; */
+      /* bottom: -0.3em; */
+      /* transform: translate(-50%, -50%); */
+      /* border-radius: 10px; */
+      width: 80%;
+      left: 10%;
+      bottom: 0;
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid $primary;
       text-align: center;
       text-decoration: none;
       min-height: 50px;

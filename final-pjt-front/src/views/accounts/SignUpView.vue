@@ -1,26 +1,29 @@
 <template>
-  <section class="section">
-    <img class="section-left" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
-    <div class="section-right">
-      <h1>회원가입</h1>
-      <form @submit.prevent="signUp" class="form">
-        <label for="id">아이디 </label><br>
-        <input type="text" id="id" v-model="id" required  minlength="2" maxlength="12">
-        <br>
-        <label for="nickname">닉네임 </label><br>
-        <input type="text" id="nickname" v-model="nickname" required minlength="2" maxlength="10">
-        <br>
-        <label for="password1"> 비밀번호 </label><br>
-        <input type="password" id="password1" v-model="password1" required minlength="8">
-        <br>
-        <label for="password2"> 비밀번호 확인 </label><br>
-        <input type="password" id="password2" v-model="password2" required minlength="8">
-        <br>
-        <input type="submit" value="회원가입"  class="btn btn-primary">
-        <router-link :to="{ name: 'LogInView' }" class="link">이미 회원이신가요? 로그인하기</router-link>
-      </form>
-    </div>
-  </section>
+  <div>
+    <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`">
+    <section class="section">
+      <img class="section-left" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
+      <div class="section-right">
+        <h1>회원가입</h1>
+        <form @submit.prevent="signUp" class="form">
+          <label for="id">아이디 </label><br>
+          <input type="text" id="id" v-model="id" required  minlength="2" maxlength="12">
+          <br>
+          <label for="nickname">닉네임 </label><br>
+          <input type="text" id="nickname" v-model="nickname" required minlength="2" maxlength="10">
+          <br>
+          <label for="password1"> 비밀번호 </label><br>
+          <input type="password" id="password1" v-model="password1" required minlength="8">
+          <br>
+          <label for="password2"> 비밀번호 확인 </label><br>
+          <input type="password" id="password2" v-model="password2" required minlength="8">
+          <br>
+          <input type="submit" value="회원가입"  class="btn btn-primary">
+          <router-link :to="{ name: 'LogInView' }" class="link">이미 회원이신가요? 로그인하기</router-link>
+        </form>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>

@@ -7,11 +7,13 @@
           <!-- 포스터 -->
           <div class="col-md-4">
             <img :src="'https://image.tmdb.org/t/p/original' + movie?.poster_path" class="img-fluid rounded-start" alt="">
+            <MovieItemReview :movie="movie" />
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
-            <MovieItemReview :movie="movie" />
-            <MovieItemDetail :movie="movie" :cast="cast" :director="director" />
+            <div class="card-body p-4">
+              <MovieItemDetail :movie="movie" :cast="cast" :director="director" />
+            </div>
           </div>
         </div>
       </div>
@@ -49,7 +51,6 @@ export default {
     getMovieDetail() {
       axios.get(API_URL + `/movies/${this.$route.params.movie_id}`)
       .then((res) => {
-        // console.log(this.$route.params.movie_id, res)
         // DB에 있다면 DB 정보 가져오기
         // console.log(res)
         this.movie = res
@@ -138,8 +139,14 @@ export default {
   position: absolute;
   top: 0;
   opacity: 0.4;
-  background: #aeaeae;
+  background: #575757;
 }
+
+/* background-image로 구현시
+  background-image: linear-gradient(rgba(0,0,0,.85) 15%,rgba(0,0,0,.2) 40%,#000 90%);
+  background-attachment: fixed;
+  margin: 0;
+  height: 100vh; */
 
 .card {
   background: $body-bg;
@@ -154,24 +161,5 @@ export default {
   h6 {
     color: $primary;
   }
-  .genre .additional-details {
-    font-size: 1.5em;
-  }
 }
-
-
-
-.genre-list {
-  background-color: $primary;
-  border-radius: $borderRadius;
-  padding: .3em;
-  margin-right: .5em;
-  text-align: center;
-}
-
-.actor-img {
-  object-fit: cover;
-  margin-right: .5em;
-}
-
 </style>

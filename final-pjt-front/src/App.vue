@@ -83,7 +83,6 @@ ul,li,ol{list-style:none}
 a {
   text-decoration:none;
   color:#fff;
-  font-size:15px;
   cursor: pointer;
 }
 
@@ -167,7 +166,7 @@ input {
 
 /* Animate neon flicker */
 @keyframes flicker {
-    0%, 19%, 56%, 100% {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
       
         text-shadow:
             -0.2rem -0.2rem 1rem #fff,
