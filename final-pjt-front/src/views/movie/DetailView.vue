@@ -41,7 +41,7 @@ export default {
     }
   },
   created() {
-    console.log('라우팅 성공')
+    // console.log('라우팅 성공')
     this.getMovieDetail()
     this.getCredits()
   },
@@ -49,56 +49,53 @@ export default {
     getMovieDetail() {
       axios.get(API_URL + `/movies/${this.$route.params.movie_id}`)
       .then((res) => {
-        console.log(this.$route.params.movie_id, res)
+        // console.log(this.$route.params.movie_id, res)
         // DB에 있다면 DB 정보 가져오기
-        if (res['title'] !== undefined) {
-          // console.log(res)
-          this.movie = res
-        } else {
-        // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
-          axios({
-            method: 'get',
-            url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
-            params: {
-              api_key: process.env.VUE_APP_TMDB,
-              language: 'ko-KR',
-            },
-          })
-          .then((res) => {
-            // console.log(res.data)
-            this.movie = res.data
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-
-          axios({
-            method: 'post',
-            url: API_URL + '/movies',
-            data: {
-              title: this.movie['title'],
-              overview: this.movie['overview'],
-              release_date: this.movie['release_date'],
-              tmdb_id: this.movie['id'],
-              adult: this.movie['adult'],
-              popularity: this.movie['popularity'],
-              vote_average: this.movie['vote_average'],
-              vote_count: this.movie['vote_count'],
-              poster_path: this.movie['poster_path'],
-              backdrop_path: this.movie['backdrop_path'],
-            }
-          })
-          .then((response) => {
-            console.log(response)
-            // this.actionMovies = this.shuffle(response.data)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-        }
+        // console.log(res)
+        this.movie = res
       })
       .catch((error) => {
         console.log(error)
+        // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
+        axios({
+          method: 'get',
+          url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
+          params: {
+            api_key: process.env.VUE_APP_TMDB,
+            language: 'ko-KR',
+          },
+        })
+        .then((res) => {
+          console.log('DB에 없어요', res.data)
+          this.movie = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+        axios({
+          method: 'post',
+          url: API_URL + '/movies',
+          data: {
+            title: this.movie['title'],
+            overview: this.movie['overview'],
+            release_date: this.movie['release_date'],
+            tmdb_id: this.movie['id'],
+            adult: this.movie['adult'],
+            popularity: this.movie['popularity'],
+            vote_average: this.movie['vote_average'],
+            vote_count: this.movie['vote_count'],
+            poster_path: this.movie['poster_path'],
+            backdrop_path: this.movie['backdrop_path'],
+          }
+        })
+        .then((response) => {
+          console.log(this.movie)
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       })
     },
     getCredits() {
@@ -116,7 +113,6 @@ export default {
           } else {
             this.cast = res.data.cast
           }
-          console.log(this.cast)
           this.director = res.data.crew.filter((person) => {
             return person['job'] === 'Director'
           })[0]
@@ -124,7 +120,7 @@ export default {
           //   return person['job'] === 'Director'
           // })[0]
           // )
-          console.log(this.director)
+          // console.log(this.director)
         })
         .catch((err) => {
           console.log(err)
