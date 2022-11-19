@@ -56,13 +56,14 @@ export default {
         this.password1 = null
         this.password2 = null
         return
+      } else {
+        const userData = {
+          id: id,
+          password1: password1,
+          password2: password2,
+        }
+        this.$store.dispatch('signUp', userData)
       }
-      const payload = {
-        id: id,
-        password1: password1,
-        password2: password2,
-      }
-      this.$store.dispatch('signUp', payload)
     }
   }
 }

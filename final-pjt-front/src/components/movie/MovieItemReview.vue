@@ -62,9 +62,12 @@ export default {
     onRate() {
 
     },
+    getReview() {
+
+    },
     createReview() {
 
-    }
+    },
   },
   computed: {
     ...mapState([
