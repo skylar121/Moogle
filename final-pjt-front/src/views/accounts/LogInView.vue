@@ -5,16 +5,16 @@
       <img class="section-left" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
       <div class="section-right">
         <h1>로그인</h1>
-        <form @submit.prevent="signUp" class="form">
-          <label for="username">아이디 </label><br>
-          <input type="text" id="username" v-model="username" required>
+        <form @submit.prevent="logIn" class="form">
+          <label for="userId">아이디 </label><br>
+          <input type="text" id="userId" v-model.trim="userId">
           <!-- <span class="underline"></span> -->
           <br>
-          <label for="password1"> 비밀번호 </label><br>
-          <input type="password" id="password1" v-model="password1" required minlength="8">
+          <label for="password"> 비밀번호 </label><br>
+          <input type="password" id="password" v-model.trim="password">
           <!-- <span class="underline"></span> -->
           <br>
-          <input type="submit" value="로그인" class="btn btn-primary">
+          <input type="submit" value="로그인" class="btn btn-primary" @click.prevent="logIn">
           <router-link :to="{ name: 'SignUpView' }" class="link">아직 회원이 아니신가요? 회원가입하기</router-link>
         </form>
       </div>
@@ -27,20 +27,31 @@ export default {
   name: 'LogInView',
   data() {
     return {
-      username: null,
+      userId: null,
       password: null,
     }
   },
   methods: {
     logIn() {
-      const username = this.username
+      const userId = this.userId
       const password = this.password
       
-      const payload = {
-        username: username,
+      const userData = {
+        userId: userId,
         password: password
       }
-      this.$store.dispatch('logIn', payload)
+
+      if (!userId) {
+        alert('아이디는 필수예요!')
+        return
+      }
+      if (!password) {
+        alert('비밀번호는 필수예요!')
+        return
+      }
+
+      console.log(userData)
+      this.$store.dispatch('logIn', userData)
     },
   }
 }

@@ -6,17 +6,17 @@
       <div class="section-right">
         <h1>회원가입</h1>
         <form @submit.prevent="signUp" class="form">
-          <label for="id">아이디 </label><br>
-          <input type="text" id="id" v-model="id" required  minlength="2" maxlength="12">
+          <label for="userId">아이디 </label><br>
+          <input type="text" id="userId" v-model="userId" required>
           <br>
           <label for="nickname">닉네임 </label><br>
-          <input type="text" id="nickname" v-model="nickname" required minlength="2" maxlength="10">
+          <input type="text" id="nickname" v-model="nickname" required>
           <br>
           <label for="password1"> 비밀번호 </label><br>
-          <input type="password" id="password1" v-model="password1" required minlength="8">
+          <input type="password" id="password1" v-model="password1" required>
           <br>
           <label for="password2"> 비밀번호 확인 </label><br>
-          <input type="password" id="password2" v-model="password2" required minlength="8">
+          <input type="password" id="password2" v-model="password2" required>
           <br>
           <label for="profileImg" class="form-label">프로필 이미지 업로드</label>
           <v-file-input accept="image/*" type="file" id="profileImg" @change="selectFile"></v-file-input>
@@ -31,11 +31,13 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'SignUpView',
   data() {
     return {
-      id: null,
+      userId: null,
       nickname: null,
       password1: null,
       password2: null,
@@ -53,7 +55,7 @@ export default {
     //   this.profile_image = this.$refs.profileImg.file
     // },
     signUp() {
-      const id = this.id
+      const userId = this.userId
       const nickname = this.nickname
       const password1 = this.password1
       const password2 = this.password2
@@ -62,7 +64,7 @@ export default {
       // const payload = {
       //   id, password1, password2
       // }
-      if (!id) {
+      if (!userId) {
         alert('아이디는 필수입니다.')
         return
       }
@@ -84,7 +86,7 @@ export default {
         return
       } else {
         const userData = {
-          id: id, 
+          userId: userId, 
           nickname: nickname, 
           password1: password1, 
           password2: password2,
@@ -93,7 +95,11 @@ export default {
         console.log(userData)
         this.$store.dispatch('signUp', userData)
       }
-    }
+    },
+    ...mapMutations(['REMOVE_TOKEN']),
+  },
+  created() {
+    // this.REMOVE_TOKEN()
   }
 }
 </script>

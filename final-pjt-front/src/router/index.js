@@ -42,4 +42,23 @@ const router = new VueRouter({
   routes
 })
 
+// router.beforeEach((to, from, next) => {
+//   const isLogIn = this.$store.getters.isLogin
+
+//   // 로그인이 필요한 페이지
+//   // const authPages = ['hello', 'home', 'about']
+//   const allowAllPages = ['login']
+//   // 앞으로 방문할 페이지가 인증을 필요로 하는 사이트인지 검사
+//   // const isAuthRequired = authPages.includes(to.name)
+//   const isAuthRequired = !allowAllPages.includes(to.name)
+
+//   if (isAuthRequired && !isLogIn) {
+//     console.log('Login으로 이동!')
+//     next({ name: 'login'})
+//   } else {
+//     console.log('to로 이동!')
+//     next()
+//   }
+// })
+
 export default router

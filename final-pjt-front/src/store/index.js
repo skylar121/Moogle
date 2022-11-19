@@ -13,7 +13,15 @@ Vue.use(BootstrapVue, IconsPlugin, FormRatingPlugin)
 
 export default new Vuex.Store({
   plugins: [
-    createPersistedState()
+    createPersistedState({
+      // key: 'vuex',              
+      // reducer (val) {                                
+      //   if(val.authentication.token === null) { // return empty state when user logged out                
+      //     return {}
+      //   }
+      //   return val
+      // }
+    })
   ],
   state: {
     token: null,
@@ -112,7 +120,7 @@ export default new Vuex.Store({
     },
     REMOVE_TOKEN(state) {
       state.token = null
-      localStorage.removeItem("vuex")
+      localStorage.removeItem('vuex')
     },
     SAVE_USER_DATA(state, userData) {
       state.currUser = userData
@@ -127,7 +135,7 @@ export default new Vuex.Store({
     //////////////// accounts ////////////////
     signUp(context, userData) {
       const formData = new FormData()
-      formData.append('username', userData.id)
+      formData.append('username', userData.userId)
       formData.append('nickname', userData.nickname)
       formData.append('password1', userData.password1)
       formData.append('password2', userData.password2)
@@ -144,11 +152,12 @@ export default new Vuex.Store({
         .then((res) => {
           const token = res.data.key
           context.commit('SAVE_TOKEN', token) // token
-          // context.dispatch('getCurrUser', token)
+          context.dispatch('getCurrUser', token)
           router.push({ name: 'MainView' })
         })
         .catch((err) => {
           console.log(err)
+          alert(err.message)
         })
     },
     logIn(context, userData) {
@@ -156,7 +165,7 @@ export default new Vuex.Store({
         method: 'post',
         url: api.accounts.login(),
         data: {
-          id: userData.id,
+          username: userData.userId,
           password: userData.password,
         }
       })
@@ -164,31 +173,45 @@ export default new Vuex.Store({
           const token = res.data.key
           context.commit('SAVE_TOKEN', token) // token
           context.dispatch('getCurrUser', token)
-          // 이전 페이지로 router.push ?
-          // router.push({ name: 'MainView' })
+          // 이전 페이지로는 어케가징
+          router.push({ name: 'MainView' })
         })
         .catch((err) => {
           console.log(err)
+          alert(err.message)
         })
     },
-    logOut(context) {
-      context.commit('REMOVE_TOKEN')
+    logOut(context, userData) {
+      axios({
+        method: 'post',
+        url: api.accounts.logout(),
+        data: userData,
+      })
+        .then(() => {
+          context.commit('REMOVE_TOKEN')
+          alert('로그아웃 완료')
+          router.push({ name: 'MainView' })
+        })
     },
     getCurrUser(context, token) {
+      console.log('유저정보 가져올게')
       if (context.getters.isLogin) {
         axios({
           method: 'get',
-          // 유저정보 가져오는 url 상의 필요
           url: api.accounts.currUserData(),
           headers: {
-            "X-AUTH-TOKEN": token
+            Authorization: `Token ${ token }`
           }
         })
           .then((res) => {
-            context.commit('SAVE_USER_DATA', res)
+            console.log(res.data)
+            context.commit('SAVE_USER_DATA', res.data)
           })
           .catch((err) => {
             console.log(err)
+            alert(err.message)
+            context.commit('REMOVE_TOKEN')
+            router.push({ name: 'LogInView' })
           })
       }
     },

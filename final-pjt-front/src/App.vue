@@ -12,12 +12,13 @@
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="">
       </form>
       <div v-if="!isLogin" class="user-menu">
-        <router-link :to="{ name: 'SignUpView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
-        <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-right-to-bracket fa-lg"></i></router-link>
+        <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
       <div v-else>
-        <router-link :to="{ name: 'MyPageView' }" class="menu-items">My Page</router-link>
-        <span @click="logout">
+        <router-link :to="{ name: 'MyPageView' }" class="menu-items">
+        {{ currUser?.username }}
+        </router-link>
+        <span>
           <i class="fa-solid fa-right-to-bracket fa-lg"></i>
         </span>
       </div>
@@ -29,13 +30,16 @@
 
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default ({
   computed: {
     ...mapState([
+      'currUser',
+    ]),
+    ...mapGetters([
       'isLogin',
-    ])
+    ]),
   },
 })
 </script>

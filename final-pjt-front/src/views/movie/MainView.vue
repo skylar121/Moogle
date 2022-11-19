@@ -2,7 +2,8 @@
   <div>
     <section class="display">
       <div class="row-title">
-        {{ userNickname }} 님을 위한 추천
+        <span class="text-primary">{{ currUser?.username }} </span>
+        님을 위한 추천
       </div>
       <MovieListCarouselBig />
     </section>
@@ -42,7 +43,7 @@ export default {
   },
   computed: {
     ...mapState([
-      'userNickname',
+      'currUser',
       'nowPlayingMovies',
       'actionMovies',
       'romanceMovies',
