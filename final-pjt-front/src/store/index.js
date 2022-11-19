@@ -126,15 +126,25 @@ export default new Vuex.Store({
   actions: {
     //////////////// accounts ////////////////
     signUp(context, userData) {
+      const formData = new FormData()
+      formData.append('username', userData.id)
+      formData.append('nickname', userData.nickname)
+      formData.append('password1', userData.password1)
+      formData.append('password2', userData.password2)
+      formData.append('profile_image', userData.profile_image)
+
       axios({
         method: 'post',
         url: api.accounts.signup(),
-        data: userData,
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
       })
         .then((res) => {
           const token = res.data.key
           context.commit('SAVE_TOKEN', token) // token
-          context.dispatch('getCurrUser', token)
+          // context.dispatch('getCurrUser', token)
           router.push({ name: 'MainView' })
         })
         .catch((err) => {
