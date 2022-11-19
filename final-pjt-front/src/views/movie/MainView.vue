@@ -11,31 +11,28 @@
       <div class="row-title">
         현재 상영중인 영화
       </div>
-      <MovieListCarouselSmall :movieData="nowPlayingMovies" />
+      <MovieListCarouselSmall :movie-data="nowPlayingMovies" />
 
       <div class="row-title">
         Actions
       </div>
-      <MovieListCarouselSmall :movieData="actionMovies" />
+      <MovieListCarouselSmall :movie-data="actionMovies" />
 
       <!-- 3. 장르별 영화 -->
       <div class="row-title">
         Romance
       </div>
-      <MovieListCarouselSmall :movieData="nowPlayingMovies" />
+      <MovieListCarouselSmall :movie-data="nowPlayingMovies" />
     </section>
   </div>
 
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import axios from 'axios'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 import MovieListCarouselBig from '@/components/movie/MovieListCarouselBig'
 import MovieListCarouselSmall from '@/components/movie/MovieListCarouselSmall'
-
-const API_URL = 'http://127.0.0.1:8000'
 
 export default {
   name: 'MainView',
@@ -43,68 +40,28 @@ export default {
     MovieListCarouselBig,
     MovieListCarouselSmall,
   },
-  data() {
-    return {
-      videoUrl: null,
-      isHovered: false,
-      nowPlayingMovies: null,
-      actionMovies: null,
-      romanceMovies: null,
-    }
-  },
-  methods: {
-    getNowPlayingMovies() {
-      const MOVIE_URL = 'https://api.themoviedb.org/3/movie/now_playing'
-      axios.get(MOVIE_URL, {
-        params: {
-          api_key : process.env.VUE_APP_TMDB,
-          language: 'ko-KR',
-          page: 1,
-          region: 'KR',
-        }
-      })
-        .then((response) => {
-          // console.log('상영중', response.data.results)
-          this.nowPlayingMovies = this.shuffle(response.data.results)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    getActionMovies() {
-      axios.get(API_URL + '/movies/action10')
-        .then((response) => {
-          // console.log(response.data)
-          this.actionMovies = this.shuffle(response.data)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    shuffle ([...arr]) {
-      let m = arr.length;
-      while (m) {
-        const i = Math.floor(Math.random() * m--);
-        [arr[m], arr[i]] = [arr[i], arr[m]];
-      }
-      return arr
-    },
-  },
   computed: {
     ...mapState([
       'userNickname',
+      'nowPlayingMovies',
+      'actionMovies',
+      'romanceMovies',
+  ]),
+  },
+  methods: {
+    ...mapActions([
+      'fetchNowPlayingMovies',
+      'fetchActionMovies',
+      'fetchRomanceMovies',
+    ]),
+    ...mapGetters([
       'isLogin',
     ]),
-    // shuffleRecommendMovies() {
-    //   return this.shuffle(this.recommendMovies)
-    // },
   },
   created() {
-    if (this.$store.state.recommendMovies === null) {
-      this.$store.dispatch('fetchMovie')
-    }
-    this.getNowPlayingMovies()
-    this.getActionMovies()
+    this.fetchNowPlayingMovies()
+    this.fetchActionMovies()
+    this.fetchRomanceMovies()
   },
 }
 </script>

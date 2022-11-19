@@ -3,7 +3,7 @@
     <nav>
       <div class="logo">
         <router-link :to="{ name: 'MainView' }">
-          <span contenteditable spellcheck>
+          <span contenteditable>
             neon lights
           </span>
         </router-link>
@@ -32,24 +32,11 @@
 import { mapState } from 'vuex'
 
 export default ({
-  components: {
-  },
-  data() {
-    return {
-      videoUrl: null,
-      isHovered: false,
-    }
-  },
   computed: {
     ...mapState([
       'isLogin',
     ])
   },
-  methods: {
-    logout() {
-      this.$store.commit('logout')
-    },
-  }
 })
 </script>
 

@@ -52,8 +52,8 @@ export default {
       axios.get(API_URL + `/movies/${this.$route.params.movie_id}/`)
       .then((res) => {
         // DB에 있다면 DB 정보 가져오기
-        console.log(res)
-        this.movie = res
+        console.log(res.data)
+        this.movie = res.data
       })
       .catch((error) => {
         console.log('DB에 없어')
