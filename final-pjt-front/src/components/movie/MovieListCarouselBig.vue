@@ -10,12 +10,12 @@
   >
     <slide 
       v-for="(movie, idx) in recommendMovies" 
-      :key="movie.tmdb_id" 
+      :key="movie.id" 
       :index="idx" 
-      @click="routeDetail(movie.tmdb_id)"
+      @click="routeDetail(movie.id)"
     >
       <template slot-scope="{ index }" >
-        <div @click="routeDetail(movie.tmdb_id)" class="movie-item" :data-index="index">
+        <div @click="routeDetail(movie.id)" class="movie-item" :data-index="index">
           <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" :height="500">
           <div class="movie-swipe-big">
             <div class="movie-title-big">{{ movie.title }} </div>
@@ -43,9 +43,9 @@ export default {
     ]),
   },
   methods: {
-    routeDetail(tmdb_id) {
-      // console.log('클릭', tmdb_id)
-      this.$router.push({ name: 'DetailView', params: { movie_id: tmdb_id }})
+    routeDetail(id) {
+      // console.log('클릭', id)
+      this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     }
   },
 }

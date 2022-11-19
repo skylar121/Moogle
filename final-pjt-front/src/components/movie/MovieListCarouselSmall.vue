@@ -13,8 +13,8 @@
       :index="idx" 
     >
       <template slot-scope="{ index }" >
-        <div @click="routeDetail(movie.id)" class="movie-item" :data-index="index">
-          <img :src="'https://image.tmdb.org/t/p/original' + movie.backdrop_path" :height="180">
+        <div @click="goToDetail(movie.id)" class="movie-item" :data-index="index">
+          <img :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path"  :height="180">
           <div class="movie-swipe-small">
             <span class="movie-title-small">{{ movie.title }}</span>
             <span>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)}` : '' }}</span>
@@ -38,8 +38,8 @@ export default {
     movieData: Array,
   },
   methods: {
-    routeDetail(id) {
-      // console.log('클릭', tmdb_id)
+    goToDetail(id) {
+      console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     }
   },

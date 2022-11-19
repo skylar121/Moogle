@@ -12,7 +12,7 @@
         <div class="col">
           <h6>장르</h6>
           <p class="mt-3 mb-4"><span class="genre-list" v-for="genre in movie?.genres" :key="genre['id']">{{ genre['name'] }}</span></p>
-          <!-- {{ genre_list.filter(genreId => genre['id'] === genreId) }} -->
+          <!-- {{ genres_list.filter(genreId => genre['id'] === genreId) }} -->
         </div>
       </div>
       <div class="row">
@@ -54,13 +54,13 @@ export default {
   },
   computed: {
     ...mapState([
-      'genre_list',
+      'genres_list',
     ]),
   },
   data() {
     return {
-      // movie_genres(genre_list) {
-      //   genre_list.filter(genreItem => genreItem['id'] === genreId)
+      // movie_genres(genres_list) {
+      //   genres_list.filter(genreItem => genreItem['id'] === genreId)
       // }
     }
   }

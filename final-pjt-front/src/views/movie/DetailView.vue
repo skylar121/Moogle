@@ -1,12 +1,12 @@
 <template>
-  <div class="">
-    <img class="background-img" :src="`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`">
+  <div v-if="movie">
+    <img class="background-img" :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path">
     <div class="container-lg mt-3">
       <div class="card mb-3">
         <div class="row g-0">
           <!-- 포스터 -->
           <div class="col-md-4">
-            <img :src="'https://image.tmdb.org/t/p/original' + movie?.poster_path" class="img-fluid rounded-start" alt="">
+            <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" class="img-fluid rounded-start" alt="">
             <MovieItemReview :movie="movie" />
           </div>
           <!-- 오른쪽 영역 -->
@@ -56,53 +56,59 @@ export default {
         this.movie = res
       })
       .catch((error) => {
+        console.log('DB에 없어')
         console.log(error)
-        // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
-        axios({
-          method: 'get',
-          url: `${MOVIE_URL}/${this.$route.params.movie_id}/`,
-          params: {
-            api_key: process.env.VUE_APP_TMDB,
-            language: 'ko-KR',
-          },
-        })
-        .then((res) => {
-          console.log('DB에 없어요', res.data)
-          this.movie = res.data
-        })
-        .catch((err) => {
-          console.log(err)
-        })
 
-        axios({
-          method: 'post',
-          url: API_URL + '/movies',
-          data: {
-            title: this.movie['title'],
-            overview: this.movie['overview'],
-            release_date: this.movie['release_date'],
-            id: this.movie['id'],
-            adult: this.movie['adult'],
-            popularity: this.movie['popularity'],
-            vote_average: this.movie['vote_average'],
-            vote_count: this.movie['vote_count'],
-            poster_path: this.movie['poster_path'],
-            backdrop_path: this.movie['backdrop_path'],
-          }
-        })
-        .then((response) => {
-          console.log(this.movie)
-          console.log(response)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+        // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
+        if (!this.movie) {
+          console.log('TMDB에서 가져올거야')
+          axios({
+            method: 'get',
+            url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
+            params: {
+              api_key: process.env.VUE_APP_TMDB,
+              language: 'ko-KR',
+            },
+          })
+          .then((res) => {
+            this.movie = res.data
+            console.log(this.movie)
+
+            axios({
+              method: 'post',
+              url: API_URL + '/movies/',
+              data: {
+                title: this.movie['title'],
+                overview: this.movie['overview'],
+                release_date: this.movie['release_date'],
+                id: this.movie['id'],
+                adult: this.movie['adult'],
+                popularity: this.movie['popularity'],
+                vote_average: this.movie['vote_average'],
+                vote_count: this.movie['vote_count'],
+                poster_path: this.movie['poster_path'],
+                backdrop_path: this.movie['backdrop_path'],
+              }
+            })
+              .then((response) => {
+                console.log(this.movie)
+                console.log(response)
+              })
+              .catch((error) => {
+                console.log('아직 post 없음', error)
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        }
       })
+      
     },
     getCredits() {
       axios({
         method: 'get',
-        url: `${MOVIE_URL}/${this.$route.params.movie_id}/credits/`,
+        url: `${MOVIE_URL}/${this.$route.params.movie_id}/credits`,
         params: {
           api_key: process.env.VUE_APP_TMDB,
           language: 'ko-KR',

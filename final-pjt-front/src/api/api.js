@@ -1,7 +1,7 @@
 const LOCAL = 'http://127.0.0.1:8000/'
 
 const ACCOUNTS = 'accounts/'
-// const MOVIES = 'movies/'
+const MOVIES = 'movies/'
 
 export default {
   accounts: {
@@ -14,6 +14,9 @@ export default {
     userMovieData: id => LOCAL + ACCOUNTS + id + '/movies/',
   },
   movies: {
-    
+    recommendMovies: () => LOCAL + MOVIES + 'recommend/',
+    nowPlayingMovies: () => LOCAL + MOVIES + 'goto_main/',
+    actionMovies: () => LOCAL + MOVIES + 'action10/',
+    romanceMovies: () => LOCAL + MOVIES + 'romance10/',
   },
 }

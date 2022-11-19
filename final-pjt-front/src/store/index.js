@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
+import api from "@/api/api"
 
 import { BootstrapVue, IconsPlugin, FormRatingPlugin } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -10,9 +11,7 @@ Vue.use(Vuex)
 Vue.use(BootstrapVue, IconsPlugin, FormRatingPlugin)
 
 import accounts from './modules/accounts'
-import movies from './modules/movies'
-
-const API_URL = 'http://127.0.0.1:8000'
+import movies from './modules/movie'
 
 export default new Vuex.Store({
   plugins: [
@@ -31,19 +30,14 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    fetchMovie(context) {
-      // const MOVIE_URL = 'https://api.themoviedb.org/3/movie/top_rated'
+    fetchRecommendMovies(context) {
       axios({
         method: 'get',
-        url: `${API_URL}/movies`,
-        // params: {
-        //   api_key : process.env.VUE_APP_TMDB,
-        //   language: 'ko-KR',
-        // }
+        url: api.movies.recommendMovies(),
       })
         .then((response) => {
-          console.log(response.data)
-          context.commit('SAVE_MOVIE_DATA', response.data)
+          console.log(response)
+          context.commit('SAVE_RECOMMEND', response)
         })
         .catch((error) => {
           console.log(error)
