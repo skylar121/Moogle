@@ -16,7 +16,7 @@ class Movie(models.Model):
     id = models.IntegerField(primary_key=True)
     adult = models.BooleanField()
     popularity = models.FloatField()
-    vote_average = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
+    vote_average = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     vote_count = models.IntegerField()
     poster_path = models.TextField(null=True)
     backdrop_path = models.TextField(null=True)

@@ -33,6 +33,15 @@ def movie_detail(request,id):
 
 # 영화 다 가져와 !
 def get_movie(request):
+    request_url = f"https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_API_KEY}&language=ko-KR"
+    genres = requests.get(request_url).json()
+    for genre in genres['genres']:
+        print(genre)
+        genre_instance = Genre()
+        genre_instance.id = genre['id']
+        genre_instance.name = genre['name']
+        genre_instance.save()
+        
     for i in range(1, 10):
         request_url = f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=ko-KR&page={i}"
         movies = requests.get(request_url).json()
