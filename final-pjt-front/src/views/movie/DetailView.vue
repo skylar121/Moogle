@@ -49,10 +49,10 @@ export default {
   },
   methods: {
     getMovieDetail() {
-      axios.get(API_URL + `/movies/${this.$route.params.movie_id}`)
+      axios.get(API_URL + `/movies/${this.$route.params.movie_id}/`)
       .then((res) => {
         // DB에 있다면 DB 정보 가져오기
-        // console.log(res)
+        console.log(res)
         this.movie = res
       })
       .catch((error) => {
@@ -60,7 +60,7 @@ export default {
         // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
         axios({
           method: 'get',
-          url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
+          url: `${MOVIE_URL}/${this.$route.params.movie_id}/`,
           params: {
             api_key: process.env.VUE_APP_TMDB,
             language: 'ko-KR',
@@ -81,7 +81,7 @@ export default {
             title: this.movie['title'],
             overview: this.movie['overview'],
             release_date: this.movie['release_date'],
-            tmdb_id: this.movie['id'],
+            id: this.movie['id'],
             adult: this.movie['adult'],
             popularity: this.movie['popularity'],
             vote_average: this.movie['vote_average'],
@@ -102,7 +102,7 @@ export default {
     getCredits() {
       axios({
         method: 'get',
-        url: `${MOVIE_URL}/${this.$route.params.movie_id}/credits`,
+        url: `${MOVIE_URL}/${this.$route.params.movie_id}/credits/`,
         params: {
           api_key: process.env.VUE_APP_TMDB,
           language: 'ko-KR',

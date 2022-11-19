@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Movie
+from .models import Movie, Community, Comment, Review, ReviewComment
 
 class MovieListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,54 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         model = Movie
         fields = '__all__'
 
-# review
-# comment
-# coummnity
-# 등등
+# ------------------------------------------------------
+class CommunityListSerializer(serializers.ModelSerializer):
+  userName = serializers.SerializerMethodField()
+  
+  def get_userName(self,obj):
+    return obj.user.username
+
+  class Meta:
+    model = Community
+    fields = ('id', 'userName', 'user', 'title', 'content', 'created_at', 'updated_at',)
+    read_only_fields = ('user',)
+
+
+class CommentSerializer(serializers.ModelSerializer):
+  userName = serializers.SerializerMethodField()
+  
+  def get_userName(self,obj):
+    return obj.user.username
+
+  class Meta:
+    model = Comment
+    fields = ('id', 'userName', 'user', 'content', 'created_at', 'updated_at', 'community',)
+    read_only_fields = ('user','community',)
+    
+class ReviewListSerializer(serializers.ModelSerializer):
+  movie_title = serializers.SerializerMethodField()
+
+  def get_movie_title(self, obj):
+    return obj.movie.title
+
+  userName = serializers.SerializerMethodField()
+  
+  def get_userName(self,obj):
+    return obj.user.username
+
+  class Meta:
+    model = Review
+    fields = ('id', 'user', 'userName', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title')
+    read_only_fields = ('user',)
+
+
+class ReviewCommentSerializer(serializers.ModelSerializer):
+  userName = serializers.SerializerMethodField()
+  
+  def get_userName(self,obj):
+    return obj.user.username
+
+  class Meta:
+    model = ReviewComment
+    fields = ('id', 'userName', 'user', 'content', 'review', 'rank', 'created_at', 'updated_at',)
+    read_only_fields = ('user', 'review',)
