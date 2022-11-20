@@ -8,6 +8,6 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
-        data['profile_image'] = self.validated_data.get('profile_image', '')
+
 
         return data

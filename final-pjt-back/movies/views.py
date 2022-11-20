@@ -371,5 +371,11 @@ def action10(request):
     return Response(serializer.data)
     
     
-    
+# 로맨스 10개 랜덤으로 고고
+@api_view(['GET'])
+def romance10(request):
+    genre = get_object_or_404(Genre, pk=10749)
+    movies = random.sample(list(genre.movie_set.all()[:100]),10)
+    serializer = MovieListSerializer(movies, many=True)
+    return Response(serializer.data)
     

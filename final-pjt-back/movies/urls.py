@@ -28,6 +28,7 @@ urlpatterns = [
     path('get_genre/',views.get_genre),
     path('goto_main/',views.goto_main),
     path('action10/',views.action10),
+    path('romance10',views.romance10),
     
     #drf-spectacular
     path('schema/', SpectacularAPIView.as_view(),name='schema'),
