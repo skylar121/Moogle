@@ -129,17 +129,14 @@ def review_list_create(request, movie_pk):
     serializer = ReviewListSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
       movie = get_object_or_404(Movie, pk=request.data.get('movie'))
-
-      pre_point = movie.vote_average * movie.vote_count
-      pre_count = movie.vote_count
-
-      point = pre_point+request.data.get('rank')
-      count = movie.vote_count + 1
-      new_vote_average = round(point/count, 2)
-
-      movie.vote_average = new_vote_average
-      movie.vote_count = count
-      movie.save()
+      
+      # pre_point = movie.vote_average * movie.vote_count
+      # point = pre_point+int(request.data.get('rank'))
+      # count = movie.vote_count + 1
+      # new_vote_average = round(point/count, 2)
+      # movie.vote_average = new_vote_average
+      # movie.vote_count = count
+      # movie.save()
         
       serializer.save(user=request.user)
       return Response(serializer.data, status=status.HTTP_201_CREATED)
