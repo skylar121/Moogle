@@ -1,10 +1,11 @@
 <template>
   <div class="row g-0 p-4">
     <h3 class="fw-bold">Reviews</h3>
+    <span>더 많은 게시물을 보려면? Community 가기</span>
     <div class="container overflow-hidden">
-      <div v-if="isLogin" class="row">
-        <div v-if="reviews?.length > 0">
-          <div v-for="review in reviews" :key="review.id" class="card review-card col-6 col-md-4 p-3">
+      <div v-if="isLogin" class="row col-6 col-md-4 p-3">
+        <div v-if="reviews?.length > 0" class="col">
+          <div v-for="review in reviews" :key="review.id" class="card review-card ">
             <div class="card-header text-bg-primary">
               {{ review.userName }}
             </div>

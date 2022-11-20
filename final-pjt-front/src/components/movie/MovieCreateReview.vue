@@ -6,8 +6,8 @@
           <b-form-rating
             id="rating-lg-no-border rating-inline"
             @change="onRate"
-            :value="userReview"
-            v-model="movieRating"
+            :value="userReview[0].rank"
+            v-model="reviewRating"
             icon-half="star-half"
             variant="danger"
             no-border inline show-value show-clear
@@ -17,18 +17,38 @@
             color="#ffd21e"
           ></b-form-rating>
         </div>
-        <div v-if="userReview">
-          <p>{{ userReview.content }}</p>
-          <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn">별점 & 리뷰 수정 <i class="fa-solid fa-pen-to-square"></i></button>
+        <div v-if="!isEditing && userReview">
+          <p>{{ userReview[0]?.title }}</p>
+          <p>{{ userReview[0]?.content }}</p>
+          <div class="d-flex justify-content-end">
+            <button @click.prevent="onEdit" 
+              type="submit" 
+              class="btn btn-primary review-submit-btn"
+            >
+              별점 & 리뷰 수정 
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </div>
         </div>
         <div v-else>
         <!-- <div> -->
-          <div class="mb-3 review-input" @change="onRate" >
-            <label for="review" class="form-label">나의 한줄평</label>
-            <textarea v-model="movieComment" class="form-control" id="review" rows="3" placeholder="2자 이상 남겨주세요."></textarea>
+          <div class="mb-3 review-input text-center" @change="onRate" >
+            <label for="reviewTitle" class="form-label">제목</label>
+            <input v-model="reviewTitle" class="form-control" id="reviewTitle" rows="3" placeholder="2자 이상 남겨주세요.">
           </div>
-          <div class="d-flex flex-row-reverse">
+          <div class="mb-3 review-input" @change="onRate" >
+            <label for="reviewContent" class="form-label">내용</label>
+            <textarea v-model="reviewContent" class="form-control" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요.">{{}}</textarea>
+          </div>
+
+          <div v-if="!isEditing" class="d-flex justify-content-end">
             <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn">별점 & 리뷰 저장 <i class="fa-solid fa-pen-to-square"></i></button>
+            <button type="button" @click="onEdit()" class="btn btn-dark text-light">취소</button>
+          </div>
+
+          <div v-else class="d-flex justify-content-end">
+            <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn">수정 완료 <i class="fa-solid fa-pen-to-square"></i></button>
+            <button type="button" @click="onEdit()" class="btn btn-dark text-light">취소</button>
           </div>
         </div>
         <!-- <div class="mb-3 form-check review-check">
@@ -65,12 +85,15 @@ export default {
   },
   props: {
     userReview: Array,
+    propStar: Number,
     movie: Object,
   },
   data() {
     return {
-      movieRating: null,
-      movieComment: null,
+      reviewTitle: this.userReview[0]?.title,
+      reviewRating: this.propStar,
+      reviewContent: this.userReview[0]?.content,
+      isEditing: false,
     }
   },
   computed: {
@@ -93,24 +116,29 @@ export default {
       }
     },
     createReview() {
-      if (!this.movieRating || this.movieRating <= 0.0 ) {
+      if (!this.reviewRating || this.reviewRating <= 0.0 ) {
         alert('별점은 필수입니다!')
-        this.movieRating = null
+        this.reviewRating = null
         return
       }
-      if (!this.movieComment) {
+      if (!this.reviewContent) {
+        alert('제목은 필수입니다!')
+        this.reviewContent = null
+        return
+      }
+      if (!this.reviewContent) {
         alert('리뷰도 필수입니다!')
-        this.movieComment = null
+        this.reviewContent = null
         return
       }
-      if (this.movieComment.length < 2) {
+      if (this.reviewContent.length < 2) {
         alert('보다 좋은 커뮤니티를 위해 2자 이상 작성 부탁드려요!')
         return
       }
       const reviewItem = {
-        title: this.movie.title,
-        content: this.movieComment,
-        rank: this.movieRating,
+        title: this.reviewTitle,
+        content: this.reviewContent,
+        rank: this.reviewRating,
         movie: this.movie.id
       }
       console.log(this.token)
@@ -125,15 +153,66 @@ export default {
         .then((res) => {
           console.log(res)
           this.$emit('fetchAllReviews')
-          this.movieRating = null
-          this.movieComment = null
+          // this.reviewRating = null
+          // this.reviewTitle = null
+          // this.reviewContent = null
         })
         .catch((err) => {
           console.log(err)
         })
     },
+    onEdit () {
+      this.isEditing = !this.isEditing
+    },
     updateReview() {
+      if (!this.reviewRating || this.reviewRating <= 0.0 ) {
+        alert('별점은 필수입니다!')
+        this.reviewRating = null
+        return
+      }
+      if (!this.reviewContent) {
+        alert('제목은 필수입니다!')
+        this.reviewContent = null
+        return
+      }
+      if (!this.reviewContent) {
+        alert('리뷰도 필수입니다!')
+        this.reviewContent = null
+        return
+      }
+      if (this.reviewContent.length < 2) {
+        alert('보다 좋은 커뮤니티를 위해 2자 이상 작성 부탁드려요!')
+        return
+      }
+      const reviewItem = {
+        title: this.reviewTitle,
+        content: this.reviewContent,
+        rank: this.reviewRating,
+        movie: this.movie.id
+      }
 
+      console.log(reviewItem)
+      console.log((this.token))
+      
+      axios({
+        method: 'put',
+        url: api.movies.updateReview(this.movie.id),
+        data: reviewItem,
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((res) => {
+          console.log(res)
+          this.isEditing = false
+          this.$emit('fetchAllReviews')
+          // this.reviewRating = null
+          // this.reviewTitle = null
+          // this.reviewContent = null
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
   },
   created() {

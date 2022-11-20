@@ -107,7 +107,7 @@ def create_comment(request, community_pk):
 
 # 커뮤니티 게시글 삭제
 @api_view(['PUT', 'DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def community_update_delete(request, community_pk):
   community = get_object_or_404(Community, pk=community_pk)
@@ -190,7 +190,9 @@ def create_review_comment(request, review_pk):
 # @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def review_update_delete(request, review_pk):
+  print('YES')
   review = get_object_or_404(Review, pk=review_pk)
+  
   if not request.user.reviews.filter(pk=review_pk).exists():
     return Response({'message': '권한이 없습니다.'})
 
@@ -199,28 +201,28 @@ def review_update_delete(request, review_pk):
     
     if serializer.is_valid(raise_exception=True):
       movie = get_object_or_404(Movie, pk=request.data.get('movie'))
-      pre_point = movie.vote_average * (movie.vote_count - 1)
-      pre_count = movie.vote_count - 1
-      point = pre_point+request.data.get('rank')
-      count = movie.vote_count
-      new_vote_average = round(point/count, 2)
-      movie.vote_average = new_vote_average
-      movie.vote_count = count
-      movie.save()
+      # pre_point = movie.vote_average * (movie.vote_count - 1)
+      # pre_count = movie.vote_count - 1
+      # point = pre_point+request.data.get('rank')
+      # count = movie.vote_count
+      # new_vote_average = round(point/count, 2)
+      # movie.vote_average = new_vote_average
+      # movie.vote_count = count
+      # movie.save()
       serializer.save(user=request.user)
       return Response(serializer.data)
 
   else:
     review = get_object_or_404(Review, pk=review_pk)
     movie = get_object_or_404(Movie, pk=review.movie_id)
-    pre_point = movie.vote_average * (movie.vote_count)
-    pre_count = movie.vote_count
-    point = pre_point - review.rank
-    count = movie.vote_count-1
-    new_vote_average = round(point/count, 2)
-    movie.vote_average = new_vote_average
-    movie.vote_count = count
-    movie.save()
+    # pre_point = movie.vote_average * (movie.vote_count)
+    # pre_count = movie.vote_count
+    # point = pre_point - review.rank
+    # count = movie.vote_count-1
+    # new_vote_average = round(point/count, 2)
+    # movie.vote_average = new_vote_average
+    # movie.vote_count = count
+    # movie.save()
     review.delete()
     return Response({ 'id': review_pk })
 

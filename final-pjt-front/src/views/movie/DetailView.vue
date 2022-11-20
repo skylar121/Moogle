@@ -8,7 +8,7 @@
           <!-- 왼쪽 포스터 영역 -->
           <div class="col-md-4">
             <img :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start  w-100" alt="">
-            <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
+            <MovieCreateReview :movie="movie" :userReview="userReview" :propStar="userReview[0].rank" :propContent="userReview[0].content" @fetchAllReviews="fetchAllReviews" />
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
