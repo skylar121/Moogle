@@ -1,36 +1,38 @@
 <template>
   <div v-if="movie">
-    <img class="background-img" :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path">
+    <picture><img class="background-img" :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path"></picture>
     <div class="container-lg mt-3">
       <div class="card mb-3">
+        <!-- 영화 디테일 + 리뷰 작성 + 추천 -->
         <div class="row g-0">
-          <!-- 포스터 -->
+          <!-- 왼쪽 포스터 영역 -->
           <div class="col-md-4">
             <img :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start  w-100" alt="">
-            <MovieItemCreateReview :movie="movie" />
+            <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
             <div class="card-body p-4">
-              <MovieItemDetail :movie="movie" :cast="cast" :director="director" />
-              <MovieItemSimilar />
+              <MovieDetail :movie="movie" :cast="cast" :director="director" />
+              <MovieSimilar />
             </div>
           </div>
         </div>
+        <!-- 영화 리뷰 목록 -->
+        <MovieReviewList :reviews="reviews" />
       </div>
-      <MovieItemReviewList />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-// import api from '@/api/api'
+import api from '@/api/api'
 import axios from 'axios'
-import MovieItemCreateReview from '@/components/movie/MovieItemCreateReview'
-import MovieItemDetail from '@/components/movie/MovieItemDetail'
-import MovieItemSimilar from '@/components/movie/MovieItemSimilar'
-import MovieItemReviewList from '@/components/movie/MovieItemReviewList'
+import MovieCreateReview from '@/components/movie/MovieCreateReview'
+import MovieDetail from '@/components/movie/MovieDetail'
+import MovieSimilar from '@/components/movie/MovieSimilar'
+import MovieReviewList from '@/components/movie/MovieReviewList'
 
 const MOVIE_URL = 'https://api.themoviedb.org/3/movie'
 const API_URL = 'http://127.0.0.1:8000'
@@ -38,10 +40,10 @@ const API_URL = 'http://127.0.0.1:8000'
 export default {
   name: 'DetailView',
   components: {
-    MovieItemCreateReview,
-    MovieItemDetail,
-    MovieItemSimilar,
-    MovieItemReviewList,
+    MovieCreateReview,
+    MovieDetail,
+    MovieSimilar,
+    MovieReviewList,
   },
   data() {
     return {
@@ -50,16 +52,19 @@ export default {
       director: null,
       userReview: null,
       totalComments: null,
+      reviews: null,
     }
   },
   computed: {
     ...mapState([
-      'token'
+      'token',
+      'currUser',
     ]),
   },
   created() {
     this.getMovieDetail()
     this.getCredits()
+    this.fetchAllReviews()
   },
   methods: {
     getMovieDetail() {
@@ -147,6 +152,25 @@ export default {
           console.log(err)
         })
     },
+    // 유저 리뷰 가져오기
+    fetchAllReviews() {
+      axios({
+        method: 'get',
+        url: api.movies.createReview(this.$route.params.movie_id),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((response)=>{
+          console.log(response.data)
+          this.reviews = response.data.reverse()
+          this.userReview = response.data.filter(review => this.currUser.pk === review.user)
+          console.log(this.userReview)
+        })
+        .catch((error)=>{
+          console.log(error);
+        })
+    },
   },
 }
 </script>
@@ -157,13 +181,14 @@ export default {
 }
 
 .background-img {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 160%;
   object-fit: cover;
   position: absolute;
   top: 0;
   opacity: 0.4;
   background: #575757;
+  /* background-image: linear-gradient(rgba(0,0,0,.85) 15%,rgba(0,0,0,.2) 40%,#000 90%); */
 }
 
 /* background-image로 구현시

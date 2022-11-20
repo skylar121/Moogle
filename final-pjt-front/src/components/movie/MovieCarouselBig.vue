@@ -32,7 +32,7 @@ import { mapGetters } from 'vuex'
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 
 export default {
-  name: 'MovieListCarouselBig',
+  name: 'MovieCarouselBig',
   components: {
     Carousel3d,
     Slide,

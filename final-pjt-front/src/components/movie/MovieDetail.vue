@@ -58,7 +58,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'MovieItemDetail',
+  name: 'MovieDetail',
   props: {
     movie: Object,
     cast: Array,

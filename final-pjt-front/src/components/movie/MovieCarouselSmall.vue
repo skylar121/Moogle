@@ -29,7 +29,7 @@
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 
 export default {
-  name: 'MovieListCarouselSmall',
+  name: 'MovieCarouselSmall',
   components: {
     Carousel3d,
     Slide,

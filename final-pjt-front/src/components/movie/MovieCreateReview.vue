@@ -5,9 +5,9 @@
         <div class="star-box d-flex align-items-center justify-content-center mb-3">
           <b-form-rating
             id="rating-lg-no-border rating-inline"
-            @change="onRate" 
+            @change="onRate"
+            :value="userReview"
             v-model="movieRating"
-            :value="movieRating"
             icon-half="star-half"
             variant="danger"
             no-border inline show-value show-clear
@@ -17,17 +17,19 @@
             color="#ffd21e"
           ></b-form-rating>
         </div>
-        <div v-if="movieRating">
-          <p></p>
-          <p>{{ movieComment }}</p>
+        <div v-if="userReview">
+          <p>{{ userReview.content }}</p>
           <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn">별점 & 리뷰 수정 <i class="fa-solid fa-pen-to-square"></i></button>
         </div>
         <div v-else>
+        <!-- <div> -->
           <div class="mb-3 review-input" @change="onRate" >
             <label for="review" class="form-label">나의 한줄평</label>
             <textarea v-model="movieComment" class="form-control" id="review" rows="3" placeholder="2자 이상 남겨주세요."></textarea>
           </div>
-          <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn">별점 & 리뷰 저장 <i class="fa-solid fa-pen-to-square"></i></button>
+          <div class="d-flex flex-row-reverse">
+            <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn">별점 & 리뷰 저장 <i class="fa-solid fa-pen-to-square"></i></button>
+          </div>
         </div>
         <!-- <div class="mb-3 form-check review-check">
           <input type="checkbox" class="form-check-input" id="private">
@@ -57,11 +59,12 @@ import { BFormRating } from 'bootstrap-vue'
 import api from '@/api/api'
 
 export default {
-  name: 'MovieItemReview',
+  name: 'MovieCreateReview',
   components: {
     BFormRating
   },
   props: {
+    userReview: Array,
     movie: Object,
   },
   data() {
@@ -72,7 +75,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'token'
+      'token',
+      'currUser'
     ]),
     ...mapGetters([
       'isLogin',
@@ -120,7 +124,7 @@ export default {
       })
         .then((res) => {
           console.log(res)
-          this.$emit('fetchCurrUserReview')
+          this.$emit('fetchAllReviews')
           this.movieRating = null
           this.movieComment = null
         })
@@ -128,31 +132,12 @@ export default {
           console.log(err)
         })
     },
-    // 유저 리뷰 가져오기
-    fetchCurrUserReview() {
-      axios({
-        method: 'get',
-        url: api.movies.createReview(this.$route.params.movie_id),
-        headers: {
-          Authorization: `Token ${this.token}`
-        }
-      })
-        .then((response)=>{
-            console.log(response.data[0])
-            this.movieRating = response.data[0].rank
-            this.movieComment = response.data[0].content
-        })
-        .catch((error)=>{
-          console.log(error);
-        })
-    },
-    
     updateReview() {
 
     },
   },
   created() {
-    this.fetchCurrUserReview()
+    this.$emit('fetchAllReviews')
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-4">
     <h6>비슷한 영화 추천</h6>
     <carousel-3d
       v-if="similarMovies"
@@ -34,7 +34,7 @@
 import axios from 'axios'
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 export default {
-  name: 'MovieItemSimilar',
+  name: 'MovieSimilar',
   components: {
     Carousel3d,
     Slide,
@@ -60,7 +60,8 @@ export default {
       })
         .then((res) => {
           // console.log(res)
-          this.similarMovies = res.data.results
+          // 지금 보고 있는 영화는 제외하고 추천
+          this.similarMovies = res.data.results.filter(movie => movie.id !== this.$route.params.movie_id)
           // console.log(this.similarMovies)
         })
         .catch((err) => {

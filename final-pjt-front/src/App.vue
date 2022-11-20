@@ -87,9 +87,9 @@ a {
 
 nav {
   overflow: hidden;
-  padding: 3em;
+  padding: 2.7em;
   color: #fff;
-  /* background-color:#21201E; */
+  /* background-color: #222222; */
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -141,6 +141,7 @@ input {
   font-weight: 200;
   font-style: italic;
   color: #fff;
+  margin-left: -.8em;
   padding: 1.2em 2em;
   border: 0.3rem solid #fff;
   border-radius: 2rem;
