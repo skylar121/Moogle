@@ -113,6 +113,24 @@ export default new Vuex.Store({
   },
   getters: {
     isLogin: state => !!state.token,
+    shuffledRecommendMovies(state) {
+      const arr = state.recommendMovies
+      let m = arr.length;
+      while (m) {
+        const i = Math.floor(Math.random() * m--);
+        [arr[m], arr[i]] = [arr[i], arr[m]];
+      }
+      return arr
+    },
+    shuffledNowPlayingMovies(state) {
+      const arr = state.nowPlayingMovies
+      let m = arr.length;
+      while (m) {
+        const i = Math.floor(Math.random() * m--);
+        [arr[m], arr[i]] = [arr[i], arr[m]];
+      }
+      return arr
+    },
   },
   mutations: {
     SAVE_TOKEN(state, token) {
@@ -218,17 +236,41 @@ export default new Vuex.Store({
 
     //////////////// movies ////////////////
     fetchRecommendMovies(context) {
-      axios({
-        method: 'get',
-        url: api.movies.recommendMovies(),
-      })
-        .then((response) => {
-          console.log(response)
-          context.commit('SAVE_RECOMMEND', response)
+      // 로그인 했다면 맞춤 추천, 안했다면 TMDB 추천
+      if (this.state.token) {
+        axios({
+          method: 'get',
+          url: api.movies.recommendMovies(),
         })
-        .catch((error) => {
-          console.log(error)
+          .then((res) => {
+            // console.log(res)
+            context.commit('SAVE_RECOMMEND', res)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else {
+        const MOVIE_URL = 'https://api.themoviedb.org/3/movie/popular'
+        axios({
+          method: 'get',
+          // url: api.movies.recommendMovies(),
+          url: MOVIE_URL,
+          params: {
+            api_key : process.env.VUE_APP_TMDB,
+            language: 'ko-KR',
+          }
         })
+          .then((res) => {
+            // console.log(res)
+            // context.commit('SAVE_RECOMMEND', res)
+  
+            // console.log(res.data.results)
+            context.commit('SAVE_RECOMMEND', res.data.results)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     fetchNowPlayingMovies(context) {
       const MOVIE_URL = 'https://api.themoviedb.org/3/movie/now_playing'
@@ -242,9 +284,9 @@ export default new Vuex.Store({
         }
       })
         .then((response) => {
-          console.log(response.data.results)
+          // console.log(response.data.results)
           context.commit('SAVE_NOW_PLAYING', response.data.results)
-          console.log(context.state.nowPlayingMovies)
+          // console.log(context.state.nowPlayingMovies)
         })
         .catch((error) => {
           console.log(error)
@@ -256,7 +298,7 @@ export default new Vuex.Store({
         url: api.movies.actionMovies()
       })
         .then((response) => {
-          console.log('액숀', response.data)
+          // console.log(response.data)
           context.commit('SAVE_ACTION', response.data)
         })
         .catch((error) => {

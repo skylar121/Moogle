@@ -2,7 +2,7 @@
   <div class="container mb-3 p-4">
     <div v-if="!isLogin">
       <form @submit.prevent="createReview" class="position-relative">
-        <div class="star-box d-flex align-items-center ms-2 mb-3">
+        <div class="star-box d-flex align-items-center justify-content-center mb-3">
           <b-form-rating
             id="rating-lg-no-border rating-inline"
             @change="onRate()"
@@ -10,11 +10,11 @@
             :value="movieRating"
             icon-half="star-half"
             variant="danger"
-            no-border inline show-value 
+            no-border inline show-value show-clear
             precision="1"
             class="star text-light"
             size="lg"
-            color="#ff8800"
+            color="#ffd21e"
           ></b-form-rating>
         </div>
         <div class="mb-3 review-input">
@@ -23,7 +23,7 @@
         </div>
         <div class="mb-5 form-check review-check">
           <input type="checkbox" class="form-check-input" id="private">
-          <label class="form-check-label me-2" for="private">비공개</label>
+          <label class="form-check-label me-2" for="private">비밀글</label>
           <span id="emailHelp" class="form-text">나만 볼 수 있어요.</span>
         </div>
         <button type="submit" class="btn btn-primary position-absolute review-submit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       movieId: this.$route.params.movie_id,
-      movieRating: 0,
+      movieRating: 0.0,
     }
   },
   props: {
@@ -71,18 +71,19 @@ export default {
   },
   computed: {
     ...mapState([
-      'userNickname',
       'isLogin',
     ]),
-    // shuffleRecommendMovies() {
-    //   return this.shuffle(this.recommendMovies)
-    // },
   },
 
 }
 </script>
 
 <style>
+/* 별 크기 키우기 */
+#rating-lg-no-border\ rating-inline {
+  font-size: 1.5rem;
+}
+
 .review-input input {
   color: white;
   width: 100%;

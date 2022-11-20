@@ -52,16 +52,16 @@ export default {
       axios.get(API_URL + `/movies/${this.$route.params.movie_id}/`)
       .then((res) => {
         // DB에 있다면 DB 정보 가져오기
-        console.log(res.data)
+        // console.log(res.data)
         this.movie = res.data
       })
       .catch((error) => {
-        console.log('DB에 없어')
+        // console.log('DB에 없어')
         console.log(error)
 
         // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
         if (!this.movie) {
-          console.log('TMDB에서 가져올거야')
+          // console.log('TMDB에서 가져올거야')
           axios({
             method: 'get',
             url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
@@ -72,7 +72,7 @@ export default {
           })
           .then((res) => {
             this.movie = res.data
-            console.log(this.movie)
+            // console.log(this.movie)
 
             axios({
               method: 'post',
@@ -91,7 +91,7 @@ export default {
               }
             })
               .then((response) => {
-                console.log(this.movie)
+                // console.log(this.movie)
                 console.log(response)
               })
               .catch((error) => {
@@ -138,6 +138,10 @@ export default {
 </script>
 
 <style lang="scss">
+#app > nav > div:nth-child(3) > a {
+  color: $primary;
+}
+
 .background-img {
   width: 100vw;
   height: 100vh;
@@ -161,7 +165,7 @@ export default {
     font-size: 2.7rem;
     font-weight: 800;
   }
-  a {
+  & a {
     color: white;
   }
   h6 {

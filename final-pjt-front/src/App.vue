@@ -15,7 +15,7 @@
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
       <div v-else>
-        <router-link :to="{ name: 'MyPageView' }" class="menu-items">
+        <router-link :to="{ name: 'ProfileView' }" class="menu-items">
         {{ currUser?.username }}
         </router-link>
         <span>

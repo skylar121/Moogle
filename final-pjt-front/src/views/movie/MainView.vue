@@ -1,9 +1,12 @@
 <template>
   <div>
     <section class="display">
-      <div class="row-title">
-        <span class="text-primary">{{ currUser?.username }} </span>
-        님을 위한 추천
+      <div v-if="currUser" class="row-title">
+        <span class="text-primary">{{ currUser.username }}</span>
+        님을 위해 준비했어요!
+      </div>
+      <div v-else class="row-title">
+        <span class="text-primary">추천 영화 <span class="text-muted fs-6"> 나만을 위한 추천을 보고싶다면 로그인!</span></span>
       </div>
       <MovieListCarouselBig />
     </section>
@@ -12,18 +15,18 @@
       <div class="row-title">
         현재 상영중인 영화
       </div>
-      <MovieListCarouselSmall :movie-data="nowPlayingMovies" />
+      <MovieListCarouselSmall :movie-data="shuffledNowPlayingMovies" />
 
       <div class="row-title">
-        Actions
+        영화도 나는 멜로
       </div>
       <MovieListCarouselSmall :movie-data="actionMovies" />
 
-      <!-- 3. 장르별 영화 -->
       <div class="row-title">
-        Romance
+        너는 액션<span class="text-muted fs-6"> 난 피자 너는 순두부</span>
       </div>
-      <MovieListCarouselSmall :movie-data="nowPlayingMovies" />
+      <MovieListCarouselSmall :movie-data="actionMovies" />
+
     </section>
   </div>
 
@@ -44,22 +47,23 @@ export default {
   computed: {
     ...mapState([
       'currUser',
-      'nowPlayingMovies',
       'actionMovies',
       'romanceMovies',
-  ]),
+    ]),
+    ...mapGetters([
+      'shuffledNowPlayingMovies',
+    ]),
   },
   methods: {
     ...mapActions([
+      'fetchRecommendMovies',
       'fetchNowPlayingMovies',
       'fetchActionMovies',
       'fetchRomanceMovies',
     ]),
-    ...mapGetters([
-      'isLogin',
-    ]),
   },
   created() {
+    this.fetchRecommendMovies()
     this.fetchNowPlayingMovies()
     this.fetchActionMovies()
     this.fetchRomanceMovies()

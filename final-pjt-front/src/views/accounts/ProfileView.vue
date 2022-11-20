@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="profile">
     <!-- <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`"> -->
     <div class="card text-center">
       <div class="card-header">
@@ -16,9 +16,9 @@
         </ul>
       </div>
       <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
+        <h5 class="card-title">Profile</h5>
         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <a href="#" class="btn btn-primary">평가 더 남기러가기</a>
       </div>
     </div>
   </div>
@@ -31,5 +31,7 @@ export default {
 </script>
 
 <style>
-
+.profile {
+  border: 1px solid pink;
+}
 </style>

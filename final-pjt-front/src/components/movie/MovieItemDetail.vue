@@ -56,6 +56,10 @@ export default {
     ...mapState([
       'genres_list',
     ]),
+    // thisMovieGenres() {
+    //   const genres_list =  this.$store.state.genres_list
+    //   return genres_list.filter(genre => genre['id'] === genreId)
+    // },
   },
   data() {
     return {
@@ -74,6 +78,9 @@ export default {
   .card-title {
     font-size: 2.7rem;
     font-weight: 800;
+  }
+  .card-text {
+    /* word-break: keep-all; */
   }
   a {
     color: white;
