@@ -19,7 +19,7 @@
           <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" :height="500">
           <div class="movie-swipe-big">
             <div class="movie-title-big">{{ movie.title }} </div>
-            <div class="movie-rating-big">예상별점 ⭐{{ movie.vote_average }}</div>
+            <div class="movie-rating-big">예상별점 ⭐{{ (movie?.vote_average/2).toFixed(1) }}</div>
           </div>
         </div>
       </template>

@@ -6,25 +6,31 @@
         <div class="row g-0">
           <!-- 포스터 -->
           <div class="col-md-4">
-            <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" class="img-fluid rounded-start" alt="">
-            <MovieItemReview :movie="movie" />
+            <img :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start  w-100" alt="">
+            <MovieItemCreateReview :movie="movie" />
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
             <div class="card-body p-4">
               <MovieItemDetail :movie="movie" :cast="cast" :director="director" />
+              <MovieItemSimilar />
             </div>
           </div>
         </div>
       </div>
+      <MovieItemReviewList />
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+// import api from '@/api/api'
 import axios from 'axios'
-import MovieItemReview from '@/components/movie/MovieItemReview'
+import MovieItemCreateReview from '@/components/movie/MovieItemCreateReview'
 import MovieItemDetail from '@/components/movie/MovieItemDetail'
+import MovieItemSimilar from '@/components/movie/MovieItemSimilar'
+import MovieItemReviewList from '@/components/movie/MovieItemReviewList'
 
 const MOVIE_URL = 'https://api.themoviedb.org/3/movie'
 const API_URL = 'http://127.0.0.1:8000'
@@ -32,18 +38,26 @@ const API_URL = 'http://127.0.0.1:8000'
 export default {
   name: 'DetailView',
   components: {
-    MovieItemReview,
-    MovieItemDetail
+    MovieItemCreateReview,
+    MovieItemDetail,
+    MovieItemSimilar,
+    MovieItemReviewList,
   },
   data() {
     return {
       movie: null,
       cast: null,
       director: null,
+      userReview: null,
+      totalComments: null,
     }
   },
+  computed: {
+    ...mapState([
+      'token'
+    ]),
+  },
   created() {
-    // console.log('라우팅 성공')
     this.getMovieDetail()
     this.getCredits()
   },

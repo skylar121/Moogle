@@ -17,7 +17,7 @@
           <img :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path"  :height="180">
           <div class="movie-swipe-small">
             <span class="movie-title-small">{{ movie.title }}</span>
-            <span>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)}` : '' }}</span>
+            <span>{{ (movie?.vote_average/2).toFixed(1) > 0.0 ? `⭐${(movie?.vote_average/2).toFixed(1)}` : '' }}</span>
           </div>
         </div>
       </template>

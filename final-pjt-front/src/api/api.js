@@ -18,5 +18,6 @@ export default {
     nowPlayingMovies: () => LOCAL + MOVIES + 'goto_main/',
     actionMovies: () => LOCAL + MOVIES + 'action10/',
     romanceMovies: () => LOCAL + MOVIES + 'romance10/',
+    createReview: movieId => LOCAL + MOVIES + movieId + '/review_list_create/',
   },
 }

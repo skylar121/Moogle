@@ -191,8 +191,9 @@ export default new Vuex.Store({
         .then((res) => {
           const token = res.data.key
           context.commit('SAVE_TOKEN', token) // token
+          // 로그인되면 유저 정보 가지러가기
           context.dispatch('getCurrUser', token)
-          // 이전 페이지로는 어케가징
+          // 이전 페이지로는 어케가징 ?
           router.push({ name: 'MainView' })
         })
         .catch((err) => {

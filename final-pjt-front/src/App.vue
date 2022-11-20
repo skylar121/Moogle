@@ -3,7 +3,7 @@
     <nav>
       <div class="logo">
         <router-link :to="{ name: 'MainView' }">
-          <span contenteditable>
+          <span>
             neon lights
           </span>
         </router-link>
@@ -43,7 +43,10 @@ export default ({
   },
   methods: {
     logOut() {
-      this.$store.dispatch('logOut')
+      if (confirm('로그아웃 하실건가요?') == true){ 
+        //true는 확인버튼을 눌렀을 때 코드 작성
+        this.$store.dispatch('logOut')
+      }
     }
   }
 })

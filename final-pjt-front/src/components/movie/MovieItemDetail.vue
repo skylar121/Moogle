@@ -18,7 +18,19 @@
       <div class="row">
         <div class="col">
           <h6>평균 별점</h6>
-          <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p>
+          <div v-if="movieVoteAverage" class="movieVoteAverage">
+            <b-form-rating
+              v-model="movieVoteAverage"
+              readonly
+              show-value
+              show-value-max
+              precision="1"
+              color="#ffd21e"
+              class="border-0 text-light"
+            ></b-form-rating>
+            <!-- <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p> -->
+          </div>
+          <p v-else>아직 별점이 없어요!</p>
         </div>
         <div class="col">
           <h6>개봉일</h6>
@@ -52,6 +64,14 @@ export default {
     cast: Array,
     director: Object,
   },
+  data() {
+    return {
+      movieVoteAverage: null, 
+      // movie_genres(genres_list) {
+      //   genres_list.filter(genreItem => genreItem['id'] === genreId)
+      // }
+    }
+  },
   computed: {
     ...mapState([
       'genres_list',
@@ -61,13 +81,9 @@ export default {
     //   return genres_list.filter(genre => genre['id'] === genreId)
     // },
   },
-  data() {
-    return {
-      // movie_genres(genres_list) {
-      //   genres_list.filter(genreItem => genreItem['id'] === genreId)
-      // }
-    }
-  }
+  created() {
+    this.movieVoteAverage = this.movie.vote_average.toFixed(1) > 0.0 ? (this.movie.vote_average / 2).toFixed(1) : null
+  },
 }
 </script>
 
@@ -93,6 +109,10 @@ export default {
   .genre .additional-details {
     font-size: 1.5em;
   }
+}
+
+.movieVoteAverage {
+  width: 80%;
 }
 
 .genre-list {

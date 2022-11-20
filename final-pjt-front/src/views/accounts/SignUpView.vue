@@ -81,9 +81,6 @@ export default {
         this.password1 = null
         this.password2 = null
         return
-      } else if (!profile_image) {
-        alert('사진은 필수예요ㅠㅠ')
-        return
       } else {
         const userData = {
           userId: userId, 
