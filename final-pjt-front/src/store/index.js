@@ -210,6 +210,10 @@ export default new Vuex.Store({
           alert('로그아웃 완료')
           router.push({ name: 'MainView' })
         })
+        .catch((err) => {
+          console.log(err)
+          // alert(err.message)
+        })
     },
     getCurrUser(context, token) {
       console.log('유저정보 가져올게')

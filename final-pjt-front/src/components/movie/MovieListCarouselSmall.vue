@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     goToDetail(id) {
-      console.log('클릭', id)
+      // console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     }
   },

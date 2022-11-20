@@ -18,7 +18,7 @@
         <router-link :to="{ name: 'ProfileView' }" class="menu-items">
         {{ currUser?.username }}
         </router-link>
-        <span>
+        <span @click="logOut" class="logout-btn">
           <i class="fa-solid fa-right-to-bracket fa-lg"></i>
         </span>
       </div>
@@ -41,6 +41,11 @@ export default ({
       'isLogin',
     ]),
   },
+  methods: {
+    logOut() {
+      this.$store.dispatch('logOut')
+    }
+  }
 })
 </script>
 
@@ -128,10 +133,6 @@ input {
   --neon-border-color: rgb(0, 153, 255);
 }
 
-.logo a {
-
-}
-
 .logo span {
   font-size: 1.2rem;
   font-weight: 200;
@@ -182,4 +183,9 @@ input {
         box-shadow: none;
     }    
 }
+
+.logout-btn {
+  cursor: pointer;
+}
+
 </style>

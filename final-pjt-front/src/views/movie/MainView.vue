@@ -20,7 +20,7 @@
       <div class="row-title">
         영화도 나는 멜로
       </div>
-      <MovieListCarouselSmall :movie-data="actionMovies" />
+      <MovieListCarouselSmall :movie-data="romanceMovies" />
 
       <div class="row-title">
         너는 액션<span class="text-muted fs-6"> 난 피자 너는 순두부</span>
