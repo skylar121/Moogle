@@ -138,6 +138,7 @@ export default new Vuex.Store({
     },
     REMOVE_TOKEN(state) {
       state.token = null
+      state.currUser = null
       localStorage.removeItem('vuex')
     },
     SAVE_USER_DATA(state, userData) {
