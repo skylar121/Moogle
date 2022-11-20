@@ -1,12 +1,13 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+# from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
+from django.db import models
 
 class Genre(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.TextField()
-
 
 class Movie(models.Model):
     title = models.TextField()
@@ -14,6 +15,7 @@ class Movie(models.Model):
     genres = models.ManyToManyField(Genre)
     release_date = models.TextField(null=True)
     id = models.IntegerField(primary_key=True)
+    genre_name = models.CharField(max_length=300, default=" ", blank=True)
     adult = models.BooleanField()
     popularity = models.FloatField()
     vote_average = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(10)])

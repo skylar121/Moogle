@@ -22,17 +22,39 @@ TMDB_API_KEY = 'b4e0be7fe675a0e4fdd96cca62fc6dbd'
 @api_view(['GET'])
 def movie_list(request):
     if request.method == 'GET':
-        movies = get_list_or_404(Movie)
+        movies = get_list_or_404(Movie.objects.order_by('-popularity'))
         serializer = MovieListSerializer(movies, many=True)
         return Response(serializer.data)
-
+    elif request.method == 'POST':
+        serializer = MovieListSerializer(data = request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 # 단일 영화 조회
+# @api_view(['GET'])
+# def movie_detail(request,id):
+#     movie = get_object_or_404(Movie,id=id)
+#     if request.method == 'GET':
+#       serializer = MovieDetailSerializer(movie)
+#       return Response(serializer.data)
+#     elif request.method == 'DELETE':
+#         movie.delete()
+#         result = {'delete' : f'movie {id} is deleted'}
+#         return Response(result, status=status.HTTP_204_NO_CONTENT)
+#     elif request.method == 'PUT':
+#         serializer = MovieDetailSerializer(movie, data = request.data)
+#         if serializer.is_valid(raise_exception=True):
+#             serializer.save()
+#             return Response(serializer.data)
 @api_view(['GET'])
 def movie_detail(request,id):
     movie = get_object_or_404(Movie,id=id)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
+# 주석 코드로 교체 예정
 
+
+  
 # 커뮤니티 리스트 생성
 @api_view(['GET', 'POST'])
 @authentication_classes([JSONWebTokenAuthentication])
@@ -63,7 +85,7 @@ def community_detail(request, community_pk):
 
 @api_view(['GET'])
 @authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def comment_list(request, community_pk):
     community = get_object_or_404(Community, pk=community_pk)
     comments = community.comment_set.all()
@@ -363,7 +385,8 @@ def goto_main(request):
 @api_view(['GET'])
 def action10(request):
     genre = get_object_or_404(Genre, pk=28)
-    movies = random.sample(list(genre.movie_set.all()[:100]),10)
+    # movies = random.sample(list(genre.movie_set.all()[:100]),10)
+    movies = random.sample(list(genre.movie_set.all().order_by('-popularity')[:100]),10)
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
     
@@ -372,7 +395,42 @@ def action10(request):
 @api_view(['GET'])
 def romance10(request):
     genre = get_object_or_404(Genre, pk=10749)
-    movies = random.sample(list(genre.movie_set.all()[:100]),10)
+    movies = random.sample(list(genre.movie_set.order_by('-popularity')[:100]),10)
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
-    
+
+
+
+
+
+def get_movie_final(request):
+    request_url = f"https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_API_KEY}&language=ko-KR"
+    genres = requests.get(request_url).json()
+    for genre in genres['genres']:
+        jjang = Genre()
+        jjang.id = genre['id']
+        jjang.name = genre['name']
+        jjang.save()
+    for i in range(1, 10):
+        request_url = f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=ko-KR&page={i}"
+        movies = requests.get(request_url).json()
+        for movie in movies['results']:
+            abc = Movie()
+            abc.title = movie['title']
+            abc.overview = movie['overview']
+            abc.release_date = movie.get('release_date')
+            abc.id = movie['id']
+            abc.adult = movie['adult']
+            abc.popularity = movie['popularity']
+            abc.vote_average = movie['vote_average']
+            abc.vote_count = movie['vote_count']
+            abc.poster_path = movie['poster_path']
+            abc.backdrop_path = movie['backdrop_path']
+            if abc.release_date and abc.poster_path and abc.backdrop_path:
+                abc.save()
+                for genre in movie.get('genre_ids'):
+                    for genre2 in genres['genres']:
+                        if genre == genre2['id']:
+                            abc.genres.id = genre2['id']
+                            abc.genres.name = genre2['name']
+    return HttpResponse()

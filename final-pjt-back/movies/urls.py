@@ -25,6 +25,7 @@ urlpatterns = [
     
     # 데이터 불러오기
     path('get_movie/',views.get_movie),
+    path('get_movie_final/',views.get_movie_final),
     path('get_genre/',views.get_genre),
     path('goto_main/',views.goto_main),
     path('action10/',views.action10),
