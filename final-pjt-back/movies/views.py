@@ -116,9 +116,9 @@ def comment_delete(request, community_pk, comment_pk):
     comment.delete()
     return Response({ 'id': comment_pk })
 
-# review
+# 리뷰 생성 및 조회 (로그인 된 상태)
 @api_view(['GET', 'POST'])
-@authentication_classes([JSONWebTokenAuthentication])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def review_list_create(request, movie_pk):
   if request.method == 'GET':
@@ -146,7 +146,7 @@ def review_list_create(request, movie_pk):
 
 # 리뷰 댓글 목록
 @api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def review_comment_list(request, review_pk):
   review = get_object_or_404(Review, pk=review_pk)
@@ -156,7 +156,7 @@ def review_comment_list(request, review_pk):
 
 # 리뷰 댓글 형성
 @api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def create_review_comment(request, review_pk):
   review = get_object_or_404(Review, pk=review_pk)
@@ -168,7 +168,7 @@ def create_review_comment(request, review_pk):
 
 # 리뷰 삭제
 @api_view(['PUT', 'DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def review_update_delete(request, review_pk):
   review = get_object_or_404(Review, pk=review_pk)
@@ -207,7 +207,7 @@ def review_update_delete(request, review_pk):
 
 # 리뷰 댓글 삭제
 @api_view(['DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def review_comment_delete(request, review_pk, review_comment_pk):
   review = get_object_or_404(Review, pk=review_pk)
@@ -222,7 +222,7 @@ def review_comment_delete(request, review_pk, review_comment_pk):
 
 
 @api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def recommend(request):
     pass
