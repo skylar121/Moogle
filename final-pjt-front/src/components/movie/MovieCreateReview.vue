@@ -67,13 +67,13 @@
             <label for="reviewTitle" class="form-label">제목</label>
             <input 
               :value="reviewTitle" 
-              class="form-control" id="reviewTitle" rows="3" 
+              class="" id="reviewTitle" rows="3" 
               placeholder="2자 이상 남겨주세요." 
             >
           </div>
           <div class="mb-3 review-input" @change="onRate" >
             <label for="reviewContent" class="form-label">내용</label>
-            <textarea v-model="reviewContent" class="form-control" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요."></textarea>
+            <textarea v-model="reviewContent" class="" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요."></textarea>
           </div>
           <div class="d-flex justify-content-end">
             <!-- 수정 완료 -->
@@ -86,11 +86,11 @@
         <div v-else class="-flex flex-column justify-content-end align-items-center">            
           <div class="mb-3 review-input text-center" @change="onRate">
             <label for="reviewTitle" class="form-label fs-4">제목</label>
-            <input v-model="reviewTitle" class="form-control" id="reviewTitle" rows="3" placeholder="2자 이상 남겨주세요.">
+            <input v-model="reviewTitle" class="" id="reviewTitle" rows="3" placeholder="2자 이상 남겨주세요.">
           </div>
           <div class="mb-3 review-input text-center" @change="onRate">
             <label for="reviewContent" class="form-label fs-5">내용</label>
-            <textarea v-model="reviewContent" class="form-control" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요.">{{}}</textarea>
+            <div class="d-block w-100"><textarea v-model="reviewContent" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요.">{{}}</textarea></div>
           </div>
           <div class="d-flex justify-content-end">
             <!-- 별점 & 리뷰 저장 -->
@@ -324,6 +324,13 @@ export default {
 /* #review {
   color: #dee2e6;
 } */
+
+textarea {
+  width: 100%;
+  height: 6.25em;
+  border: none;
+  resize: none;
+}
 
 #reviewTitle, #reviewContent {
   /* outline: none; */

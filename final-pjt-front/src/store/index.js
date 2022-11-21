@@ -214,7 +214,7 @@ export default new Vuex.Store({
       })
         .then(() => {
           context.commit('REMOVE_TOKEN')
-          alert('로그아웃 완료')
+          // alert('로그아웃 완료')
           router.push({ name: 'MainView' })
         })
         .catch((err) => {

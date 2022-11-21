@@ -47,8 +47,10 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+// import api from '@/api/api'
 import { mapState, mapGetters } from 'vuex';
+
 export default {
   name: 'MovieReviewList',
   props: {
@@ -63,21 +65,26 @@ export default {
     ])
   },
   methods: {
-    deleteReview() {
-      axios({
-        method: 'delete',
-        url: '',
-        headers: {
-          Authorization: `Token ${this.token}`
-        }
-      })
-      .then(() => {
-        
-      })
-      .catch(() => {
-        console.log()
-      })
-    }
+    // deleteReview() {
+    //   if (confirm('진짜 삭제할까요?') === true) {
+    //     axios({
+    //       method: 'delete',
+    //       url: api.movies.updateDeleteReview(this.userReview[0].id),
+    //       headers: {
+    //         Authorization: `Token ${this.token}`
+    //       }
+    //     })
+    //       .then(() => {
+    //         // console.log(res)
+    //         alert('정상적으로 삭제되었어요.')
+    //         this.isEditing = false
+    //         this.$emit('fetchAllReviews')
+    //       })
+    //       .catch((err) => {
+    //         console.log(err)
+    //       })
+    //     }
+    // },
   },
   created() {
     this.$emit('fetchAllReviews')
