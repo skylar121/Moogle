@@ -1,7 +1,6 @@
 <template>
   <div class="row g-0 p-4">
     <h3 class="fw-bold">Reviews</h3>
-    <span>더 많은 게시물을 보려면? Community 가기</span>
     <div class="container overflow-hidden">
       <div v-if="isLogin" class="row col-6 col-md-4 p-3">
         <div v-if="reviews?.length > 0" class="col">
@@ -28,7 +27,6 @@
               <div class="fs-5">
                 <i class="fa-regular fa-heart me-2"></i>
                 <i class="fa-regular fa-comment me-2"></i>
-                <i v-if="currUser.pk === review.user" @click="updateReview" class="fa-solid fa-pencil me-2"></i>
                 <i v-if="currUser.pk === review.user" @click="deleteReview" class="fa-solid fa-trash-can"></i>
               </div>
               {{ review.updated_at.slice(0, 10) }}
@@ -40,7 +38,7 @@
         </div>
       </div>
       <div v-else>
-        <p>유저들의 리뷰를 보려면 로그인 하세요</p>
+        <p>유저들의 리뷰를 보려면 로그인 하세요~!</p>
       </div>
     </div>
     
@@ -64,9 +62,6 @@ export default {
     ])
   },
   methods: {
-    updateReview() {
-
-    },
     deleteReview() {
       axios({
         method: 'delete',
