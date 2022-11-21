@@ -84,6 +84,28 @@ def profile(request, username):
 
 
 
+# 확인이 필요
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def likes(request):
+    review_id = request.GET['review_id']
+    post = Review.objects.get(id=review_id)
+
+    if not request.user.is_authenticated:
+        message = '로그인을 해주세요'
+        context = {'like_count':post.like.count(),'message':message}
+        return HttpResponse()
+    user = request.user
+    if post.like.filter(id=user.id).exists():
+        post.like.remove(user)
+        message = "좋아요 취소"
+    else:
+        post.like.add(user)
+        message = "좋아요"
+    context = {'like_count' : post.like.count(), "message":message}
+    return HttpResponse()
+
 
 
 
