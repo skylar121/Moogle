@@ -9,7 +9,7 @@
           <div class="col-md-4">
             <img :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start  w-100" alt="">
             <div v-if="userReview">
-              <MovieCreateReview :movie="movie" :userReview="userReview" :propStar="userReview[0]?.rank" :propContent="userReview[0]?.content" @fetchAllReviews="fetchAllReviews" />
+              <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
             </div>
             <div v-else>
               <MovieCreateReview :movie="movie" @fetchAllReviews="fetchAllReviews" />
@@ -64,6 +64,7 @@ export default {
     ...mapState([
       'token',
       'currUser',
+
     ]),
   },
   created() {
@@ -73,65 +74,64 @@ export default {
   },
   methods: {
     getMovieDetail() {
-      console.log('무비디테일가져오기')
+      console.log('DB에서 무비디테일가져오기')
       axios.get(API_URL + `/movies/${this.$route.params.movie_id}/`)
       .then((res) => {
         // DB에 있다면 DB 정보 가져오기
-        // console.log(res.data)
+        console.log(res)
         this.movie = res.data
       })
       .catch((error) => {
         console.log('DB에 없어')
         console.log(error)
 
-        // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
-        if (!this.movie) {
-          console.log('TMDB에서 가져올거야')
-          axios({
-            method: 'get',
-            url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
-            params: {
-              api_key: process.env.VUE_APP_TMDB,
-              language: 'ko-KR',
-            },
-          })
-          .then((res) => {
-            this.movie = res.data
-            // console.log(this.movie)
-            console.log('저장하러간다')
-            axios({
-              method: 'post',
-              url: API_URL + '/movies/',
-              headers: {
-                Authorization: `Token ${this.token}`
-              },
-              data: {
-                title: this.movie['title'],
-                overview: this.movie['overview'],
-                release_date: this.movie['release_date'],
-                id: this.movie['id'],
-                adult: this.movie['adult'],
-                popularity: this.movie['popularity'],
-                vote_average: this.movie['vote_average'],
-                vote_count: this.movie['vote_count'],
-                poster_path: this.movie['poster_path'],
-                backdrop_path: this.movie['backdrop_path'],
-              }
-            })
-              .then((response) => {
-                // console.log(this.movie)
-                console.log('저장완료', response)
-              })
-              .catch((error) => {
-                console.log('아직 post 없음', error)
-              })
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-        }
+        // // DB에 없으면 TMDB에서 데이터 가져와서 DB에 저장
+        // if (!this.movie) {
+        //   console.log('TMDB에서 가져올거야')
+        //   axios({
+        //     method: 'get',
+        //     url: `${MOVIE_URL}/${this.$route.params.movie_id}`,
+        //     params: {
+        //       api_key: process.env.VUE_APP_TMDB,
+        //       language: 'ko-KR',
+        //     },
+        //   })
+        //   .then((res) => {
+        //     this.movie = res.data
+        //     // console.log(this.movie)
+        //     console.log('저장하러간다')
+        //     axios({
+        //       method: 'post',
+        //       url: API_URL + '/movies/',
+        //       headers: {
+        //         Authorization: `Token ${this.token}`
+        //       },
+        //       data: {
+        //         title: this.movie['title'],
+        //         overview: this.movie['overview'],
+        //         release_date: this.movie['release_date'],
+        //         id: this.movie['id'],
+        //         adult: this.movie['adult'],
+        //         popularity: this.movie['popularity'],
+        //         vote_average: this.movie['vote_average'],
+        //         vote_count: this.movie['vote_count'],
+        //         poster_path: this.movie['poster_path'],
+        //         backdrop_path: this.movie['backdrop_path'],
+        //       }
+        //     })
+        //       .then((response) => {
+        //         // console.log(this.movie)
+        //         console.log('저장완료', response)
+        //       })
+        //       .catch((error) => {
+        //         console.log('아직 post 없음', error)
+        //       })
+        //   })
+        //   .catch((err) => {
+        //     console.log(err)
+        //   })
+        // }
       })
-      
     },
     getCredits() {
       axios({

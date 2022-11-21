@@ -295,10 +295,53 @@ export default new Vuex.Store({
         }
       })
         .then((response) => {
-          // console.log(response.data.results)
-          context.commit('SAVE_NOW_PLAYING', response.data.results)
+          let res = response.data.results
+          // console.log(res)
+          context.commit('SAVE_NOW_PLAYING', res)
           // console.log(context.state.nowPlayingMovies)
-        })
+          for (const movie of res) {
+            // DB에 있다면 DB 정보 가져오기
+            const API_URL = 'http://127.0.0.1:8000'
+            axios.get(API_URL + `/movies/${movie.id}/`)
+            .then(() => {
+              // console.log(res.data)
+              // this.movie = res.data
+            })
+            .catch((error) => {
+              console.log('DB에 없어')
+              console.log(error)
+
+              // DB에 없으면 TMDB에서 가져온 데이터를 DB에 저장
+              console.log('저장하러간다')
+              axios({
+                method: 'post',
+                url: API_URL + '/movies/',
+                headers: {
+                  Authorization: `Token ${this.token}`
+                },
+                data: {
+                  title: this.movie['title'],
+                  overview: this.movie['overview'],
+                  release_date: this.movie['release_date'],
+                  id: this.movie['id'],
+                  adult: this.movie['adult'],
+                  popularity: this.movie['popularity'],
+                  vote_average: this.movie['vote_average'],
+                  vote_count: this.movie['vote_count'],
+                  poster_path: this.movie['poster_path'],
+                  backdrop_path: this.movie['backdrop_path'],
+                }
+              })
+                .then((response) => {
+                  // console.log(this.movie)
+                  console.log('저장완료', response)
+                })
+                .catch((error) => {
+                  console.log('아직 post 없음', error)
+                })
+            })
+        }
+      })
         .catch((error) => {
           console.log(error)
         })
@@ -309,7 +352,7 @@ export default new Vuex.Store({
         url: api.movies.actionMovies()
       })
         .then((response) => {
-          // console.log(response.data)
+          console.log(response.data)
           context.commit('SAVE_ACTION', response.data)
         })
         .catch((error) => {
