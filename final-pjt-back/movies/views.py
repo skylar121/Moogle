@@ -48,6 +48,7 @@ def movie_list(request):
 #             return Response(serializer.data)
 @api_view(['GET'])
 def movie_detail(request,id):
+    print('yes')
     movie = get_object_or_404(Movie,id=id)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
