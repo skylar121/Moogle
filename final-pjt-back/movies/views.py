@@ -342,7 +342,8 @@ def get_movie(request):
             if abc.release_date and abc.poster_path and abc.backdrop_path:
                 abc.save()
                 for genre in movie.get('genre_ids'):
-                    abc.genres.add(genre)
+                    abc.genres.add(Genre.objects.get(id=genre))
+                    
     return HttpResponse()
 
 # 장르 데이터 가져와
@@ -378,6 +379,7 @@ def goto_main(request):
         moviejson.append(abc)
         for genre in movie.get('genre_ids'):
             abc.genres.add(genre)
+            print(Genre.objects.get(genre))
     else:
         serializer = MovieListSerializer(moviejson, many=True)
         return Response(serializer.data)
@@ -404,7 +406,7 @@ def romance10(request):
 
 
 
-
+# 아직 수정중....
 def get_movie_final(request):
     request_url = f"https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_API_KEY}&language=ko-KR"
     genres = requests.get(request_url).json()
