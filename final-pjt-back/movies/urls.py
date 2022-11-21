@@ -22,7 +22,13 @@ urlpatterns = [
     path('',views.movie_list),
     # 단일 영화 조회
     path('<int:id>/',views.movie_detail),
-    
+
+
+    # 유저 관련
+    path('profile/<str:username>/', views.profile),
+    path('<int:review_pk>/likes/', views.likes),
+
+
     # 데이터 불러오기
     path('get_movie/',views.get_movie),
     path('get_movie_final/',views.get_movie_final),
