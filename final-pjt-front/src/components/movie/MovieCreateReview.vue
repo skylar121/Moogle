@@ -10,7 +10,7 @@
           <b-form-rating
             id="rating-lg-no-border rating-inline"
             @change="onRate"
-            :value="userReview[0].rank"
+            :value="userReview?.[0]?.rank"
             icon-half="star-half"
             variant="danger"
             no-border inline show-value show-clear
@@ -37,8 +37,8 @@
         </div>
       </div>
 
-      <!-- 수정중 X & 리뷰 있다면 내용 + 수정 버튼 보여주기 -->
-      <div v-if="(!isEditing && userReview)" class="text-center">
+      <!-- 수정중 X & 리뷰 있다면 내용 + 수정 + 삭제 버튼 보여주기 -->
+      <div v-if="(!isEditing &&  userReview.length > 0)" class="text-center">
         <p class="fs-3">{{ userReview?.[0]?.title }}</p>
         <p>{{ userReview?.[0]?.content }}</p>
         <div class="d-flex justify-content-end">
@@ -46,16 +46,23 @@
             type="submit" 
             class="btn btn-primary review-submit-btn"
           >
-            EDIT
+            수정
             <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+          <button @click.prevent="deleteReview" 
+            type="submit" 
+            class="btn btn-primary review-submit-btn"
+          >
+            삭제
+            <i class="fa-solid fa-trash"></i>
           </button>
         </div>
       </div>
+
       <!-- 수정중 OR 리뷰 없다면 리뷰 form -->
       <div v-else>
-        
         <!-- 리뷰 있다면 UPDATE -->
-        <div v-if="isEditing && userReview">
+        <div v-if="isEditing && userReview.length > 0">
           <div class="mb-3 review-input text-center" @change="onRate" >
             <label for="reviewTitle" class="form-label">제목</label>
             <input 
@@ -70,9 +77,9 @@
           </div>
           <div class="d-flex justify-content-end">
             <!-- 수정 완료 -->
-            <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn"> SAVE <i class="fa-solid fa-floppy-disk"></i></button>
+            <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn"> 저장 <i class="fa-solid fa-floppy-disk"></i></button>
             <!-- 수정 취소 -->
-            <button type="button" @click="onEdit" class="btn btn-dark text-light"><i class="fa-solid fa-xmark"></i></button>
+            <button type="button" @click="onEdit" class="btn btn-dark text-light">취소<i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
         <!-- 리뷰 없다면 CREATE -->
@@ -87,9 +94,7 @@
           </div>
           <div class="d-flex justify-content-end">
             <!-- 별점 & 리뷰 저장 -->
-            <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn"><i class="fa-solid fa-floppy-disk"></i></button>
-            <!-- 취소 -->
-            <button type="button" @click="onEdit" class="btn btn-dark text-light"><i class="fa-solid fa-xmark"></i></button>
+            <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn">리뷰 생성<i class="fa-solid fa-floppy-disk"></i></button>
           </div>
         </div>
       </div>
@@ -146,41 +151,41 @@ export default {
       return this.userReview?.[0]?.title
     },
     reviewContent() {
-        return this.userReview? this.userReview?.[0]?.content : null
-    }
+      return this.userReview? this.userReview?.[0]?.content : null
     },
     reviewRating() {
       return this.userReview? this.userReview?.[0]?.rank : this.propStar
     },
-    // reviewTitle: {
-    //   get() {
-    //     return this.userReview?.[0]?.title
-    //   },
-    //   set(newTitle) {
-    //     this.userReview.title = newTitle
-    //   }
-    // },
-    // reviewContent: {
-    //   get() {
-    //     return this.userReview? this.userReview?.[0]?.content : null
-    //     return this.userReview? this.userReview?.[0]?.content : null
-    //   },
-    //   set(newContent) {
-    //     this.userReview.content = newContent
-    //   }
-    // },
-    // reviewRating: {
-    //   get() {
-    //     return this.userReview? this.userReview?.[0]?.rank : this.propStar
-    //   },
-    //   set(newRank) {
-    //     this.userReview.rank = newRank
-    //   }
+  },
+  // reviewTitle: {
+  //   get() {
+  //     return this.userReview?.[0]?.title
+  //   },
+  //   set(newTitle) {
+  //     this.userReview.title = newTitle
+  //   }
+  // },
+  // reviewContent: {
+  //   get() {
+  //     return this.userReview? this.userReview?.[0]?.content : null
+  //     return this.userReview? this.userReview?.[0]?.content : null
+  //   },
+  //   set(newContent) {
+  //     this.userReview.content = newContent
+  //   }
+  // },
+  // reviewRating: {
+  //   get() {
+  //     return this.userReview? this.userReview?.[0]?.rank : this.propStar
+  //   },
+  //   set(newRank) {
+  //     this.userReview.rank = newRank
+  //   }
   methods: {
     onRate() {
       if (!this.isLogin) {
         console.log(this.isLogin)
-        if (confirm('리뷰를 남기려면 로그인해주세요') === true){ 
+        if (confirm('리뷰를 남기려면 로그인해주세요.') === true){ 
           this.reviewRating = null
           this.$router.push({name: 'LogInView'})
         }
@@ -203,7 +208,7 @@ export default {
         return
       }
       if (title?.length < 2 || content?.length < 2) {
-        alert('보다 좋은 커뮤니티를 위해 2자 이상 작성 부탁드려요!')
+        alert('2자 이상 작성해주세요 :)')
         return
       }
       const reviewItem = {
@@ -212,7 +217,7 @@ export default {
         rank,
         movie: this.movie.id
       }
-      console.log(this.movie.id)
+      // console.log(this.movie.id)
       axios({
         method: 'post',
         url: api.movies.createReview(this.movie.id),
@@ -253,7 +258,7 @@ export default {
         return
       }
       if (this.reviewContent.length < 2) {
-        alert('보다 좋은 커뮤니티를 위해 2자 이상 작성 부탁드려요!')
+        alert('2자 이상 작성해주세요 :)')
         return
       }
       const title = document.querySelector('#reviewTitle').value
@@ -268,7 +273,7 @@ export default {
       // console.log(api.movies.updateReview(this.userReview[0].id))
       axios({
         method: 'put',
-        url: api.movies.updateReview(this.userReview[0].id),
+        url: api.movies.updateDeleteReview(this.userReview[0].id),
         data: reviewItem,
         headers: {
           Authorization: `Token ${this.token}`
@@ -282,6 +287,26 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    deleteReview() {
+      if (confirm('진짜 삭제할까요?') === true) {
+        axios({
+          method: 'delete',
+          url: api.movies.updateDeleteReview(this.userReview[0].id),
+          headers: {
+            Authorization: `Token ${this.token}`
+          }
+        })
+          .then(() => {
+            // console.log(res)
+            alert('정상적으로 삭제되었어요.')
+            this.isEditing = false
+            this.$emit('fetchAllReviews')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        }
     },
   },
   created() {
@@ -324,7 +349,5 @@ export default {
   bottom: -4em; */
   right: 0;
 }
-
-
 
 </style>

@@ -19,6 +19,6 @@ export default {
     actionMovies: () => LOCAL + MOVIES + 'action10/',
     romanceMovies: () => LOCAL + MOVIES + 'romance10/',
     createReview: movieId => LOCAL + MOVIES + movieId + '/review_list_create/',
-    updateReview: reviewId => LOCAL + MOVIES + 'review/' + reviewId + '/',
+    updateDeleteReview: reviewId => LOCAL + MOVIES + 'review/' + reviewId + '/',
   },
 }
