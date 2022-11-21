@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import Movie, Community, Comment, Review, ReviewComment
+from .models import Movie, Genre, Community, Comment, Review, ReviewComment
+
+class GenreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Genre
+        fields = '__all__'
 
 class MovieListSerializer(serializers.ModelSerializer):
     class Meta:

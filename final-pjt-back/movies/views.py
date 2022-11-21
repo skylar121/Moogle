@@ -313,15 +313,6 @@ def like_movie_users(request, my_pk):
 
 
 
-
-
-
-
-
-
-
-
-
 # 영화 다 가져와 !
 def get_movie(request):
     for i in range(1, 10):
@@ -388,21 +379,23 @@ def goto_main(request):
 @api_view(['GET'])
 def action10(request):
     genre = get_object_or_404(Genre, pk=28)
-    # movies = random.sample(list(genre.movie_set.all()[:100]),10)
-    movies = random.sample(list(genre.movie_set.all().order_by('-popularity')[:100]),10)
+    movies = list(genre.movie_set.order_by('-vote_average'))
+    l = min(10, len(movies))
+    movies = random.sample(movies, l)
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
     
     
-# 로맨스 10개 랜덤으로 고고
+# 로맨스 랜덤으로 고고
 @api_view(['GET'])
 def romance10(request):
     genre = get_object_or_404(Genre, pk=10749)
-    movies = random.sample(list(genre.movie_set.order_by('-popularity')[:100]),10)
+
+    movies = list(genre.movie_set.order_by('-vote_average'))
+    l = min(10, len(movies))
+    movies = random.sample(movies, l)
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
-
-
 
 
 # 아직 수정중....
