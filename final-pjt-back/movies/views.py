@@ -151,8 +151,7 @@ def review_list_create(request, movie_pk):
   else:
     serializer = ReviewListSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-      movie = get_object_or_404(Movie, pk=request.data.get('movie'))
-      
+      movie = get_object_or_404(Movie, pk=movie_pk)
       # pre_point = movie.vote_average * movie.vote_count
       # point = pre_point+int(request.data.get('rank'))
       # count = movie.vote_count + 1
@@ -161,7 +160,7 @@ def review_list_create(request, movie_pk):
       # movie.vote_count = count
       # movie.save()
         
-      serializer.save(user=request.user)
+      serializer.save(user=request.user, movie=movie)
       return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 # 리뷰 댓글 목록
@@ -199,19 +198,19 @@ def review_update_delete(request, review_pk):
 
   if request.method == 'PUT':
     serializer = ReviewListSerializer(review, data=request.data)
-    
+    print('YES')
     if serializer.is_valid(raise_exception=True):
-      movie = get_object_or_404(Movie, pk=request.data.get('movie'))
-      # pre_point = movie.vote_average * (movie.vote_count - 1)
-      # pre_count = movie.vote_count - 1
-      # point = pre_point+request.data.get('rank')
-      # count = movie.vote_count
-      # new_vote_average = round(point/count, 2)
-      # movie.vote_average = new_vote_average
-      # movie.vote_count = count
-      # movie.save()
-      serializer.save(user=request.user)
-      return Response(serializer.data)
+        # movie = get_object_or_404(Movie, pk=review.movie)
+        # pre_point = movie.vote_average * (movie.vote_count - 1)
+        # pre_count = movie.vote_count - 1
+        # point = pre_point+request.data.get('rank')
+        # count = movie.vote_count
+        # new_vote_average = round(point/count, 2)
+        # movie.vote_average = new_vote_average
+        # movie.vote_count = count
+        # movie.save()
+        serializer.save(user=request.user)
+        return Response(serializer.data)
 
   else:
     review = get_object_or_404(Review, pk=review_pk)

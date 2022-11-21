@@ -6,14 +6,14 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = '__all__'
+        read_only_fields = ('genre',)
 
 class MovieListSerializer(serializers.ModelSerializer):
-    # genre_set = GenreSerializer(many=True, read_only=True)
-    # genre_name = serializers.CharField(source='genre_set.name')
+    genres = GenreSerializer(many=True, read_only=True)
+    # genre_name = serializers.CharField(source='genres.name')
     class Meta:
         model = Movie
         fields = '__all__'
-        # read_only_fields = ('genre_set', 'genre_name')
 
 
 # title, poster , backdrop, vote_average
@@ -60,7 +60,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
   class Meta:
     model = Review
     fields = ('id', 'user', 'userName', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title')
-    read_only_fields = ('user',)
+    read_only_fields = ('user', 'movie')
 
 
 class ReviewCommentSerializer(serializers.ModelSerializer):
