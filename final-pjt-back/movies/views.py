@@ -379,7 +379,6 @@ def goto_main(request):
         moviejson.append(abc)
         for genre in movie.get('genre_ids'):
             abc.genres.add(genre)
-            print(Genre.objects.get(genre))
     else:
         serializer = MovieListSerializer(moviejson, many=True)
         return Response(serializer.data)
