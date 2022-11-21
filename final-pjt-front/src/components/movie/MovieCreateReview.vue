@@ -53,7 +53,7 @@
         <div v-else>
           
           <!-- 리뷰 있다면 UPDATE -->
-          <div v-if="isEditing && userReview" class="d-flex justify-content-end">
+          <div v-if="isEditing && userReview" class="d-flex flex-column justify-content-end align-items-center">
             <div class="mb-3 review-input text-center" @change="onRate" >
               <label for="reviewTitle" class="form-label">제목</label>
               <input 
@@ -173,7 +173,7 @@ export default {
     onRate() {
       if (!this.isLogin) {
         console.log(this.isLogin)
-        if (confirm('리뷰를 남기려면 로그인해주세요') == true){ 
+        if (confirm('리뷰를 남기려면 로그인해주세요') === true){ 
           this.$router.push({name: 'LogInView'})
         }
       }
@@ -266,15 +266,10 @@ export default {
           Authorization: `Token ${this.token}`
         }
       })
-        .then((res) => {
-          
-          console.log(res)
+        .then(() => {
+          // console.log(res)
           this.isEditing = false
-          console.log('false', this.isEditing)
           this.$emit('fetchAllReviews')
-          // this.reviewRating = null
-          // this.reviewTitle = null
-          // this.reviewContent = null
         })
         .catch((err) => {
           console.log(err)
