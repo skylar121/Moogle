@@ -9,7 +9,7 @@
         </router-link>
       </div>
       <div class="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="" v-model="query" @keyup.enter="showSearchPage(query)">
+        <input id="search-bar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="" v-model="query" @keyup.enter="showSearchPage(query)">
       </div>
       <div v-if="!isLogin" class="user-menu">
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
@@ -23,7 +23,6 @@
         </span>
       </div>
     </nav>
-    <router-link :to="{ name: 'DetailView' }"></router-link>
     <router-view />
   </div>
 </template>
@@ -33,6 +32,11 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default ({
+  data() {
+    return {
+      query: null,
+    }
+  },
   computed: {
     ...mapState([
       'currUser',
@@ -130,6 +134,10 @@ input {
     color: white;
     margin-right: 1em;
   }
+}
+
+#search-bar {
+  color: rgb(240, 229, 229);
 }
 
 /* 로고 네온사인 */

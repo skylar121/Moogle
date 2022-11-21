@@ -9,6 +9,8 @@
               {{ review.userName }}
             </div>
             <div class="card-body d-flex flex-column justify-content-center align-items-center">
+              <p class="card-title fs-3">{{ review.title }}</p>
+              <p class="card-text text-muted">{{ review.content }}</p>
               <div class="movieVoteAverage">
                 <b-form-rating
                   :value="review.rank"
@@ -20,7 +22,6 @@
                 ></b-form-rating>
                 <!-- <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p> -->
               </div>
-              <p class="card-text">{{ review.content }}</p>
               <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">

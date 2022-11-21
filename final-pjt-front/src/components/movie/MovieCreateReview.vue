@@ -1,96 +1,105 @@
 <template>
   <div class="container mb-3 p-4">
-    <div>
-      <form @submit.prevent="createReview" class="">
-        <div class="star-box d-flex align-items-center justify-content-center mb-3">
-          <!-- 유저 리뷰가 있다면 -->
-          <div v-if="userReview">
-            <b-form-rating
-              id="rating-lg-no-border rating-inline"
-              @change="onRate"
-              :value="userReview[0].rank"
-              icon-half="star-half"
-              variant="danger"
-              no-border inline show-value show-clear
-              precision="1"
-              class="star text-light w-100"
-              size="lg"
-              color="#ffd21e"
-            ></b-form-rating>
-          </div>
-          <!-- 유저 리뷰가 없다면 -->
-          <div v-else>
-            <b-form-rating
-              id="rating-lg-no-border rating-inline"
-              @change="onRate"
-              v-model="reviewRating"
-              icon-half="star-half"
-              variant="danger"
-              no-border inline show-value show-clear
-              precision="1"
-              class="star text-light w-100"
-              size="lg"
-              color="#ffd21e"
-            ></b-form-rating>
-          </div>
-        </div>
-
-        <!-- 수정중 X & 리뷰 있다면 내용 + 수정 버튼 보여주기 -->
-        <div v-if="(!isEditing && userReview)">
-          <p>{{ userReview?.[0]?.title }}</p>
-          <p>{{ userReview?.[0]?.content }}</p>
-          <div class="d-flex justify-content-end">
-            <button @click.prevent="onEdit" 
-              type="submit" 
-              class="btn btn-primary review-submit-btn"
-            >
-              별점 & 리뷰 수정 
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-          </div>
-        </div>
-        <!-- 수정중 OR 리뷰 없다면 리뷰 form -->
-        <div v-else>
-          
-          <!-- 리뷰 있다면 UPDATE -->
-          <div v-if="isEditing && userReview" class="d-flex flex-column justify-content-end align-items-center">
-            <div class="mb-3 review-input text-center" @change="onRate" >
-              <label for="reviewTitle" class="form-label">제목</label>
-              <input 
-                :value="reviewTitle" 
-                class="form-control" id="reviewTitle" rows="3" 
-                placeholder="2자 이상 남겨주세요." 
-              >
-            </div>
-            <div class="mb-3 review-input" @change="onRate" >
-              <label for="reviewContent" class="form-label">내용</label>
-              <textarea v-model="reviewContent" class="form-control" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요."></textarea>
-            </div>
-            <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn">수정 완료 <i class="fa-solid fa-pen-to-square"></i></button>
-            <button type="button" @click="onEdit" class="btn btn-dark text-light">취소</button>
-          </div>
-          <!-- CREATE -->
-          <div v-else class="d-flex justify-content-end">            
-            <div class="mb-3 review-input text-center" @change="onRate" >
-              <label for="reviewTitle" class="form-label">제목</label>
-              <input v-model="reviewTitle" class="form-control" id="reviewTitle" rows="3" placeholder="2자 이상 남겨주세요.">
-            </div>
-            <div class="mb-3 review-input" @change="onRate" >
-              <label for="reviewContent" class="form-label">내용</label>
-              <textarea v-model="reviewContent" class="form-control" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요.">{{}}</textarea>
-            </div>
-            <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn">별점 & 리뷰 저장 <i class="fa-solid fa-pen-to-square"></i></button>
-            <button type="button" @click="onEdit" class="btn btn-dark text-light">취소</button>
-          </div>
-        </div>
-        <!-- <div class="mb-3 form-check review-check">
-          <input type="checkbox" class="form-check-input" id="private">
-          <label class="form-check-label me-2" for="private">비밀글</label>
-          <span id="emailHelp" class="form-text text-muted">나만 볼 수 있어요.</span>
-        </div> -->
-        
-      </form>
+    <div class="text-center">
+      <h3 class="fw-bold">My Review</h3>
     </div>
+    <form @submit.prevent="createReview">
+      <div class="star-box d-flex align-items-center justify-content-center mb-3">
+        <!-- 유저 리뷰가 있다면 -->
+        <div v-if="userReview">
+          <b-form-rating
+            id="rating-lg-no-border rating-inline"
+            @change="onRate"
+            :value="userReview[0].rank"
+            icon-half="star-half"
+            variant="danger"
+            no-border inline show-value show-clear
+            precision="1"
+            class="star text-light w-100"
+            size="lg"
+            color="#ffd21e"
+          ></b-form-rating>
+        </div>
+        <!-- 유저 리뷰가 없다면 -->
+        <div v-else>
+          <b-form-rating
+            id="rating-lg-no-border rating-inline"
+            @change="onRate"
+            v-model="reviewRating"
+            icon-half="star-half"
+            variant="danger"
+            no-border inline show-value show-clear
+            precision="1"
+            class="star text-light w-100"
+            size="lg"
+            color="#ffd21e"
+          ></b-form-rating>
+        </div>
+      </div>
+
+      <!-- 수정중 X & 리뷰 있다면 내용 + 수정 버튼 보여주기 -->
+      <div v-if="(!isEditing && userReview)" class="text-center">
+        <p class="fs-3">{{ userReview?.[0]?.title }}</p>
+        <p>{{ userReview?.[0]?.content }}</p>
+        <div class="d-flex justify-content-end">
+          <button @click.prevent="onEdit" 
+            type="submit" 
+            class="btn btn-primary review-submit-btn"
+          >
+            EDIT
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+        </div>
+      </div>
+      <!-- 수정중 OR 리뷰 없다면 리뷰 form -->
+      <div v-else>
+        
+        <!-- 리뷰 있다면 UPDATE -->
+        <div v-if="isEditing && userReview">
+          <div class="mb-3 review-input text-center" @change="onRate" >
+            <label for="reviewTitle" class="form-label">제목</label>
+            <input 
+              :value="reviewTitle" 
+              class="form-control" id="reviewTitle" rows="3" 
+              placeholder="2자 이상 남겨주세요." 
+            >
+          </div>
+          <div class="mb-3 review-input" @change="onRate" >
+            <label for="reviewContent" class="form-label">내용</label>
+            <textarea v-model="reviewContent" class="form-control" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요."></textarea>
+          </div>
+          <div class="d-flex justify-content-end">
+            <!-- 수정 완료 -->
+            <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn"> SAVE <i class="fa-solid fa-floppy-disk"></i></button>
+            <!-- 수정 취소 -->
+            <button type="button" @click="onEdit" class="btn btn-dark text-light"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+        <!-- 리뷰 없다면 CREATE -->
+        <div v-else class="-flex flex-column justify-content-end align-items-center">            
+          <div class="mb-3 review-input text-center" @change="onRate">
+            <label for="reviewTitle" class="form-label fs-4">제목</label>
+            <input v-model="reviewTitle" class="form-control" id="reviewTitle" rows="3" placeholder="2자 이상 남겨주세요.">
+          </div>
+          <div class="mb-3 review-input text-center" @change="onRate">
+            <label for="reviewContent" class="form-label fs-5">내용</label>
+            <textarea v-model="reviewContent" class="form-control" id="reviewContent" rows="3" placeholder="2자 이상 남겨주세요.">{{}}</textarea>
+          </div>
+          <div class="d-flex justify-content-end">
+            <!-- 별점 & 리뷰 저장 -->
+            <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn"><i class="fa-solid fa-floppy-disk"></i></button>
+            <!-- 취소 -->
+            <button type="button" @click="onEdit" class="btn btn-dark text-light"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="mb-3 form-check review-check">
+        <input type="checkbox" class="form-check-input" id="private">
+        <label class="form-check-label me-2" for="private">비밀글</label>
+        <span id="emailHelp" class="form-text text-muted">나만 볼 수 있어요.</span>
+      </div> -->
+      
+    </form>
 
     <!-- 이전 화면으로 돌아갈수 있다면... -->
     <!-- <div v-else class="my-3">
@@ -126,16 +135,23 @@ export default {
     }
   },
   computed: {
-    
+    ...mapState([
+      'token',
+    ]),
+    ...mapGetters([
+      'isLogin'
+    ]),
+
     reviewTitle() {
       return this.userReview?.[0]?.title
-      },
-    reviewContent() {
-          return this.userReview? this.userReview?.[0]?.content : null
     },
-      reviewRating() {
-            return this.userReview? this.userReview?.[0]?.rank : this.propStar
-      },
+    reviewContent() {
+        return this.userReview? this.userReview?.[0]?.content : null
+    }
+    },
+    reviewRating() {
+      return this.userReview? this.userReview?.[0]?.rank : this.propStar
+    },
     // reviewTitle: {
     //   get() {
     //     return this.userReview?.[0]?.title
@@ -160,54 +176,46 @@ export default {
     //   set(newRank) {
     //     this.userReview.rank = newRank
     //   }
-
-    ...mapState([
-      'token',
-      'currUser'
-    ]),
-    ...mapGetters([
-      'isLogin',
-    ]),
-  },
   methods: {
     onRate() {
       if (!this.isLogin) {
         console.log(this.isLogin)
         if (confirm('리뷰를 남기려면 로그인해주세요') === true){ 
+          this.reviewRating = null
           this.$router.push({name: 'LogInView'})
         }
       }
     },
     createReview() {
-      if (!this.reviewRating || this.reviewRating <= 0.0 ) {
+      const title = document.querySelector('#reviewTitle').value
+      const content = document.querySelector('#reviewContent').value
+      const rank = document.querySelector("#rating-lg-no-border\\ rating-inline").getAttribute("aria-valuenow")
+      if (!rank || rank <= 0.0 ) {
         alert('별점은 필수입니다!')
-        this.reviewRating = null
         return
       }
-      if (!this.reviewContent) {
+      if (!title) {
         alert('제목은 필수입니다!')
-        this.reviewContent = null
         return
       }
-      if (!this.reviewContent) {
+      if (!content) {
         alert('리뷰도 필수입니다!')
-        this.reviewContent = null
         return
       }
-      if (this.reviewContent?.length < 2) {
+      if (title?.length < 2 || content?.length < 2) {
         alert('보다 좋은 커뮤니티를 위해 2자 이상 작성 부탁드려요!')
         return
       }
       const reviewItem = {
-        title: this.reviewTitle,
-        content: this.reviewContent,
-        rank: this.reviewRating,
+        title, 
+        content, 
+        rank,
         movie: this.movie.id
       }
-      console.log(this.token)
+      console.log(this.movie.id)
       axios({
         method: 'post',
-        url: api.movies.createReview(this.userReview.id),
+        url: api.movies.createReview(this.movie.id),
         data: reviewItem,
         headers: {
           Authorization: `Token ${this.token}`
@@ -282,14 +290,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 /* 별 크기 키우기 */
 #rating-lg-no-border\ rating-inline {
   font-size: 1.5rem;
 }
 
-#review {
+/* #review {
   color: #dee2e6;
+} */
+
+#reviewTitle, #reviewContent {
+  /* outline: none; */
+  border: none;
+  border-bottom: 1px solid $primary;
+  color: white;
 }
 
 .review-input input {
