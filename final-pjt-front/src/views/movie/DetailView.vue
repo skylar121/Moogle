@@ -8,7 +8,12 @@
           <!-- 왼쪽 포스터 영역 -->
           <div class="col-md-4">
             <img :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start  w-100" alt="">
-            <MovieCreateReview :movie="movie" :userReview="userReview" :propStar="userReview ? userReview[0]?.rank : 0" :propContent="userReview ? userReview[0]?.content : null" @fetchAllReviews="fetchAllReviews" />
+            <div v-if="userReview">
+              <MovieCreateReview :movie="movie" :userReview="userReview" :propStar="userReview[0]?.rank" :propContent="userReview[0]?.content" @fetchAllReviews="fetchAllReviews" />
+            </div>
+            <div v-else>
+              <MovieCreateReview :movie="movie" @fetchAllReviews="fetchAllReviews" />
+            </div>
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
@@ -155,7 +160,6 @@ export default {
     // 유저 리뷰 가져오기
     fetchAllReviews() {
       if (this.token) {
-        console.log('1')
         axios({
         method: 'get',
         url: api.movies.createReview(this.$route.params.movie_id),
