@@ -8,12 +8,12 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MovieListSerializer(serializers.ModelSerializer):
-    genre_set = GenreSerializer(many=True, read_only=True)
-    genre_name = serializers.CharField(source='genre_set.name')
+    # genre_set = GenreSerializer(many=True, read_only=True)
+    # genre_name = serializers.CharField(source='genre_set.name')
     class Meta:
         model = Movie
         fields = '__all__'
-        read_only_fields = ('genre_set', 'genre_name')
+        # read_only_fields = ('genre_set', 'genre_name')
 
 
 # title, poster , backdrop, vote_average
