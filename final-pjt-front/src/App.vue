@@ -8,9 +8,9 @@
           </span>
         </router-link>
       </div>
-      <form class="search" role="search" @submit.prevent="showSearchPage">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="">
-      </form>
+      <div class="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="" v-model="query" @keyup.enter="showSearchPage(query)">
+      </div>
       <div v-if="!isLogin" class="user-menu">
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
@@ -30,7 +30,7 @@
 
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default ({
   computed: {
@@ -42,6 +42,9 @@ export default ({
     ]),
   },
   methods: {
+    ...mapActions([
+      'showSearchPage',
+    ]),
     logOut() {
       if (confirm('로그아웃 하실건가요?') == true){ 
         //true는 확인버튼을 눌렀을 때 코드 작성

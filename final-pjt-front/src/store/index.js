@@ -110,6 +110,10 @@ export default new Vuex.Store({
           "name": "서부"
       }
     ],
+    query: '',
+    searchResults: '',
+    currentMoviePk: null,
+    selectedMovies: [],
   },
   getters: {
     isLogin: state => !!state.token,
@@ -149,6 +153,7 @@ export default new Vuex.Store({
     SAVE_NOW_PLAYING: (state, payload) => state.nowPlayingMovies = payload,
     SAVE_ACTION: (state, payload) => state.actionMovies = payload,
     SAVE_ROMANCE: (state, payload) => state.romanceMovies = payload,
+    SET_SEARCH_RESULTS: (state, payload) => state.searchResults = payload,
   },
   actions: {
     //////////////// accounts ////////////////
@@ -324,5 +329,16 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    showSearchPage(context, query) {  
+      axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_TMDB}&language=ko&query=` + query + '&include_adult=false')
+        .then((res) => {
+          context.commit('SET_SEARCH_RESULTS', res.data.results)
+          router.push({name: 'MovieSearchView', params: { query: query }})
+        })
+        .catch((err) => {
+          console.log(err)
+          console.log('서치에러')
+        })
+    }
   },
 })

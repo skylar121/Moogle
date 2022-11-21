@@ -6,6 +6,7 @@ import LogInView from '@/views/accounts/LogInView'
 import ProfileView from '@/views/accounts/ProfileView'
 import DetailView from '@/views/movie/DetailView'
 import ReviewDetailView from '@/views/movie/ReviewDetailView'
+import MovieSearchView from '@/views/movie/MovieSearchView'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,11 @@ const routes = [
     name: 'ReviewDetailView',
     component: ReviewDetailView
   },
+  {
+    path: '/search/:query',
+    name: 'MovieSearchView',
+    component: MovieSearchView
+  }
 ]
 
 const router = new VueRouter({
