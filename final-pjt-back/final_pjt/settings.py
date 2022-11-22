@@ -91,7 +91,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 
 ACCOUNT_EMAIL_REQUIRED = False
-# ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
+ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
 
 SITE_ID = 1
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from rest_framework.response import Response
+from django.http import JsonResponse 
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -64,47 +65,33 @@ def profile(request, username):
 
     return Response({'userid':user.pk, 'review_movie':review_movie, 'movie_list':movie_title})
     # reveiw_movie 는 리뷰 남겼던 영화다.
-
-
-
-    # 영화 타이틀
     # 리뷰 좋아요 필요 !
     # user 가 좋아요 표시한 리뷰 목록... ? 
     # 팔로우 ~~
 
-# @require_POST
-# def likes(request, movie_pk):
-#     if request.user.is_authenticated:
-#         movie = get_object_or_404(Movie, pk=movie_pk)
-#         if movie.like_users.filter(pk=request.user.pk).exist():
-#             movie.like_users.remove(request.user)
-#         else:
-#             movie.like_users.remove(request.user)
-#         return Response 
 
 
 
-# 확인이 필요
 
+
+# 게시글 좋아요 !
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def likes(request):
     review_id = request.GET['review_id']
     post = Review.objects.get(id=review_id)
 
-    if not request.user.is_authenticated:
-        message = '로그인을 해주세요'
-        context = {'like_count':post.like.count(),'message':message}
-        return HttpResponse()
-    user = request.user
-    if post.like.filter(id=user.id).exists():
-        post.like.remove(user)
-        message = "좋아요 취소"
-    else:
-        post.like.add(user)
-        message = "좋아요"
-    context = {'like_count' : post.like.count(), "message":message}
-    return HttpResponse()
+    if request.user.is_authenticated:
+        
+        user = request.user
+        if post.like.filter(id=user.id).exists():
+            post.like.remove(user)
+            message = "좋아요 취소"
+        else:
+            post.like.add(user)
+            message = "좋아요"
+        context = {'like_count' : post.like.count(), "message":message}
+        return JsonResponse(context)
 
 
 
@@ -142,7 +129,7 @@ def community_detail(request, community_pk):
 
   serializer = CommunityListSerializer(community)
   return Response(serializer.data)
-    
+
 
 
 @api_view(['GET'])
@@ -380,6 +367,11 @@ def like_movie_users(request, my_pk):
     return Response(users)
 
 
+
+
+
+
+# ----------------------------------------------------------------------------------------
 
 
 # 영화 다 가져와 !

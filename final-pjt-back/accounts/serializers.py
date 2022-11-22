@@ -8,6 +8,12 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
+        # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        
+        data['nickname'] = self.validated_data['nickname']
+        data['profile_image'] = self.validated_data['profile_image']
 
 
         return data

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from .models import User
 # Create your views here.
 
 
@@ -25,9 +26,11 @@ from rest_framework.response import Response
 
 
 
+def user_follow(request, username):
+    follow_user = get_object_or_404(User, username=username, is_active=True)
 
-
-
+    request.user.following_set.add(follow_user)
+    follow_user.follower_set.add(request.user)
 
 
 
