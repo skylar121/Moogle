@@ -108,9 +108,9 @@ def profile(request, username):
 # 게시글 좋아요 !
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def like_toggle(request):
-    review_id = request.GET['review_id']
-    post = Review.objects.get(id=review_id)
+def like_toggle(request, review_pk):
+    # review_id = request.GET['review_id']
+    post = Review.objects.get(id=review_pk)
 
     if request.user.is_authenticated:
         
