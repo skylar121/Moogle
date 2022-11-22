@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import User
+from .serializers import UserSerializer
 # Create your views here.
 
 
@@ -15,13 +16,14 @@ from .models import User
 
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_info(request, username):
+    User = get_user_model()
 
-# def profile(request, username):
-#     User =get_object_or_404(get_user_model(),username=username)
-
-#     person = User.objects.get(username=username)
-
-#     return Response({'username': username, })
+    person = get_object_or_404(User, username=username)
+    serializer = UserSerializer(person)
+    return Response(serializer.data)
 
 
 

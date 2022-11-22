@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Movie, Genre, Review, ReviewComment
+from accounts.serializers import UserSerializer
 
 class GenreSerializer(serializers.ModelSerializer):
 
@@ -26,7 +27,7 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 # ------------------------------------------------------
 # class CommunityListSerializer(serializers.ModelSerializer):
 #   userName = serializers.SerializerMethodField()
-  
+
 #   def get_userName(self,obj):
 #     return obj.user.username
 
@@ -38,7 +39,7 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 
 # class CommentSerializer(serializers.ModelSerializer):
 #   userName = serializers.SerializerMethodField()
-  
+
 #   def get_userName(self,obj):
 #     return obj.user.username
 
@@ -47,30 +48,54 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 #     fields = ('id', 'userName', 'user', 'content', 'created_at', 'updated_at', 'community',)
 #     read_only_fields = ('user','community',)
     
+
+
+# 유저 리뷰 장르 포함 영화정보 싹다 가져오는 버전
+# class ReviewListSerializer(serializers.ModelSerializer):
+#     movie = MovieDetailSerializer(read_only=True)
+#     user = UserSerializer(read_only=True)
+#     class Meta:
+#         model = Review
+#         fields = ('id', 'user', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at')
+#         read_only_fields = ('user', 'movie')
+
+
+# 유저 리뷰 장르는 없이 적당히 가져오는 버전
 class ReviewListSerializer(serializers.ModelSerializer):
-  movie_title = serializers.SerializerMethodField()
+    movie_title = serializers.SerializerMethodField()
+    movie_poster_path = serializers.SerializerMethodField()
+    movie_backdrop_path = serializers.SerializerMethodField()
+    # 장르는 
+    # movie_genres = serializers.SerializerMethodField()
 
-  def get_movie_title(self, obj):
-    return obj.movie.title
+    def get_movie_title(self, obj):
+        return obj.movie.title
+    def get_movie_poster_path(self, obj):
+        return obj.movie.poster_path
+    def get_movie_backdrop_path(self, obj):
+        print(obj.movie)
+        return obj.movie.backdrop_path
+    # def get_movie_genres(self, obj):
+    #     return obj.movie.genres
 
-  userName = serializers.SerializerMethodField()
-  
-  def get_userName(self,obj):
-    return obj.user.username
+    userName = serializers.SerializerMethodField()
 
-  class Meta:
-    model = Review
-    fields = ('id', 'user', 'userName', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title')
-    read_only_fields = ('user', 'movie')
+    def get_userName(self,obj):
+        return obj.user.username
+
+    class Meta:
+        model = Review
+        fields = ('id', 'user', 'userName', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title', 'movie_poster_path', 'movie_backdrop_path')
+        read_only_fields = ('user', 'movie')
 
 
 class ReviewCommentSerializer(serializers.ModelSerializer):
-  userName = serializers.SerializerMethodField()
-  
-  def get_userName(self,obj):
-    return obj.user.username
+    userName = serializers.SerializerMethodField()
 
-  class Meta:
-    model = ReviewComment
-    fields = ('id', 'userName', 'user', 'content', 'review', 'rank', 'created_at', 'updated_at',)
-    read_only_fields = ('user', 'review',)
+    def get_userName(self,obj):
+        return obj.user.username
+
+    class Meta:
+        model = ReviewComment
+        fields = ('id', 'userName', 'user', 'content', 'review', 'rank', 'created_at', 'updated_at',)
+        read_only_fields = ('user', 'review',)

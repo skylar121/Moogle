@@ -21,5 +21,6 @@ class CustomRegisterSerializer(RegisterSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ('id', 'username', 'email', 'nickname', 'profile_image',)
         # read_only_fields = '__all__'

@@ -78,25 +78,27 @@ def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     print(user.pk, 11111111111)
     reviews = get_list_or_404(Review, user_id=user.pk)
-    movie_title = []
-    review_movie = []
-    review_title = []
-    review_content = []
-    review_like = []
+    serializer = ReviewListSerializer(reviews, many=True)
+    return Response(serializer.data)
+    # movie_title = []
+    # review_movie = []
+    # review_title = []
+    # review_content = []
+    # review_like = []
 
-    for review in reviews:
-        review_movie.append(review.movie_id)
-        review_title.append(review.title)
-        review_content.append(review.content)
+    # for review in reviews:
+    #     review_movie.append(review.movie_id)
+    #     review_title.append(review.title)
+    #     review_content.append(review.content)
 
-    movies = get_list_or_404(Movie)
-    print(movies)
-    for movie in movies:
-        if movie.pk in review_movie:
-            movie_title.append(movie.title)
-            print(movie_title)
+    # movies = get_list_or_404(Movie)
+    # print(movies)
+    # for movie in movies:
+    #     if movie.pk in review_movie:
+    #         movie_title.append(movie.title)
+    #         print(movie_title)
 
-    return Response({'userid':user.pk, 'review_movie':review_movie, 'movie_list':movie_title})
+    # return Response({'userid':user.pk, 'review_movie':review_movie, 'movie_list':movie_title})
     # 장르 넣어줘 ~!
     # 팔로우 ~~
 
