@@ -42,8 +42,7 @@
         <p class="fs-3">{{ userReview?.[0]?.title }}</p>
         <p>{{ userReview?.[0]?.content }}</p>
         <div class="d-flex justify-content-end">
-          <button @click.prevent="onEdit" 
-            type="submit" 
+          <button @click="onEdit" 
             class="btn btn-primary review-submit-btn"
           >
             수정
@@ -238,7 +237,7 @@ export default {
         })
     },
     onEdit() {
-      this.isEditing = !this.isEditing
+      this.isEditing = true
       console.log(this.isEditing)
     },
     updateReview() {

@@ -2,7 +2,7 @@
   <div>
     <section class="display">
       <div v-if="currUser" class="row-title">
-        <span class="text-primary">{{ currUser.nickname }}</span>
+        <span class="text-primary">{{ currUser.username }}</span>
         님을 위해 준비했어요!
       </div>
       <div v-else class="row-title">

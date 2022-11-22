@@ -3,36 +3,8 @@
     <h3 class="fw-bold">Reviews</h3>
     <div class="container overflow-hidden">
       <div v-if="isLogin" class="row col-6 col-md-4 p-3">
-        <div v-if="reviews?.length > 0" class="col">
-          <div v-for="review in reviews" :key="review.id" class="card review-card ">
-            <div class="card-header text-bg-primary">
-              {{ review.userName }}
-            </div>
-            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-              <p class="card-title fs-3">{{ review.title }}</p>
-              <p class="card-text text-muted">{{ review.content }}</p>
-              <div class="movieVoteAverage">
-                <b-form-rating
-                  :value="review.rank"
-                  readonly
-                  show-value
-                  precision="1"
-                  color="#ffd21e"
-                  class="border-0 text-light"
-                ></b-form-rating>
-                <!-- <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p> -->
-              </div>
-              <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-            </div>
-            <div class="card-footer text-muted d-flex justify-content-between">
-              <div class="fs-5">
-                <i class="fa-regular fa-heart me-2"></i>
-                <i class="fa-regular fa-comment me-2"></i>
-                <i v-if="currUser.pk === review.user" @click="deleteReview" class="fa-solid fa-trash-can"></i>
-              </div>
-              {{ review.updated_at.slice(0, 10) }}
-            </div>
-          </div>
+        <div v-if="reviews && reviews.length > 0" class="col">
+          <MovieReviewItem v-for="review in reviews" :review="review" :key="review.id" />
         </div>
         <div v-else>
           <p>아직 리뷰가 없어요ㅠㅠ</p>
@@ -47,24 +19,29 @@
 </template>
 
 <script>
-// import axios from 'axios'
-// import api from '@/api/api'
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
+import MovieReviewItem from '@/components/movie/MovieReviewItem'
 
 export default {
   name: 'MovieReviewList',
+  components: {
+    MovieReviewItem,
+  },
   props: {
     reviews: Array,
   },
   computed: {
-    ...mapState([
-      'currUser'
-    ]),
     ...mapGetters([
       'isLogin'
-    ])
+    ]),
   },
   methods: {
+    // likeReview() {
+    //   axios({
+    //     method: 'get',
+    //     url: api.movies.likeReview()
+    //   })
+    // },
     // deleteReview() {
     //   if (confirm('진짜 삭제할까요?') === true) {
     //     axios({
