@@ -83,11 +83,12 @@ def profile(request, username):
     review_title = []
     review_content = []
     review_like = []
+
     for review in reviews:
         review_movie.append(review.movie_id)
         review_title.append(review.title)
         review_content.append(review.content)
-        # like 구현해야함 ..!
+
     movies = get_list_or_404(Movie)
     print(movies)
     for movie in movies:
@@ -96,9 +97,7 @@ def profile(request, username):
             print(movie_title)
 
     return Response({'userid':user.pk, 'review_movie':review_movie, 'movie_list':movie_title})
-    # reveiw_movie 는 리뷰 남겼던 영화다.
-    # 리뷰 좋아요 필요 !
-    # user 가 좋아요 표시한 리뷰 목록... ? 
+    # 장르 넣어줘 ~!
     # 팔로우 ~~
 
 
@@ -109,7 +108,7 @@ def profile(request, username):
 # 게시글 좋아요 !
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def likes(request):
+def like_toggle(request):
     review_id = request.GET['review_id']
     post = Review.objects.get(id=review_id)
 
@@ -125,7 +124,15 @@ def likes(request):
         context = {'like_count' : post.like.count(), "message":message}
         return JsonResponse(context)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def like_count(request):
+    review_id = request.GET['review_id']
+    post = Review.objects.get(id=review_id)
 
+    if request.user.is_authenticated:
+        context = {'like_count' : post.like.count()}
+        return JsonResponse(context)
 
 
 

@@ -28,7 +28,7 @@ urlpatterns = [
 
     # 유저 관련
     path('profile/<str:username>/', views.profile),
-    path('<int:review_pk>/likes/', views.likes),
+    
 
 
     # 데이터 불러오기
@@ -67,4 +67,9 @@ urlpatterns = [
     path('<int:my_pk>/<movie_title>/like/', views.movie_like),
     path('<int:my_pk>/like/', views.my_movie_like),
     path('<int:my_pk>/like/users/', views.like_movie_users),
+    # 리뷰에 좋아요 누르기
+    path('<int:review_pk>/like_toggle/', views.like_toggle),
+    # 리뷰 좋아요 세기
+    path('<int:review_pk>/like_count/', views.like_count),
+    
 ]
