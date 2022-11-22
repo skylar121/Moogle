@@ -163,8 +163,10 @@ export default new Vuex.Store({
       formData.append('nickname', userData.nickname)
       formData.append('password1', userData.password1)
       formData.append('password2', userData.password2)
-      formData.append('profile_image', userData.profile_image)
-
+      if (userData.profile_image){
+        formData.append('profile_image', userData.profile_image)
+      }
+      console.log(formData)
       axios({
         method: 'post',
         url: api.accounts.signup(),
