@@ -32,7 +32,7 @@ const routes = [
     component: LogInView
   },
   {
-    path: '/profile',
+    path: '/profile/:username',
     name: 'ProfileView',
     component: ProfileView
   },

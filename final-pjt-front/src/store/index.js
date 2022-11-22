@@ -32,84 +32,6 @@ export default new Vuex.Store({
     nowPlayingMovies: null,
     actionMovies: null,
     romanceMovies: null,
-    genres_list: [
-      {
-          "id": 28,
-          "name": "액션"
-      },
-      {
-          "id": 12,
-          "name": "모험"
-      },
-      {
-          "id": 16,
-          "name": "애니메이션"
-      },
-      {
-          "id": 35,
-          "name": "코미디"
-      },
-      {
-          "id": 80,
-          "name": "범죄"
-      },
-      {
-          "id": 99,
-          "name": "다큐멘터리"
-      },
-      {
-          "id": 18,
-          "name": "드라마"
-      },
-      {
-          "id": 10751,
-          "name": "가족"
-      },
-      {
-          "id": 14,
-          "name": "판타지"
-      },
-      {
-          "id": 36,
-          "name": "역사"
-      },
-      {
-          "id": 27,
-          "name": "공포"
-      },
-      {
-          "id": 10402,
-          "name": "음악"
-      },
-      {
-          "id": 9648,
-          "name": "미스터리"
-      },
-      {
-          "id": 10749,
-          "name": "로맨스"
-      },
-      {
-          "id": 878,
-          "name": "SF"
-      },
-      {
-          "id": 10770,
-          "name": "TV 영화"
-      },
-      {
-          "id": 53,
-          "name": "스릴러"
-      },
-      {
-          "id": 10752,
-          "name": "전쟁"
-      },
-      {
-          "id": 37,
-          "name": "서부"
-      }
-    ],
     query: '',
     searchResults: '',
     currentMoviePk: null,
@@ -166,7 +88,7 @@ export default new Vuex.Store({
       if (userData.profile_image){
         formData.append('profile_image', userData.profile_image)
       }
-      console.log(formData)
+      // console.log(formData)
       axios({
         method: 'post',
         url: api.accounts.signup(),
@@ -322,16 +244,16 @@ export default new Vuex.Store({
                   Authorization: `Token ${this.token}`
                 },
                 data: {
-                  title: this.movie['title'],
-                  overview: this.movie['overview'],
-                  release_date: this.movie['release_date'],
-                  id: this.movie['id'],
-                  adult: this.movie['adult'],
-                  popularity: this.movie['popularity'],
-                  vote_average: this.movie['vote_average'],
-                  vote_count: this.movie['vote_count'],
-                  poster_path: this.movie['poster_path'],
-                  backdrop_path: this.movie['backdrop_path'],
+                  title: movie['title'],
+                  overview: movie['overview'],
+                  release_date: movie['release_date'],
+                  id: movie['id'],
+                  adult: movie['adult'],
+                  popularity: movie['popularity'],
+                  vote_average: movie['vote_average'],
+                  vote_count: movie['vote_count'],
+                  poster_path: movie['poster_path'],
+                  backdrop_path: movie['backdrop_path'],
                 }
               })
                 .then((response) => {

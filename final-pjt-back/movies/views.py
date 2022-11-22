@@ -38,8 +38,33 @@ def movie_list(request):
 # 단일 영화 조회
 @api_view(['GET'])
 def movie_detail(request,id):
+    request_url = f"https://api.themoviedb.org/3/movie/{id}?api_key={TMDB_API_KEY}&language=ko-KR"
+    movie = requests.get(request_url).json()
+    inmovie = Movie.objects.filter(pk=id)
+    print(inmovie)
+    if len(inmovie):
+        print('yes')
+        movie = get_object_or_404(Movie, pk=id)
+        serializer = MovieDetailSerializer(movie)
+        return Response(serializer.data)
+    else:
+        abc = Movie()
+        abc.title = movie['title']
+        abc.overview = movie['overview']
+        abc.release_date = movie.get('release_date')
+        abc.id = movie['id']
+        abc.adult = movie['adult']
+        abc.popularity = movie['popularity']
+        abc.vote_average = movie['vote_average']
+        abc.vote_count = movie['vote_count']
+        abc.poster_path = movie['poster_path']
+        abc.backdrop_path = movie['backdrop_path']
+        abc.save()
+        if movie.get('genre_ids'):
+            for genre in movie.get('genre_ids'):
+                abc.genres.add(Genre.objects.get(id=genre))
     print('yes')
-    movie = get_object_or_404(Movie,id=id)
+    movie = get_object_or_404(Movie, pk=id)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
 # ---------------------------------------------------------------
