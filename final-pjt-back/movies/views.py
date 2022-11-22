@@ -126,9 +126,9 @@ def like_toggle(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def like_count(request):
-    review_id = request.GET['review_id']
-    post = Review.objects.get(id=review_id)
+def like_count(request,review_pk):
+    # review_id = request.GET['review_id']
+    post = Review.objects.get(id=review_pk)
 
     if request.user.is_authenticated:
         context = {'like_count' : post.like.count()}

@@ -102,3 +102,14 @@ def follow(request, user_pk):
         }
         return JsonResponse(res)
     return HttpResponse(status=200)
+
+def post_img(request,user_pk):
+    user = get_object_or_404(User, pk=user_pk)
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(user)
+    img = User.objects.get('profile_img')
+    
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(img)
+    return Response(img)
+    
