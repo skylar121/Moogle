@@ -76,7 +76,6 @@ def movie_detail(request,id):
 @api_view(['GET'])
 def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
-    print(user.pk, 11111111111)
     reviews = get_list_or_404(Review, user_id=user.pk)
     serializer = ReviewListSerializer(reviews, many=True)
     return Response(serializer.data)
@@ -103,10 +102,6 @@ def profile(request, username):
     # 팔로우 ~~
 
 
-
-
-
-
 # 게시글 좋아요 !
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -128,13 +123,16 @@ def like_toggle(request, review_pk):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def like_count(request,review_pk):
+def like_count(request, review_pk):
     # review_id = request.GET['review_id']
     post = Review.objects.get(id=review_pk)
-
-    if request.user.is_authenticated:
-        context = {'like_count' : post.like.count()}
-        return JsonResponse(context)
+    serializer = ReviewListSerializer(post)
+    return Response(serializer.data)
+    # if request.user.is_authenticated:
+        
+        # serializer = ReviewListSerializer()
+        # context = {'like_count' : post.like.count()}
+        # return JsonResponse(context)
 
 
 
@@ -337,6 +335,8 @@ def review_comment_delete(request, review_pk, review_comment_pk):
         comment.delete()
         return Response({ 'id': review_comment_pk })
 
+
+# 리뷰 좋아요
 
 
 # @api_view(['POST'])

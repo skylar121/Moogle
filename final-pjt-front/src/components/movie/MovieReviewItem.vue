@@ -1,8 +1,6 @@
 <template>
   <div class="card review-card ">
     <div class="card-header text-bg-primary">
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    {{ likeCount}}
       {{ review.userName }}
     </div>
     <div class="card-body d-flex flex-column justify-content-center align-items-center">
@@ -23,15 +21,15 @@
     </div>
     <div class="card-footer text-muted d-flex justify-content-between">
       <div class="fs-5">
-        <span v-if="msg === '좋아요 취소'">
-          <i class="fa-solid fa-heart" id="toggleLike" @click="toggleLike"></i>
-        </span>
-        <span v-else>
+        <span v-if="!initialHeart">
           <i class="fa-regular fa-heart me-2" id="toggleLike" @click="toggleLike"></i>
         </span>
-        <span>_wdddddddddddddd{{ likeCount }}_</span>
+        <span v-else>
+          <i class="fa-solid fa-heart" id="toggleLike" @click="toggleLike"></i>
+        </span>
+        <span>{{ likeCount }}</span>
         <i class="fa-regular fa-comment me-2"></i>
-        <i v-if="currUser.pk === review.user" @click="deleteReview" class="fa-solid fa-trash-can"></i>
+        <i v-if="currUser.username === review.username" @click="deleteReview" class="fa-solid fa-trash-can"></i>
       </div>
       {{ review.updated_at.slice(0, 10) }}
     </div>
@@ -48,8 +46,9 @@ export default {
   name: 'MovieReviewItem',
   data() {
     return {
-      likeCount: 3,
-      msg: null,
+      likeCount: null,
+      // msg: null,
+      initialHeart: false,
     }
   },
   props: {
@@ -73,7 +72,8 @@ export default {
         .then((res) => {
           console.log(res.data)
           this.likeCount = res.data.like_count
-          this.msg = res.data.message
+          // this.msg = res.data.message
+          this.initialHeart = !this.initialHeart
         })
         .catch((err) => {
           console.log(err)
@@ -88,15 +88,44 @@ export default {
         }
       })
         .then((res) => {
-          console.log( res.data.like_count)
-          this.likeCount = res.data.like_count
+          console.log('댓글정보')
+          console.log(res.data)
+          this.likeCount = res.data.like.length()
+          if (res.data.like.has(this.currUser.id)) {
+            this.initialHeart = true
+          }
         })
         .catch((err) => {
           console.log(err)
         })
-    }
+    },
+    deleteReview() {
+      console.log('삭제해줘')
+      console.log(this.review)
+      if (confirm('진짜 삭제할까요?') === true) {
+        axios({
+          method: 'delete',
+          url: api.movies.updateDeleteReview(this.review.id),
+          headers: {
+            Authorization: `Token ${this.token}`
+          }
+        })
+          .then(() => {
+            // console.log(res)
+            alert('정상적으로 삭제되었어요.')
+            this.isEditing = false
+            // 새로고침 안해도 알아서 재렌더링되게 수정해야함..
+            // this.$router.go()
+            this.$emit('fetchAllReviews')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        }
+    },
   },
   created() {
+    this.$emit('fetchAllReviews')
     this.getLikeCount()
   }
 }

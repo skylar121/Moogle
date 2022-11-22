@@ -19,7 +19,7 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('<int:user_pk>/follow/',views.follow, name='follow'),
+    path('<username>/follow/',views.follow, name='follow'),
     path('<int:user_pk>/post_img/',views.post_img),
     # path('profile/<username>/',views.profile, name='profile'),
     # path('get_movie/',views.get_movie)

@@ -24,6 +24,8 @@ urlpatterns = [
     path('movies/',include('movies.urls')),
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/userinfo/<username>/', views.user_info),
+    path('accounts/follower/<username>/', views.followers_list),
+    path('accounts/following/<username>/', views.followings_list),
     path('accounts/signup/',include('dj_rest_auth.registration.urls')),
     path('account/', include('accounts.urls'))
     # path('get_movie/',views.get_movie)

@@ -6,8 +6,8 @@
       <div class="section-right">
         <h1>로그인</h1>
         <form @submit.prevent="logIn" class="form">
-          <label for="userId">아이디 </label><br>
-          <input type="text" id="userId" v-model.trim="userId">
+          <label for="username">아이디 </label><br>
+          <input type="text" id="username" v-model.trim="username">
           <!-- <span class="underline"></span> -->
           <br>
           <label for="password"> 비밀번호 </label><br>
@@ -27,21 +27,21 @@ export default {
   name: 'LogInView',
   data() {
     return {
-      userId: null,
+      username: null,
       password: null,
     }
   },
   methods: {
     logIn() {
-      const userId = this.userId
+      const username = this.username
       const password = this.password
       
       const userData = {
-        userId: userId,
+        username: username,
         password: password
       }
 
-      if (!userId) {
+      if (!username) {
         alert('아이디는 필수예요!')
         return
       }

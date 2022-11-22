@@ -13,14 +13,13 @@ from .serializers import UserSerializer
 #     return Response({'token':token.key})
 
 
+User = get_user_model()
 
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_info(request, username):
-    User = get_user_model()
-
     person = get_object_or_404(User, username=username)
     serializer = UserSerializer(person)
     return Response(serializer.data)
@@ -55,22 +54,6 @@ def user_info(request, username):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # def follow(request, user_pk):
 #     if request.user.is_authenticated:
 #         User = get_user_model()
@@ -86,9 +69,16 @@ def user_info(request, username):
 
 from django.http import JsonResponse , HttpResponse
 
-def follow(request, user_pk):
-    person = get_object_or_404(User, pk=user_pk)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+# 팔로우, 언팔로우
+def follow(request, username):
+    # person = User.objects.get(pk=user_pk)
+    person = get_object_or_404(User, username=username)
+    print(person)
     user = request.user
+    print(user)
     # follow하려는 대상이 사용자가 아닐때만 가능
     if person != user:
         if person.followers.filter(pk=user.pk).exists():
@@ -104,6 +94,22 @@ def follow(request, user_pk):
         }
         return JsonResponse(res)
     return HttpResponse(status=200)
+
+@api_view(['GET'])
+def followers_list(request, username):
+    person = get_object_or_404(User, username=username)
+    followerslist = person.followers.all()
+    serializer = UserSerializer(followerslist, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def followings_list(request, username):
+    person = get_object_or_404(User, username=username)
+    followingslist = person.followings.all()
+    serializer = UserSerializer(followingslist, many=True)
+    return Response(serializer.data)
+
 
 def post_img(request,user_pk):
     user = get_object_or_404(User, pk=user_pk)

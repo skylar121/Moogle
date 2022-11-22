@@ -78,15 +78,15 @@ class ReviewListSerializer(serializers.ModelSerializer):
     # def get_movie_genres(self, obj):
     #     return obj.movie.genres
 
-    userName = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
 
-    def get_userName(self,obj):
+    def get_username(self,obj):
         return obj.user.username
 
     class Meta:
         model = Review
-        fields = ('id', 'user', 'userName', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title', 'movie_poster_path', 'movie_backdrop_path')
-        read_only_fields = ('user', 'movie')
+        fields = ('id', 'user', 'username', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title', 'movie_poster_path', 'movie_backdrop_path', 'like')
+        read_only_fields = ('user', 'movie', 'like')
 
 
 class ReviewCommentSerializer(serializers.ModelSerializer):

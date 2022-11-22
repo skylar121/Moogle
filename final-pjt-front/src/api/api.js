@@ -1,6 +1,7 @@
 const LOCAL = 'http://127.0.0.1:8000/'
 
 const ACCOUNTS = 'accounts/'
+const CUSTOM = 'account/'
 const MOVIES = 'movies/'
 
 export default {
@@ -8,10 +9,17 @@ export default {
     login: () => LOCAL + ACCOUNTS + 'login/',
     logout: () => LOCAL + ACCOUNTS + 'logout/',
     signup: () => LOCAL + ACCOUNTS + 'signup/',
-    currUserData: () => LOCAL + ACCOUNTS + 'user/',
-    profile: id => LOCAL + ACCOUNTS + id + '/',
-    follow: id => LOCAL + ACCOUNTS + id + '/',
-    userMovieData: id => LOCAL + ACCOUNTS + id + '/movies/',
+    // 유저 정보 가져오기
+    currUserData: username => LOCAL + ACCOUNTS + 'userinfo/' + username,
+    // 기본 유저 정보
+    // currUserData: () => LOCAL + ACCOUNTS + 'user/',
+    profile: username => LOCAL + ACCOUNTS + username + '/',
+    // 팔로우, 언팔로우
+    follow: username => LOCAL + CUSTOM + username + 'follow/',
+    // follow: id => LOCAL + ACCOUNTS + id + '/',
+    // 팔로우 초기값
+    follower: username => LOCAL + ACCOUNTS + 'follower' + username + '/',
+    following: username => LOCAL + ACCOUNTS + 'following' + username + '/',
   },
   movies: {
     recommendMovies: () => LOCAL + MOVIES + 'recommend/',
@@ -20,7 +28,11 @@ export default {
     romanceMovies: () => LOCAL + MOVIES + 'romance10/',
     createReview: movieId => LOCAL + MOVIES + movieId + '/review_list_create/',
     updateDeleteReview: reviewId => LOCAL + MOVIES + 'review/' + reviewId + '/',
+    // 영화 리뷰 좋아요
     toggleReviewLike: reviewId => LOCAL + MOVIES + reviewId + '/like_toggle/',
+    // 영화 리뷰 좋아요 초기값
     getReviewCount: reviewId => LOCAL + MOVIES + reviewId + '/like_count/',
+    // 유저가 쓴 리뷰 전부 가져오기
+    getUserReviews: username => LOCAL + MOVIES + 'profile' + username,
   },
 }

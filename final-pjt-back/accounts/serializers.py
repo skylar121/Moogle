@@ -13,7 +13,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         
         data['nickname'] = self.validated_data['nickname']
-        data['profile_image'] = self.validated_data['profile_image']
+        data['profile_image'] = self.validated_data.get('profile_image')
 
 
         return data

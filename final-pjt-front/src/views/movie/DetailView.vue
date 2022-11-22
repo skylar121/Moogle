@@ -8,12 +8,13 @@
           <!-- 왼쪽 포스터 영역 -->
           <div class="col-md-4">
             <img :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start  w-100" alt="">
-            <div v-if="userReview">
+            <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
+            <!-- <div v-if="userReview">
               <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
             </div>
             <div v-else>
               <MovieCreateReview :movie="movie" @fetchAllReviews="fetchAllReviews" />
-            </div>
+            </div> -->
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
@@ -147,7 +148,7 @@ export default {
         .then((response)=>{
           console.log(response.data)
           this.reviews = response.data.reverse()
-          this.userReview = response.data.filter(review => this.currUser.pk === review.user)
+          this.userReview = response.data.filter(review => this.currUser.username === review.username)
           console.log(this.userReview)
         })
         .catch((error)=>{

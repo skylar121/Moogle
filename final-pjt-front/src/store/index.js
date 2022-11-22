@@ -113,7 +113,7 @@ export default new Vuex.Store({
         method: 'post',
         url: api.accounts.login(),
         data: {
-          username: userData.userId,
+          username: userData.username,
           password: userData.password,
         }
       })
@@ -121,7 +121,7 @@ export default new Vuex.Store({
           const token = res.data.key
           context.commit('SAVE_TOKEN', token) // token
           // 로그인되면 유저 정보 가지러가기
-          context.dispatch('getCurrUser', token)
+          context.dispatch('getCurrUser', userData.username)
           // 이전 페이지로는 어케가징 ?
           router.push({ name: 'MainView' })
         })
@@ -146,18 +146,18 @@ export default new Vuex.Store({
           // alert(err.message)
         })
     },
-    getCurrUser(context, token) {
+    getCurrUser(context, username) {
       console.log('유저정보 가져올게')
       if (context.getters.isLogin) {
         axios({
           method: 'get',
-          url: api.accounts.currUserData(),
+          url: api.accounts.currUserData(username),
           headers: {
-            Authorization: `Token ${ token }`
+            Authorization: `Token ${ context.state.token }`
           }
         })
           .then((res) => {
-            console.log(res.data)
+            console.log('유저정보', res.data)
             context.commit('SAVE_USER_DATA', res.data)
           })
           .catch((err) => {
