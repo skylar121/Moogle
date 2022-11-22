@@ -1,6 +1,39 @@
 <template>
   <div id="app">
     <nav>
+      <div :class="sidebarStatus ? 'sidebar-opened sidebar' : 'sidebar-closed sidebar'" @mouseleave="closeNav">
+        <p class="closebtn" @click="closeNav">&times;</p>
+        <v-sheet
+          color="rgb(17, 17, 17)"
+          class="pa-4"
+        >
+          <v-avatar
+            class="mb-4"
+            color="grey darken-1"
+            size="64"
+          ></v-avatar>
+
+          <div style="color: white">{{ currUser?.username }}님의 프로필</div>
+        </v-sheet>
+
+        <v-divider></v-divider>
+
+        <v-list style="background-color: rgb(17, 17, 17)">
+          <v-list-item
+            v-for="[icon, text] in links"
+            :key="icon"
+            link
+          >
+            <v-list-item-icon dark>
+              <v-icon style="color: white">{{ icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content dark>
+              <v-list-item-title style="color: white">{{ text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </div>
       <div class="logo">
         <router-link :to="{ name: 'MainView' }">
           <span>
@@ -15,9 +48,10 @@
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
       <div v-else>
-        <router-link :to="{ name: 'ProfileView', params: {username: currUser.username} }" class="menu-items">
-        {{ currUser?.nickname }}
+        <router-link :to="{ name: 'ProfileView' }" class="menu-items">
+        {{ currUser?.username }}
         </router-link>
+        <button class="openbtn" @click="openNav">☰</button> 
         <span @click="logOut" class="logout-btn">
           <i class="fa-solid fa-right-to-bracket fa-lg"></i>
         </span>
@@ -32,11 +66,20 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default ({
+  name: 'App',
   data() {
     return {
       query: null,
+      sidebarStatus: false,
+      drawer: null,
+      links: [
+        ['mdi-send', '내가 좋아요한 영화'],
+        ['mdi-inbox-arrow-down', '내가 작성한 리뷰'],
+        ['mdi-delete', '팔로잉'],
+        ['mdi-alert-octagon', 'Spam'],
+    ],
     }
-  },
+  },  
   computed: {
     ...mapState([
       'currUser',
@@ -54,9 +97,16 @@ export default ({
         //true는 확인버튼을 눌렀을 때 코드 작성
         this.$store.dispatch('logOut')
       }
-    }
-  }
+    },
+    openNav() {
+      this.sidebarStatus = true
+    },
+    closeNav() {
+      this.sidebarStatus = false
+    },
+  },
 })
+
 </script>
 
 
@@ -203,4 +253,49 @@ input {
   cursor: pointer;
 }
 
+.sidebar {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 3; /* Stay on top */
+  top: 0;
+  right: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+.sidebar-opened {
+  width: 250px
+}
+
+.sidebar-closed {
+  width: 0
+}
+
+.main-opened {
+  margin-right: 250px;
+}
+
+.main-closed {
+  margin: 0;
+}
+
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
 </style>
