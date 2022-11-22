@@ -48,8 +48,8 @@
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
       <div v-else>
-        <router-link :to="{ name: 'ProfileView' }" class="menu-items">
-        {{ currUser?.username }}
+        <router-link :to="{ name: 'ProfileView', params: {username: currUser?.username} }" class="menu-items">
+        {{ currUser?.nickname }}
         </router-link>
         <button class="openbtn" @click="openNav">☰</button> 
         <span @click="logOut" class="logout-btn">
@@ -125,8 +125,11 @@ body {
   color: #fff;
 }
 
-ul,li,ol{list-style:none}
+ul,li,ol{list-style:none; padding: 0 !important;}
 
+.card {
+  background-color: $body-bg !important;
+}
 
 #app {
   font-family: 'Poppins', 'Noto Sans KR', Helvetica, Arial, sans-serif;

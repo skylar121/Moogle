@@ -26,7 +26,7 @@ export default new Vuex.Store({
   state: {
     token: null,
     currUser: null,
-    profile: null,
+    userProfile: null,
 
     recommendMovies: null,
     nowPlayingMovies: null,
@@ -70,6 +70,9 @@ export default new Vuex.Store({
     SAVE_USER_DATA(state, userData) {
       state.currUser = userData
     },
+    SAVE_USER_PROFILE(state, userData) {
+      state.userProfile = userData
+    },
 
     SAVE_RECOMMEND: (state, payload) => state.recommendMovies = payload,
     SAVE_NOW_PLAYING: (state, payload) => state.nowPlayingMovies = payload,
@@ -100,7 +103,7 @@ export default new Vuex.Store({
         .then((res) => {
           const token = res.data.key
           context.commit('SAVE_TOKEN', token) // token
-          context.dispatch('getCurrUser', token)
+          context.dispatch('getCurrUser')
           router.push({ name: 'MainView' })
         })
         .catch((err) => {
@@ -121,7 +124,7 @@ export default new Vuex.Store({
           const token = res.data.key
           context.commit('SAVE_TOKEN', token) // token
           // 로그인되면 유저 정보 가지러가기
-          context.dispatch('getCurrUser', userData.username)
+          context.dispatch('getCurrUser')
           // 이전 페이지로는 어케가징 ?
           router.push({ name: 'MainView' })
         })
@@ -146,19 +149,35 @@ export default new Vuex.Store({
           // alert(err.message)
         })
     },
-    getCurrUser(context, username) {
+    getCurrUser(context) {
       console.log('유저정보 가져올게')
       if (context.getters.isLogin) {
         axios({
           method: 'get',
-          url: api.accounts.currUserData(username),
+          url: api.accounts.currUserName(),
           headers: {
             Authorization: `Token ${ context.state.token }`
           }
         })
           .then((res) => {
-            console.log('유저정보', res.data)
-            context.commit('SAVE_USER_DATA', res.data)
+            console.log(res)
+            console.log(res.data.username);
+            axios({
+              method: 'get',
+              url: api.accounts.currUserInfo(res.data.username),
+              headers: {
+                Authorization: `Token ${ context.state.token }`
+              }
+            })
+              .then((res) => {
+                context.commit('SAVE_USER_DATA', res.data)
+              })
+              .catch((err) => {
+                console.log(err)
+                alert(err.message)
+                context.commit('REMOVE_TOKEN')
+                router.push({ name: 'LogInView' })
+              })
           })
           .catch((err) => {
             console.log(err)
@@ -305,6 +324,26 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err)
           console.log('서치에러')
+        })
+    },
+    getUserProfile(context) {
+      axios({
+        method: 'get',
+        url: api.movies.getUserProfile(context.state.currUser.username),
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        }
+      })
+        .then((res) => {
+          console.log('유저가쓴리뷰')
+          console.log(res)
+          context.commit('SAVE_USER_PROFILE', res.data)
+        })
+        .catch((err) => {
+          if (err.response.data.detail === '찾을 수 없습니다.') {
+            context.commit('SAVE_USER_PROFILE', [])
+          }
+          console.log(err)
         })
     }
   },

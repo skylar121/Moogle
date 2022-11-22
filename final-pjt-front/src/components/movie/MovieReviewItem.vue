@@ -1,7 +1,8 @@
 <template>
   <div class="card review-card ">
-    <div class="card-header text-bg-primary">
-      {{ review.userName }}
+    <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
+      <strong>{{ review.username }}</strong>
+      <i v-if="currUser.username === review.username" @click="deleteReview" class="fa-solid fa-trash-can" style="cursor: pointer"></i>
     </div>
     <div class="card-body d-flex flex-column justify-content-center align-items-center">
       <p class="card-title fs-3">{{ review.title }}</p>
@@ -25,11 +26,11 @@
           <i class="fa-regular fa-heart me-2" id="toggleLike" @click="toggleLike"></i>
         </span>
         <span v-else>
-          <i class="fa-solid fa-heart" id="toggleLike" @click="toggleLike"></i>
+          <i class="fa-solid fa-heart me-2" id="toggleLike" @click="toggleLike"> </i>
         </span>
-        <span>{{ likeCount }}</span>
-        <i class="fa-regular fa-comment me-2"></i>
-        <i v-if="currUser.username === review.username" @click="deleteReview" class="fa-solid fa-trash-can"></i>
+        <span class="me-2">{{ likeCount }}</span>
+        <i class="fa-regular fa-comment" style="cursor: pointer"></i>
+        <span class="me-2">댓글 개수</span>
       </div>
       {{ review.updated_at.slice(0, 10) }}
     </div>
@@ -90,8 +91,8 @@ export default {
         .then((res) => {
           console.log('댓글정보')
           console.log(res.data)
-          this.likeCount = res.data.like.length()
-          if (res.data.like.has(this.currUser.id)) {
+          this.likeCount = res.data.like.length
+          if (res.data.like !== [] && res.data.like.includes(this.currUser.id)) {
             this.initialHeart = true
           }
         })

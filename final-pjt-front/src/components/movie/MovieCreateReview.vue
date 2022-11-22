@@ -43,16 +43,16 @@
         <p>{{ userReview?.[0]?.content }}</p>
         <div class="d-flex justify-content-end">
           <button @click="onEdit" 
-            class="btn btn-primary review-submit-btn"
+            class="btn btn-primary review-submit-btn me-2"
           >
-            수정
+            <!-- 수정 -->
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
           <button @click.prevent="deleteReview" 
             type="submit" 
             class="btn btn-primary review-submit-btn"
           >
-            삭제
+            <!-- 삭제 -->
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
@@ -76,9 +76,13 @@
           </div>
           <div class="d-flex justify-content-end">
             <!-- 수정 완료 -->
-            <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn"> 저장 <i class="fa-solid fa-floppy-disk"></i></button>
+            <button @click.prevent="updateReview" type="submit" class="btn btn-primary review-submit-btn me-2"> 
+              <!-- 저장  -->
+              <i class="fa-solid fa-floppy-disk"></i></button>
             <!-- 수정 취소 -->
-            <button type="button" @click="onEdit" class="btn btn-dark text-light">취소<i class="fa-solid fa-xmark"></i></button>
+            <button type="button" @click="onEdit" class="btn btn-dark text-light">
+              <!-- 취소 -->
+              <i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
         <!-- 리뷰 없다면 CREATE -->
@@ -237,7 +241,7 @@ export default {
         })
     },
     onEdit() {
-      this.isEditing = true
+      this.isEditing = !this.isEditing
       console.log(this.isEditing)
     },
     updateReview() {

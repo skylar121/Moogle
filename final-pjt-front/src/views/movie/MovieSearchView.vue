@@ -1,9 +1,9 @@
 <template>
   <div>
-        <v-hover 
+        <!-- <v-hover 
           v-slot="{ hover }"
           open-delay="200"
-        >
+        > -->
     <v-row>
       <v-col
         v-for="result in searchResults"
@@ -11,18 +11,22 @@
         cols="3"
         class="poster-parent"
       >
-         <v-expand-transition>
-        <div
-            v-if="hover"
-            class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal text-h2 white--text"
-            style="height: 10%;"
-          >
-            {{ result.title }}
+        <!-- <v-expand-transition>
+      <div
+          v-if="hover"
+          class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal text-h2 white--text"
+          style="height: 10%;"
+        >
+          {{ result.title }}
+        </div>
+          </v-expand-transition> -->
+          <div class="overlay">
+            text
           </div>
-           </v-expand-transition>
           <v-img
             :src="result.poster_path? 'https://image.tmdb.org/t/p/original' + result.poster_path : 'https://image.tmdb.org/t/p/original' + result.backdrop_path" class="poster"
             @click="goToDetail(result.id)"
+            id="search-card"
           >
           <!-- <p :class="hover ? 'hovering' : 'non-hovering'">환율</p> -->
             <template v-slot:placeholder>
@@ -40,7 +44,7 @@
           </v-img>
       </v-col>
     </v-row>
-        </v-hover>
+        <!-- </v-hover> -->
   </div>
 </template>
 
@@ -71,7 +75,25 @@ export default {
 </script>
 
 <style>
-.poster {
+
+.overlay {
+  padding: 15px 20px;
+  background-color: #444444;
+  border-radius: 5px;
+  color: #ffffff;
+  position: absolute;
+  opacity: 0;
+  transition: all ease 0.5s;
+  z-index: 2;
+}
+#search-card:hover + .overlay {
+  opacity: 1;
+}
+
+#search-card {
+
+}
+/* .poster {
   justify-self: center;
   object-fit: cover;
 }
@@ -79,7 +101,7 @@ export default {
 .cstyle {
   position: relative;
   width: 100%;
-  /* height: 0; */
+  height: 0;
   overflow: hidden;
   padding-bottom: 150%;
 }
@@ -89,7 +111,6 @@ export default {
 }
 
 .hovering {
-  background-color: white;
   opacity: 0.8;
   color: black;
   width: 50%;
@@ -104,5 +125,5 @@ export default {
 
 .non-hovering {
   display: none;
-}
+} */
 </style>

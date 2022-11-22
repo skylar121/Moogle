@@ -10,9 +10,10 @@ export default {
     logout: () => LOCAL + ACCOUNTS + 'logout/',
     signup: () => LOCAL + ACCOUNTS + 'signup/',
     // 유저 정보 가져오기
-    currUserData: username => LOCAL + ACCOUNTS + 'userinfo/' + username,
+    // currUserData: username => LOCAL + ACCOUNTS + 'userinfo/' + username,
+    currUserName: () => LOCAL + ACCOUNTS + 'user/',
+    currUserInfo: (username) => LOCAL + ACCOUNTS + 'userinfo/' + username,
     // 기본 유저 정보
-    // currUserData: () => LOCAL + ACCOUNTS + 'user/',
     profile: username => LOCAL + ACCOUNTS + username + '/',
     // 팔로우, 언팔로우
     follow: username => LOCAL + CUSTOM + username + 'follow/',
@@ -32,7 +33,7 @@ export default {
     toggleReviewLike: reviewId => LOCAL + MOVIES + reviewId + '/like_toggle/',
     // 영화 리뷰 좋아요 초기값
     getReviewCount: reviewId => LOCAL + MOVIES + reviewId + '/like_count/',
-    // 유저가 쓴 리뷰 전부 가져오기
-    getUserReviews: username => LOCAL + MOVIES + 'profile' + username,
+    // 유저가 쓴 리뷰 및 프로필에 보여줄 정보
+    getUserProfile: username => LOCAL + MOVIES + 'profile/' + username + '/',
   },
 }
