@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 
-
+from .models import User
 class CustomRegisterSerializer(RegisterSerializer):
     nickname = serializers.CharField()
     profile_image = serializers.ImageField(use_url=True, required=False)
@@ -17,3 +17,9 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
         return data
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+        # read_only_fields = '__all__'

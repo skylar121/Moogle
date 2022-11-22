@@ -9,9 +9,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 import requests
 import json
-from .models import Movie,Genre,Community,Comment,Review,ReviewComment
+from .models import Movie,Genre,Review,ReviewComment
 from django.http import HttpResponse
-from .serializer import MovieDetailSerializer, MovieListSerializer, CommunityListSerializer, CommentSerializer, ReviewListSerializer, ReviewCommentSerializer
+from .serializer import MovieDetailSerializer, MovieListSerializer, ReviewListSerializer, ReviewCommentSerializer
 import random
 
 
@@ -38,16 +38,45 @@ def movie_list(request):
 # 단일 영화 조회
 @api_view(['GET'])
 def movie_detail(request,id):
+    request_url = f"https://api.themoviedb.org/3/movie/{id}?api_key={TMDB_API_KEY}&language=ko-KR"
+    movie = requests.get(request_url).json()
+    inmovie = Movie.objects.filter(pk=id)
+        
+    if len(inmovie):
+        print('yes')
+        movie = get_object_or_404(Movie,pk=id)
+        serializer = MovieDetailSerializer(movie)
+        return Response(serializer.data)
+    else:
+        abc = Movie()
+        abc.title = movie['title']
+        abc.overview = movie['overview'] 
+        abc.release_date = movie.get('release_date')
+        abc.id = movie.get('id')
+        abc.adult = movie['adult']
+        abc.popularity = movie['popularity']
+        abc.vote_average = movie['vote_average']
+        abc.vote_count = movie['vote_count']
+        abc.poster_path = movie['poster_path']
+        abc.backdrop_path = movie['backdrop_path']
+        abc.save()
+        if movie.get('genre_ids'):
+            for genre in movie.get('genre_ids'):
+                abc.genres.add(genre)
     print('yes')
-    movie = get_object_or_404(Movie,id=id)
+    movie = get_object_or_404(Movie,pk=id)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
-# ---------------------------------------------------------------
+
+
+
+
 
 # 유저 프로필
 @api_view(['GET'])
 def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
+    print(user.pk, 11111111111)
     reviews = get_list_or_404(Review, user_id=user.pk)
     movie_title = []
     review_movie = []
@@ -59,9 +88,12 @@ def profile(request, username):
         review_title.append(review.title)
         review_content.append(review.content)
         # like 구현해야함 ..!
-    movies = get_list_or_404(Movie,)
+    movies = get_list_or_404(Movie)
+    print(movies)
     for movie in movies:
-        movie_title.append(movie.title)
+        if movie.pk in review_movie:
+            movie_title.append(movie.title)
+            print(movie_title)
 
     return Response({'userid':user.pk, 'review_movie':review_movie, 'movie_list':movie_title})
     # reveiw_movie 는 리뷰 남겼던 영화다.
@@ -102,96 +134,96 @@ def likes(request):
 
 # ----------------------------------------------------------------------
 
-# 커뮤니티
-@api_view(['GET', 'POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def community_list_create(request):
-  if request.method == 'GET':
-    communities = Community.objects.all()
-    serializer = CommunityListSerializer(communities, many=True)
-    return Response(serializer.data)
-  else:
-    serializer = CommunityListSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-      serializer.save(user=request.user)
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-
-
-# 커뮤니티 단일 조회
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def community_detail(request, community_pk):
-  community = get_object_or_404(Community, pk=community_pk)
-
-  serializer = CommunityListSerializer(community)
-  return Response(serializer.data)
-
-
-
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
-def comment_list(request, community_pk):
-    community = get_object_or_404(Community, pk=community_pk)
-    comments = community.comment_set.all()
-    serializer = CommentSerializer(comments, many=True)
-    return Response(serializer.data)
-
-
-
-# 댓글 생성
-@api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def create_comment(request, community_pk):
-    community = get_object_or_404(Community, pk=community_pk)
-    serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-
-        serializer.save(user=request.user, community=community)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-
-# 커뮤니티 게시글 삭제
-@api_view(['PUT', 'DELETE'])
+# # 커뮤니티
+# @api_view(['GET', 'POST'])
 # @authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def community_update_delete(request, community_pk):
-  community = get_object_or_404(Community, pk=community_pk)
-
-  if not request.user.communities.filter(pk=community_pk).exists():
-    return Response({'message': '권한이 없습니다.'})
-
-  if request.method == 'PUT':
-      serializer = CommunityListSerializer(community, data=request.data)
-      if serializer.is_valid(raise_exception=True):
-          serializer.save(user=request.user)
-          return Response(serializer.data)
-  else:
-      community.delete()
-      return Response({ 'id': community_pk })
+# @permission_classes([IsAuthenticated])
+# def community_list_create(request):
+#   if request.method == 'GET':
+#     communities = Community.objects.all()
+#     serializer = CommunityListSerializer(communities, many=True)
+#     return Response(serializer.data)
+#   else:
+#     serializer = CommunityListSerializer(data=request.data)
+#     if serializer.is_valid(raise_exception=True):
+#       serializer.save(user=request.user)
+#       return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
-# 댓글 삭제
-@api_view(['DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def comment_delete(request, community_pk, comment_pk):
-  community = get_object_or_404(Community, pk=community_pk)
-  comment = community.comment_set.get(pk=comment_pk)
 
-  if not request.user.comments.filter(pk=comment_pk).exists():
-    return Response({'message': '권한이 없습니다.'})
-  else:
-    comment.delete()
-    return Response({ 'id': comment_pk })
+# # 커뮤니티 단일 조회
+# @api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def community_detail(request, community_pk):
+#   community = get_object_or_404(Community, pk=community_pk)
+
+#   serializer = CommunityListSerializer(community)
+#   return Response(serializer.data)
+
+
+
+# @api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
+# # @permission_classes([IsAuthenticated])
+# def comment_list(request, community_pk):
+#     community = get_object_or_404(Community, pk=community_pk)
+#     comments = community.comment_set.all()
+#     serializer = CommentSerializer(comments, many=True)
+#     return Response(serializer.data)
+
+
+
+# # 댓글 생성
+# @api_view(['POST'])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def create_comment(request, community_pk):
+#     community = get_object_or_404(Community, pk=community_pk)
+#     serializer = CommentSerializer(data=request.data)
+#     if serializer.is_valid(raise_exception=True):
+
+#         serializer.save(user=request.user, community=community)
+
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+
+# # 커뮤니티 게시글 삭제
+# @api_view(['PUT', 'DELETE'])
+# # @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def community_update_delete(request, community_pk):
+#   community = get_object_or_404(Community, pk=community_pk)
+
+#   if not request.user.communities.filter(pk=community_pk).exists():
+#     return Response({'message': '권한이 없습니다.'})
+
+#   if request.method == 'PUT':
+#       serializer = CommunityListSerializer(community, data=request.data)
+#       if serializer.is_valid(raise_exception=True):
+#           serializer.save(user=request.user)
+#           return Response(serializer.data)
+#   else:
+#       community.delete()
+#       return Response({ 'id': community_pk })
+
+
+
+# # 댓글 삭제
+# @api_view(['DELETE'])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def comment_delete(request, community_pk, comment_pk):
+#   community = get_object_or_404(Community, pk=community_pk)
+#   comment = community.comment_set.get(pk=comment_pk)
+
+#   if not request.user.comments.filter(pk=comment_pk).exists():
+#     return Response({'message': '권한이 없습니다.'})
+#   else:
+#     comment.delete()
+#     return Response({ 'id': comment_pk })
 
 
 
@@ -298,11 +330,11 @@ def review_comment_delete(request, review_pk, review_comment_pk):
 
 
 
-@api_view(['POST'])
-# @authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def recommend(request):
-    pass
+# @api_view(['POST'])
+# # @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def recommend(request):
+#     pass
 
 
 
@@ -459,35 +491,5 @@ def romance10(request):
     return Response(serializer.data)
 
 
-# 아직 수정중....
-def get_movie_final(request):
-    request_url = f"https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_API_KEY}&language=ko-KR"
-    genres = requests.get(request_url).json()
-    for genre in genres['genres']:
-        jjang = Genre()
-        jjang.id = genre['id']
-        jjang.name = genre['name']
-        jjang.save()
-    for i in range(1, 10):
-        request_url = f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=ko-KR&page={i}"
-        movies = requests.get(request_url).json()
-        for movie in movies['results']:
-            abc = Movie()
-            abc.title = movie['title']
-            abc.overview = movie['overview']
-            abc.release_date = movie.get('release_date')
-            abc.id = movie['id']
-            abc.adult = movie['adult']
-            abc.popularity = movie['popularity']
-            abc.vote_average = movie['vote_average']
-            abc.vote_count = movie['vote_count']
-            abc.poster_path = movie['poster_path']
-            abc.backdrop_path = movie['backdrop_path']
-            if abc.release_date and abc.poster_path and abc.backdrop_path:
-                abc.save()
-                for genre in movie.get('genre_ids'):
-                    for genre2 in genres['genres']:
-                        if genre == genre2['id']:
-                            abc.genres.id = genre2['id']
-                            abc.genres.name = genre2['name']
-    return HttpResponse()
+
+

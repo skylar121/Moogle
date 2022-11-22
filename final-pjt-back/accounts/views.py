@@ -26,13 +26,30 @@ from .models import User
 
 
 
-def user_follow(request, username):
-    follow_user = get_object_or_404(User, username=username, is_active=True)
+# def user_follow(request, username):
+#     follow_user = get_object_or_404(User, username=username, is_active=True)
 
-    request.user.following_set.add(follow_user)
-    follow_user.follower_set.add(request.user)
+#     request.user.following_set.add(follow_user)
+#     follow_user.follower_set.add(request.user)
+
+#     messages.success(request, f'{follow}')
 
 
+
+
+
+
+
+# def follow(self, request, user_id):
+#         # user가 2가지 있어서 혼동 방지를 위해 
+#         you = get_object_or_404(User, id=user_id)
+#         me = request.user
+#         if me in you.follow.all(): # users/models.py의 related_name=followers
+#             you.follow.remove(me) # (request.user)
+#             return Response("언팔로우 했습니다.", status=status.HTTP_200_OK)
+#         else:
+#             you.follow.add(me) # 너의 팔로워에 나를 더해라
+#             return Response("팔로우 했습니다.", status=status.HTTP_200_OK)
 
 
 
@@ -65,3 +82,23 @@ def user_follow(request, username):
 #     return redirect('accounts:login')
 
 
+from django.http import JsonResponse , HttpResponse
+
+def follow(request, user_pk):
+    person = get_object_or_404(User, pk=user_pk)
+    user = request.user
+    # follow하려는 대상이 사용자가 아닐때만 가능
+    if person != user:
+        if person.followers.filter(pk=user.pk).exists():
+            person.followers.remove(user)
+            is_follow = False
+        else:
+            person.followers.add(user)
+            is_follow = True
+        res = {
+            'is_follow': is_follow,
+            'followers': person.followers.count(),
+            'followings': person.followings.count(),
+        }
+        return JsonResponse(res)
+    return HttpResponse(status=200)

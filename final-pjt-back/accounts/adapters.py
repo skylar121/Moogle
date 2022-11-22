@@ -12,6 +12,6 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         
         user.profile_image = profile_image
         user.nickname = nickname
-        # print(data,1111111111111111111111111111111111111111)
+
         user.save()
         return user
