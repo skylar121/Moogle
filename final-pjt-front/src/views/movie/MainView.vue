@@ -53,6 +53,9 @@ export default {
     ...mapGetters([
       'shuffledNowPlayingMovies',
     ]),
+    recommendLength() {
+      return this.shuffledNowPlayingMovies.length
+    }
   },
   methods: {
     ...mapActions([

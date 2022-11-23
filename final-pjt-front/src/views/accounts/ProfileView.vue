@@ -28,8 +28,8 @@
           </div>
           <div class="profile-stats">
             <ul>
-              <li><span class="profile-stat-count">{{ watched }}</span> watched</li>
-              <li><span class="profile-stat-count">188</span> liked</li>
+              <li><span class="profile-stat-count">{{ reviewed }}</span> reviewed</li>
+              <li><span class="profile-stat-count">{{ liked }}</span> liked</li>
             </ul>
           </div>
           <!-- <div class="profile-bio">
@@ -37,15 +37,8 @@
           </div> -->
         </div>
       </div>
-      </header>
-      <main>
-      <div class="container">
-        <div class="gallery">
-          <ProfileListItem v-for="review in userReviews" :key="review.id" :review="review" @click="goToDetail"  />
-        </div>
-        <!-- <div class="loader"></div> -->
-      </div>
-      </main>
+    </header>
+      <ProfileList />
   </div>
 
 </template>
@@ -54,12 +47,12 @@
 import axios from 'axios'
 import api from "@/api/api"
 import { mapState, mapActions } from 'vuex'
-import ProfileListItem from '@/components/profile/ProfileListItem'
+import ProfileList from '@/components/profile/ProfileList'
 
 export default {
   name: 'ProfileView',
   components: {
-    ProfileListItem,
+    ProfileList,
   },
   data() {
     return {
@@ -75,15 +68,19 @@ export default {
       'token',
       'currUser',  // 로그인 유저 (기본 정보)
       'userReviews',  // 로그인 유저 (리뷰 정보)
-      
+      'userLikes',  // 로그인 유저 (리뷰 정보)
     ]),
-    watched() {
+    reviewed() {
       return this.userReviews.length
+    },
+    liked() {
+      return this.userLikes.length
     },
   },
   methods: {
     ...mapActions([
       'getUserReviews',
+      'getUserLikes',
     ]),
     goToDetail(id) {
       // console.log('클릭', id)
@@ -176,6 +173,7 @@ export default {
     this.getNowProfile()
     this.getInitialFollowers()
     this.getInitialFollowings()
+    this.getUserLikes()
   }
 }
 </script>

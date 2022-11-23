@@ -8,7 +8,7 @@
           <!-- 왼쪽 포스터 영역 -->
           <div class="col-md-4">
             <div id="movie-detail-poster">
-                <button v-if="!isLiked" @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-regular fa-heart me-2 fs-1"></i></span></button>
+                <button v-if="!isLiked" @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #dd3c3c;"><i class="fa-regular fa-heart me-2 fs-1"></i></span></button>
                 <button v-else @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-solid fa-heart me-2 fs-1"></i></span></button>
               <img
                 :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start w-100" alt="">
@@ -110,6 +110,7 @@ export default {
         })
     },
     getMovieDetail() {
+      console.log(this.$route.params.movie_id)
         axios({
           method: 'get',
           url: API_URL + `/movies/${this.$route.params.movie_id}/`,
@@ -133,7 +134,7 @@ export default {
             }
           })
             .then((response) => {
-              // console.log(this.movie)
+              console.log(this.movie)
               console.log('저장완료', response)
             })
             .catch((error) => {
@@ -208,7 +209,8 @@ export default {
   position: absolute;
   top: 1em;
   left: 1em;
-  ::after {
+  color: #dd3c3c;
+  /* ::after {
     content: '보고싶어요';
     display: block;
     font-weight: 500;
@@ -216,7 +218,7 @@ export default {
     font-size: .8rem;
     color: #e64949;
     inset: 0;
-  }
+  } */
 }
 
 .background-img {

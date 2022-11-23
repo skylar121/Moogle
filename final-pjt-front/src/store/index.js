@@ -27,6 +27,7 @@ export default new Vuex.Store({
     token: null,
     currUser: null,
     userReviews: null,
+    userLikes: null,
 
     recommendMovies: null,
     nowPlayingMovies: null,
@@ -34,8 +35,6 @@ export default new Vuex.Store({
     romanceMovies: null,
     query: '',
     searchResults: '',
-    // reviewReviews: null, // {username: '', nickname: ''}
-    selectedMovies: [],
     saveSearch: null
   },
   getters: {
@@ -74,6 +73,9 @@ export default new Vuex.Store({
     SAVE_USER_REVIEWS(state, userData) {
       state.userReviews = userData
     },
+    SAVE_USER_LIKES(state, userData) {
+      state.userLikes = userData
+    },
 
     SAVE_RECOMMEND: (state, payload) => state.recommendMovies = payload,
     SAVE_NOW_PLAYING: (state, payload) => state.nowPlayingMovies = payload,
@@ -82,7 +84,6 @@ export default new Vuex.Store({
     SET_SEARCH_RESULTS: (state, payload) => state.searchResults = payload,
     SAVE_SEARCH: (state, payload) => state.saveSearch = payload,
 
-    // 지금 클릭한 리뷰의 작성자 유저 정보
     // SAVE_CURR_Reviews: (state, payload) => state.reviewReviews = payload,
   },
   actions: {
@@ -151,6 +152,7 @@ export default new Vuex.Store({
           router.push({ name: 'MainView' })
           context.commit('SAVE_USER_DATA', null)
           context.commit('SAVE_USER_REVIEWS', null)
+          context.commit('SAVE_USER_LIKES', null)
         })
         .catch((err) => {
           console.log(err)
@@ -213,7 +215,7 @@ export default new Vuex.Store({
             context.commit('SAVE_RECOMMEND', res.data)
           })
           .catch((error) => {
-            console.log('추천영화 아직없음', error)
+            console.log('추천영화 고장남', error)
           })
       } else {
         const MOVIE_URL = 'https://api.themoviedb.org/3/movie/popular'
@@ -339,7 +341,7 @@ export default new Vuex.Store({
           console.log('서치에러')
         })
     },
-    // 로그인 유저의 리뷰 정보
+    // 로그인 유저 리뷰 조회
     getUserReviews(context) {
       axios({
         method: 'get',
@@ -358,22 +360,22 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    // getInitialMovieLike() {
-    //   console.log(this.$route.params.movie_id)
-    //   axios({
-    //     method: 'get',
-    //     url: api.movies.getMovieLikedUsers(this.$route.params.movie_id),
-    //     headers: {
-    //       Authorization: `Token ${this.token}`
-    //     }
-    //   })
-    //     .then((res) => {
-    //       console.log(res.data)
-    //       this.isLiked = Boolean(res.data.filter(follower => follower.username === this.currUser.username).length)
-    //       console.log(this.isLiked)
-    //     })
-    //     .catch((err) => {
-    //       console.log(err)
-    //     })
+    // 로그인 유저 좋아요 조회
+    getUserLikes(context) {
+      axios({
+        method: 'get',
+        url: api.movies.getUserLikedMovie(context.state.currUser.id),
+        headers: {
+          Authorization: `Token ${context.state.token}`
+        }
+      })
+        .then((res) => {
+          console.log(res.data)
+          context.commit('SAVE_USER_LIKES', res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   },
 })
