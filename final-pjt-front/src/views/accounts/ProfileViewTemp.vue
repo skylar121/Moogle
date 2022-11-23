@@ -5,20 +5,14 @@
       <div class="container">
         <div class="profile">
           <div class="profile-image">
-            <p>{{this.$route.params.username}}</p>
-            <!-- <p>{{nowProfile}}</p> -->
-            <!-- <p>{{userProfile}}</p> -->
-            <img v-if="this.$route.params.username === nowProfile[0].username" :src="userProfile[0].profile_image" alt="">
-            <!-- 다르면 다른 사람 페이지 -->
-            <img v-else :src="nowProfile.profile_image" alt="">
+            <img :src="this.$route.params.username.profile_image ? 'http://127.0.0.1:8000' + this.$route.params.username.profile_image : null" alt="">
           </div>
           <div class="profile-user-settings">
-            <h1 v-if="this.$route.params.username === nowProfile[0].username">{{userProfile[0].nickname}}</h1>
-            <h1 v-else>{{ nowProfile.nickname }}</h1>
+            <h1 v-if="currUser.username !== currProfile.username" class="profile-user-name">{{ currProfile.nickname }}</h1>
+            <h1 v-else class="profile-user-name">{{ currUser.nickname }}</h1>
             <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
             <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
-            <!-- 다르면 버튼 보이게 -->
-            <span v-if="this.$route.params.username !== nowProfile.username">
+            <span v-if="currUser.username !== currProfile">
               <button @click="follow" v-if="isFollowed">언팔로우</button>
               <button @click="follow" v-if="!isFollowed">팔로우</button>
             </span>
@@ -41,16 +35,22 @@
           <!-- <div class="profile-bio">
             <p><span class="profile-real-name">Jane Doe</span> Loem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
           </div> -->
+
+
         </div>
+        <!-- End of profile section -->
       </div>
+      <!-- End of container -->
       </header>
       <main>
       <div class="container">
         <div class="gallery">
           <ProfileListItem v-for="review in userProfile" :key="review.id" :review="review" @click="goToDetail(review.movie)"  />
         </div>
+        <!-- End of gallery -->
         <!-- <div class="loader"></div> -->
       </div>
+      <!-- End of container -->
       </main>
   </div>
 
@@ -71,16 +71,15 @@ export default {
     return {
       followers: 0,
       followings: 0,
-      isFollowed: null,
-      nowProfile: null,  // 프로필 페이지에서 보여줄 유저
+      isFollowed: false,
     }
   },
   computed: {
     ...mapState([
       'token',
-      'currUser',  // 로그인 유저 (기본 정보)
-      'userProfile',  // 로그인 유저 (리뷰 정보)
-      'reviewProfile',  // 리뷰 페이지에서 넘어온 유저
+      'currUser',
+      'userProfile',
+      'currProfile',
     ])
   },
   methods: {
@@ -91,29 +90,11 @@ export default {
       console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     },
-
-    getNowProfile() {
-      // 리뷰에서 타고 넘어왔으면 스토어의 리뷰 유저 정보 가져오기
-      console.log('프로필페이지')
-      if (this.reviewProfile) {
-        console.log('리뷰타고왔어')
-        this.nowProfile = this.reviewProfile
-        // 저장하고 나서 스토어 값 초기화
-        this.$store.commit('SAVE_USER_PROFILE', null)
-      } else {
-        console.log('내프로필볼래')
-        // 자기 프로필 보는거라면 로그인 유저 정보로 저장
-        this.getUserProfile()
-        this.nowProfile = this.currUser
-        this.nowProfile = this.userProfile
-        console.log(this.userProfile)
-      }
-    },
     follow() {
       console.log(this.token)
       axios({
         method: 'post',
-        url: api.accounts.follow(this.nowProfile[0].username),
+        url: api.accounts.follow(this.$route.params.username),
         headers: {
           Authorization: `Token ${this.token}`
         }
@@ -130,25 +111,24 @@ export default {
       })
     },
     getInitialFollowers() {
-      console.log(api.accounts.followers(this.nowProfile[0].username))
+      console.log(api.accounts.followers(this.$route.params.username))
       axios({
         method: 'get',
-        url: api.accounts.followers(this.nowProfile[0].username)
+        url: api.accounts.followers(this.$route.params.username)
       })
       .then((res) => {
         this.followers = res.data.length
-        // console.log('팔로워수', res.data)
-        // console.log('팔로워수', res.data.length)
+        console.log('팔로워수', res.data.length)
       })
       .catch((err) => {
         console.log(err)
       })
     },
     getInitialFollowings() {
-      console.log(api.accounts.followers(this.nowProfile[0].username))
+      console.log(api.accounts.followers(this.$route.params.username))
       axios({
         method: 'get',
-        url: api.accounts.followings(this.nowProfile[0].username)
+        url: api.accounts.followings(this.$route.params.username)
       })
       .then((res) => {
         this.followings = res.data.length
@@ -160,10 +140,10 @@ export default {
     },
   },
   created() {
-    this.getNowProfile()
+    this.getUserProfile()
     this.getInitialFollowers()
     this.getInitialFollowings()
-    console.log(this.currUser.username, this.nowProfile.username)
+    console.log(this.userProfile[0].movie_backdrop_path)
   }
 }
 </script>
@@ -178,6 +158,17 @@ export default {
   border: none;
 }
 
+/*
+
+All grid code is placed in a 'supports' rule (feature query) at the bottom of the CSS (Line 310). 
+        
+The 'supports' rule will only run if your browser supports CSS grid.
+
+Flexbox and floats are used as a fallback so that browsers which don't support grid will still recieve a similar layout.
+
+*/
+
+/* Base Styles */
 
 /* body {
     font-family: "Open Sans", Arial, sans-serif;

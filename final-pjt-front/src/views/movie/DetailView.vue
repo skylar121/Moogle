@@ -64,13 +64,13 @@ export default {
       userReview: null,
       totalComments: null,
       reviews: null,
+      initialHeart: null,
     }
   },
   computed: {
     ...mapState([
       'token',
       'currUser',
-
     ]),
   },
   created() {
@@ -79,6 +79,44 @@ export default {
     this.fetchAllReviews()
   },
   methods: {
+    toggleLike() {
+      axios({
+        method: 'get',
+        url: api.movies.toggleMovieLike(this.currUser.username, this.review.id),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((res) => {
+          console.log(res.data)
+          this.likeCount = res.data.like_count
+          // this.msg = res.data.message
+          this.initialHeart = !this.initialHeart
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getLikeCount() {
+      axios({
+        method: 'get',
+        url: api.movies.getReviewCount(this.review.id),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((res) => {
+          // console.log('댓글정보')
+          // console.log(res.data)
+          this.likeCount = res.data.like.length
+          if (res.data.like !== [] && res.data.like.includes(this.currUser.id)) {
+            this.initialHeart = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     getMovieDetail() {
         axios({
           method: 'get',
@@ -151,8 +189,9 @@ export default {
         }
       })
         .then((response)=>{
-          console.log(response.data)
+          console.log('찐데이터')
           this.reviews = response.data.reverse()
+          console.log(this.reviews)
           this.userReview = response.data.filter(review => this.currUser.username === review.username)
           console.log(this.userReview)
         })
@@ -161,6 +200,9 @@ export default {
         })
       }
     },
+    toggleMovieLike() {
+
+    }
   },
 }
 </script>
