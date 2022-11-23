@@ -18,6 +18,7 @@ import json
 import numpy as np
 from numpy.linalg import norm
 from sklearn.feature_extraction.text import TfidfVectorizer
+from accounts.serializers import UserSerializer
 
 TMDB_API_KEY = 'b4e0be7fe675a0e4fdd96cca62fc6dbd'
 # Create your views here.
@@ -349,14 +350,19 @@ def movie_like(request, my_pk, movie_pk):
 @permission_classes([IsAuthenticated])
 def my_movie_like(request, my_pk):
     me = get_object_or_404(get_user_model(), pk=my_pk)
-    data = []
-    movies = request.data
-    for movie_pk in movies:
-        movie = get_object_or_404(Movie, pk=movie_pk)
-        serializer = MovieListSerializer(movie)
-        data.append(serializer.data)
+    movies = me.like_movies.all()
+    serializer = MovieListSerializer(movies, many=True)
+    return Response(serializer.data)
+
+    # data = []
+
+    # movies = request.data
+    # for movie_pk in movies:
+    #     movie = get_object_or_404(Movie, pk=movie_pk)
+    #     serializer = MovieListSerializer(movie)
+    #     data.append(serializer.data)
     
-    return Response(data)
+    # return Response(data)
 
 
 
