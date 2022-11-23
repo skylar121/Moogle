@@ -28,7 +28,7 @@
           </div>
           <div class="profile-stats">
             <ul>
-              <li><span class="profile-stat-count">164</span> watched</li>
+              <li><span class="profile-stat-count">{{ watched }}</span> watched</li>
               <li><span class="profile-stat-count">188</span> liked</li>
             </ul>
           </div>
@@ -75,7 +75,11 @@ export default {
       'token',
       'currUser',  // 로그인 유저 (기본 정보)
       'userReviews',  // 로그인 유저 (리뷰 정보)
-    ])
+      
+    ]),
+    watched() {
+      return this.userReviews.length
+    },
   },
   methods: {
     ...mapActions([

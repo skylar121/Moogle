@@ -23,16 +23,16 @@ export default {
     followings: username => LOCAL + ACCOUNTS + 'followings/' + username + '/',
   },
   movies: {
-    recommendMovies: () => LOCAL + MOVIES + 'recommend/',
+    recommendMovies: userId => LOCAL + MOVIES + userId + '/recommend/',
     nowPlayingMovies: () => LOCAL + MOVIES + 'goto_main/',
     actionMovies: () => LOCAL + MOVIES + 'action10/',
     romanceMovies: () => LOCAL + MOVIES + 'romance10/',
     // 영화 좋아요
-    toggleMovieLike: (username, movie_id) => LOCAL + MOVIES + username + '/' + movie_id + '/like/',
+    toggleMovieLike: (userId, movieId) => LOCAL + MOVIES + userId + '/' + movieId + '/like/',
     // 유저가 좋아한 영화
-    getUserLikedMovie: username => LOCAL + MOVIES + username + '/like/',
+    getUserLikedMovie: userId => LOCAL + MOVIES + userId + '/like/',
     // 영화에 좋아요 한 유저들
-    getMovieLikedUsers: movie_id => LOCAL + MOVIES + movie_id + '/like/' + 'users/',
+    getMovieLikedUsers: movieId => LOCAL + MOVIES + movieId + '/like/' + 'users/',
 
     // 리뷰
     createReview: movieId => LOCAL + MOVIES + movieId + '/review_list_create/',

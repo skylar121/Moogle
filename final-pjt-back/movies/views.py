@@ -86,33 +86,6 @@ def profile(request, username):
     return Response(serializer.data)
 
 
-# 게시글 좋아요 !
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def like_toggle(request, review_pk):
-    # review_id = request.GET['review_id']
-    post = Review.objects.get(id=review_pk)
-
-    if request.user.is_authenticated:
-        
-        user = request.user
-        if post.like.filter(id=user.id).exists():
-            post.like.remove(user)
-            message = "좋아요 취소"
-        else:
-            post.like.add(user)
-            message = "좋아요"
-        context = {'like_count' : post.like.count(), "message":message}
-        return JsonResponse(context)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def like_count(request, review_pk):
-    post = Review.objects.get(id=review_pk)
-    serializer = ReviewListSerializer(post)
-    return Response(serializer.data)
-
-
 # ----------------------------------------------------------------------
 
 # 리뷰 생성 및 조회 (로그인 된 상태)
@@ -160,6 +133,31 @@ def create_review_comment(request, review_pk):
         serializer.save(user=request.user, review=review)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+# 리뷰 좋아요 !
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def like_toggle(request, review_pk):
+    # review_id = request.GET['review_id']
+    post = Review.objects.get(id=review_pk)
+
+    if request.user.is_authenticated:
+        
+        user = request.user
+        if post.like.filter(id=user.id).exists():
+            post.like.remove(user)
+            message = "좋아요 취소"
+        else:
+            post.like.add(user)
+            message = "좋아요"
+        context = {'like_count' : post.like.count(), "message":message}
+        return JsonResponse(context)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def like_count(request, review_pk):
+    post = Review.objects.get(id=review_pk)
+    serializer = ReviewListSerializer(post)
+    return Response(serializer.data)
 
 # 리뷰 삭제
 @api_view(['PUT', 'DELETE'])
@@ -217,9 +215,7 @@ def review_comment_delete(request, review_pk, review_comment_pk):
         return Response({ 'id': review_comment_pk })
 
 
-# 리뷰 좋아요
-
-
+# 좋아요 기반 추천 !!!!!!
 @api_view(['GET'])
 # @authentication_classes([JSONWebTokenAuthentication])
 # @permission_classes([IsAuthenticated])
@@ -237,7 +233,8 @@ def recommend(request,user_pk):
             'overview': d['fields']['overview'],
             'title': d['fields']['title'],
             'poster_path': d['fields']['poster_path'],
-            'genres': d['fields']['genres']
+            'genres': d['fields']['genres'],
+            'vote_average': d['fields']['vote_average']
         })
 
     new_data = pd.DataFrame(new_data)
@@ -254,13 +251,13 @@ def recommend(request,user_pk):
     # print('111111111111')
 
     tfidf=TfidfVectorizer(stop_words='english')#불용어 제거
-    print(type(tfidf))
+    # print(type(tfidf))
     tfidf_mat=tfidf.fit_transform(new_data['overview']).toarray()
 
     def cos_sim2(X,Y):
         return np.dot(X,Y)/((norm(X)*norm(Y))+1e-7)
 
-    print(new_data['title'])
+    # print(new_data['title'])
     # print(new_data['original_title'][10])
     def top_match_ar2(new_data, name, rank=5,simf=cos_sim2):
         sim=[]
@@ -276,11 +273,11 @@ def recommend(request,user_pk):
 #     # 유저가 좋아요 한 영화 넘겨 받기 ( 3개 )
     
     user = get_object_or_404(get_user_model(),pk = user_pk)
-    print(user)
+    # print(user)
     lst1 = list(user.like_movies.all().values())
     
-    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    print(lst1)
+    # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    # print(lst1)
     movieList = []
     if lst1:
         for elt in lst1:
@@ -305,23 +302,25 @@ def recommend(request,user_pk):
     #     # 여기에 영화 이름 동적으로 할당
     #     # movie_name = 영화 이름
         movie_idx = list(new_data['title']).index(movie_name)
-
+#   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         for sim, movie_id in top_match_ar2(tfidf_mat, movie_idx ,20):
-            res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
-
+            # res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
+            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path'], 'vote_average' : new_data.loc[movie_id,'vote_average']}))
+            # print({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']})
         for res in res_list[:30]:
             recommend_lst.add(res)
-    
+    result = []
+    for i in recommend_lst:
+        i = eval(i)
+        result.append(i)
+        # i = i.lstrip('\'')
 
     #     return Response(recommend_lst)
     #     # print(movieList[:10])
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(recommend_lst)
-    return Response({'recommend_lst': recommend_lst})
-
-
-
-
+    # print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    # print(recommend_lst)
+    # print(recommend_lst)
+    return Response(result)
 
 
 
@@ -344,7 +343,7 @@ def movie_like(request, my_pk, movie_pk):
     
     return Response(liking)
 
-# 내가 좋아요 누른 것들 내놔 !!!!!!!!!!!
+# 유저가 좋아요 누른 영화 조회
 @api_view(['GET'])
 # @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -366,7 +365,7 @@ def my_movie_like(request, my_pk):
 
 
 
-# 좋아요 누른 유저 조회
+# 영화 좋아요 누른 유저 조회
 @api_view(['GET'])
 # @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])

@@ -12,9 +12,11 @@
       :key="movie.id" 
       :index="idx" 
     >
+      
       <template slot-scope="{ index }" >
         <div @click="goToDetail(movie.id)" class="movie-item" :data-index="index">
           <img :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path"  :height="180">
+          <!-- <span id="ticket"><i class="fa-solid fa-ticket-simple fs-3"></i></span> -->
           <div class="movie-swipe-small">
             <span class="movie-title-small">{{ movie.title }}</span>
             <span>{{ (movie?.vote_average/2).toFixed(1) > 0.0 ? `⭐${(movie?.vote_average/2).toFixed(1)}` : '' }}</span>

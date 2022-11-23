@@ -15,12 +15,6 @@
                 <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews"
               />
             </div>
-            <!-- <div v-if="userReview">
-              <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
-            </div>
-            <div v-else>
-              <MovieCreateReview :movie="movie" @fetchAllReviews="fetchAllReviews" />
-            </div> -->
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">

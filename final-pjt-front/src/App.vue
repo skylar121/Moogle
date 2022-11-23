@@ -34,7 +34,7 @@
           </v-list-item>
         </v-list>
       </div>
-      <div class="logo">
+      <div class="logo" @click="reload">
         <router-link :to="{ name: 'MainView' }">
           <span>
             neon lights
@@ -97,6 +97,9 @@ export default ({
         //true는 확인버튼을 눌렀을 때 코드 작성
         this.$store.dispatch('logOut')
       }
+    },
+    reload() {
+      this.$router.go() // 새로고침
     },
     openNav() {
       this.sidebarStatus = true

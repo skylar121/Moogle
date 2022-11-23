@@ -199,17 +199,21 @@ export default new Vuex.Store({
     //////////////// movies ////////////////
     fetchRecommendMovies(context) {
       // 로그인 했다면 맞춤 추천, 안했다면 TMDB 추천
-      if (this.state.token) {
+      if (context.state.token) {
         axios({
           method: 'get',
-          url: api.movies.recommendMovies(),
+          url: api.movies.recommendMovies(context.state.currUser.id),
+          headers: {
+            Authorization : `Token ${context.state.token}`
+          }
         })
           .then((res) => {
-            // console.log(res)
-            context.commit('SAVE_RECOMMEND', res)
+            console.log('추천 로그인맞춤')
+            console.log(res.data)
+            context.commit('SAVE_RECOMMEND', res.data)
           })
           .catch((error) => {
-            console.log(error)
+            console.log('추천영화 아직없음', error)
           })
       } else {
         const MOVIE_URL = 'https://api.themoviedb.org/3/movie/popular'
@@ -303,7 +307,7 @@ export default new Vuex.Store({
         url: api.movies.actionMovies()
       })
         .then((response) => {
-          console.log(response.data)
+          // console.log(response.data)
           context.commit('SAVE_ACTION', response.data)
         })
         .catch((error) => {
@@ -354,5 +358,22 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
+    // getInitialMovieLike() {
+    //   console.log(this.$route.params.movie_id)
+    //   axios({
+    //     method: 'get',
+    //     url: api.movies.getMovieLikedUsers(this.$route.params.movie_id),
+    //     headers: {
+    //       Authorization: `Token ${this.token}`
+    //     }
+    //   })
+    //     .then((res) => {
+    //       console.log(res.data)
+    //       this.isLiked = Boolean(res.data.filter(follower => follower.username === this.currUser.username).length)
+    //       console.log(this.isLiked)
+    //     })
+    //     .catch((err) => {
+    //       console.log(err)
+    //     })
   },
 })
