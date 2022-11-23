@@ -13,8 +13,8 @@ export default {
     // currUserData: username => LOCAL + ACCOUNTS + 'userinfo/' + username,
     currUserName: () => LOCAL + ACCOUNTS + 'user/',
     currUserInfo: (username) => LOCAL + ACCOUNTS + 'userinfo/' + username,
-    // 기본 유저 정보
-    profile: username => LOCAL + ACCOUNTS + username + '/',
+    // // 기본 유저 정보
+    // profile: username => LOCAL + ACCOUNTS + username + '/',
     // 팔로우, 언팔로우 (팔로우하고자 하는 유저네임)
     follow: username => LOCAL + ACCOUNTS + 'follow/' + username + '/',
     // 팔로워 값
@@ -42,7 +42,7 @@ export default {
     // 영화 리뷰 좋아요 초기값
     getReviewCount: reviewId => LOCAL + MOVIES + reviewId + '/like_count/',
     // 유저가 쓴 리뷰 및 프로필에 보여줄 정보
-    getUserProfile: username => LOCAL + MOVIES + 'profile/' + username + '/',
+    getUserReviews: username => LOCAL + MOVIES + 'profile/' + username + '/',
     
     // path('<int:my_pk>/<movie_pk>/like/', views.movie_like),
     // path('<int:my_pk>/like/', views.my_movie_like),

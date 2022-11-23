@@ -8,11 +8,11 @@
             <img :src="this.$route.params.username.profile_image ? 'http://127.0.0.1:8000' + this.$route.params.username.profile_image : null" alt="">
           </div>
           <div class="profile-user-settings">
-            <h1 v-if="currUser.username !== currProfile.username" class="profile-user-name">{{ currProfile.nickname }}</h1>
+            <h1 v-if="currUser.username !== nowProfile.username" class="profile-user-name">{{ nowProfile.nickname }}</h1>
             <h1 v-else class="profile-user-name">{{ currUser.nickname }}</h1>
             <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
             <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
-            <span v-if="currUser.username !== currProfile">
+            <span v-if="currUser.username !== nowProfile.username">
               <button @click="follow" v-if="isFollowed">언팔로우</button>
               <button @click="follow" v-if="!isFollowed">팔로우</button>
             </span>
@@ -45,7 +45,7 @@
       <main>
       <div class="container">
         <div class="gallery">
-          <ProfileListItem v-for="review in userProfile" :key="review.id" :review="review" @click="goToDetail(review.movie)"  />
+          <ProfileListItem v-for="review in userReviews" :key="review.id" :review="review" @click="goToDetail(review.movie)"  />
         </div>
         <!-- End of gallery -->
         <!-- <div class="loader"></div> -->
@@ -78,13 +78,12 @@ export default {
     ...mapState([
       'token',
       'currUser',
-      'userProfile',
       'currProfile',
     ])
   },
   methods: {
     ...mapActions([
-      'getUserProfile',
+      'getUserReviews',
     ]),
     goToDetail(id) {
       console.log('클릭', id)
@@ -111,6 +110,7 @@ export default {
       })
     },
     getInitialFollowers() {
+      console.log(this.$route.params.username)
       console.log(api.accounts.followers(this.$route.params.username))
       axios({
         method: 'get',
@@ -140,10 +140,9 @@ export default {
     },
   },
   created() {
-    this.getUserProfile()
+    this.getUserReviews()
     this.getInitialFollowers()
     this.getInitialFollowings()
-    console.log(this.userProfile[0].movie_backdrop_path)
   }
 }
 </script>

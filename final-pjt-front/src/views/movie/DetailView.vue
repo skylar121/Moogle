@@ -238,6 +238,7 @@ export default {
   top: 0;
   opacity: 0.4;
   background: #575757;
+  z-index: -1;
   /* background-image: linear-gradient(rgba(0,0,0,.85) 15%,rgba(0,0,0,.2) 40%,#000 90%); */
 }
 

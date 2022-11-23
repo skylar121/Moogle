@@ -26,7 +26,7 @@ export default new Vuex.Store({
   state: {
     token: null,
     currUser: null,
-    userProfile: null,
+    userReviews: null,
 
     recommendMovies: null,
     nowPlayingMovies: null,
@@ -34,7 +34,7 @@ export default new Vuex.Store({
     romanceMovies: null,
     query: '',
     searchResults: '',
-    reviewProfile: null, // {username: '', nickname: ''}
+    // reviewReviews: null, // {username: '', nickname: ''}
     selectedMovies: [],
   },
   getters: {
@@ -70,8 +70,8 @@ export default new Vuex.Store({
     SAVE_USER_DATA(state, userData) {
       state.currUser = userData
     },
-    SAVE_USER_PROFILE(state, userData) {
-      state.userProfile = userData
+    SAVE_USER_REVIEWS(state, userData) {
+      state.userReviews = userData
     },
 
     SAVE_RECOMMEND: (state, payload) => state.recommendMovies = payload,
@@ -81,7 +81,7 @@ export default new Vuex.Store({
     SET_SEARCH_RESULTS: (state, payload) => state.searchResults = payload,
 
     // 지금 클릭한 리뷰의 작성자 유저 정보
-    SAVE_CURR_PROFILE: (state, payload) => state.reviewProfile = payload,
+    // SAVE_CURR_Reviews: (state, payload) => state.reviewReviews = payload,
   },
   actions: {
     //////////////// accounts ////////////////
@@ -145,7 +145,10 @@ export default new Vuex.Store({
         .then(() => {
           context.commit('REMOVE_TOKEN')
           // alert('로그아웃 완료')
+          localStorage.removeItem('vuex')
           router.push({ name: 'MainView' })
+          context.commit('SAVE_USER_DATA', null)
+          context.commit('SAVE_USER_REVIEWS', null)
         })
         .catch((err) => {
           console.log(err)
@@ -330,22 +333,20 @@ export default new Vuex.Store({
         })
     },
     // 로그인 유저의 리뷰 정보
-    getUserProfile(context) {
+    getUserReviews(context) {
       axios({
         method: 'get',
-        url: api.movies.getUserProfile(context.state.currUser.username),
+        url: api.movies.getUserReviews(context.state.currUser.username),
         headers: {
           Authorization: `Token ${ context.state.token }`
         }
       })
         .then((res) => {
-          console.log('유저가쓴리뷰')
-          console.log(res)
-          context.commit('SAVE_USER_PROFILE', res.data)
+          context.commit('SAVE_USER_REVIEWS', res.data)
         })
         .catch((err) => {
           if (err.response.data.detail === '찾을 수 없습니다.') {
-            context.commit('SAVE_USER_PROFILE', [])
+            context.commit('SAVE_USER_REVIEWS', [])
           }
           console.log(err)
         })

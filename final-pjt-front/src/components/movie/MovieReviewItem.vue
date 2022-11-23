@@ -1,5 +1,6 @@
 <template>
-  <div @click="goToReviewDetail" class="card review-card">
+  <div class="card review-card">
+    <!-- <div @click="goToReviewDetail" class="card review-card"> -->
     <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
       <strong>{{ review.nickname }}</strong>
       <div>

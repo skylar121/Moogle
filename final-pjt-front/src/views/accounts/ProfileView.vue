@@ -1,27 +1,21 @@
 <template>
   <div>
     <header>
-      <!-- <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`"> -->
+      <img class="background-img" :src="backgroundImg">
       <div class="container">
-        <div class="profile">
+        <div class="profile p-5">
           <div class="profile-image">
-            <p>{{this.$route.params.username}}</p>
-            <!-- <p>{{nowProfile}}</p> -->
-            <!-- <p>{{userProfile}}</p> -->
-            <img v-if="this.$route.params.username === nowProfile[0].username" :src="userProfile[0].profile_image" alt="">
-            <!-- 다르면 다른 사람 페이지 -->
-            <img v-else :src="nowProfile.profile_image" alt="">
+            <img id="profile-pic" :src="nowProfile.profile_image ? nowProfile.profile_image: require(`@/assets/default.png`)" alt="">
           </div>
           <div class="profile-user-settings">
-            <h1 v-if="this.$route.params.username === nowProfile[0].username">{{userProfile[0].nickname}}</h1>
-            <h1 v-else>{{ nowProfile.nickname }}</h1>
+            <h1>{{ nowProfile.nickname }}</h1>
             <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
             <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
             <!-- 다르면 버튼 보이게 -->
-            <span v-if="this.$route.params.username !== nowProfile.username">
-              <button @click="follow" v-if="isFollowed">언팔로우</button>
-              <button @click="follow" v-if="!isFollowed">팔로우</button>
-            </span>
+            <div v-if="currUser.username !== nowProfile.username">
+              <button class="btn btn-primary" @click="follow" v-if="isFollowed">언팔로우</button>
+              <button class="btn btn-primary" @click="follow" v-if="!isFollowed">팔로우</button>
+            </div>
             <!-- <span v-else>
               프로필 수정
             </span> -->
@@ -47,7 +41,7 @@
       <main>
       <div class="container">
         <div class="gallery">
-          <ProfileListItem v-for="review in userProfile" :key="review.id" :review="review" @click="goToDetail(review.movie)"  />
+          <ProfileListItem v-for="review in userReviews" :key="review.id" :review="review" @click="goToDetail"  />
         </div>
         <!-- <div class="loader"></div> -->
       </div>
@@ -72,54 +66,62 @@ export default {
       followers: 0,
       followings: 0,
       isFollowed: null,
-      nowProfile: null,  // 프로필 페이지에서 보여줄 유저
+      nowProfile: null,  // 프로필 페이지에서 보여줄 유저 (이미지 O)
+      backgroundImg: null,
     }
   },
   computed: {
     ...mapState([
       'token',
       'currUser',  // 로그인 유저 (기본 정보)
-      'userProfile',  // 로그인 유저 (리뷰 정보)
-      'reviewProfile',  // 리뷰 페이지에서 넘어온 유저
+      'userReviews',  // 로그인 유저 (리뷰 정보)
     ])
   },
   methods: {
     ...mapActions([
-      'getUserProfile',
+      'getUserReviews',
     ]),
     goToDetail(id) {
       console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     },
-
     getNowProfile() {
       // 리뷰에서 타고 넘어왔으면 스토어의 리뷰 유저 정보 가져오기
       console.log('프로필페이지')
-      if (this.reviewProfile) {
+      if (this.$route.params.username !== this.currUser.username) {
         console.log('리뷰타고왔어')
-        this.nowProfile = this.reviewProfile
-        // 저장하고 나서 스토어 값 초기화
-        this.$store.commit('SAVE_USER_PROFILE', null)
-      } else {
-        console.log('내프로필볼래')
+        axios({
+          method: 'get',
+          url: api.accounts.currUserInfo(this.$route.params.username),
+          headers: {
+            Authorization: `Token ${ this.token }`
+          }
+        })
+          .then((res) => {
+            // console.log('리뷰쓴 유저 프로필이야')
+            // console.log(res)
+            this.nowProfile = res.data
+            this.backgroundImg = 'https://image.tmdb.org/t/p/original' + this.userReviews[Math.floor(Math.random()*(this.userReviews.length))].movie_backdrop_path
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        } else {
+        // console.log('내프로필볼래')
         // 자기 프로필 보는거라면 로그인 유저 정보로 저장
-        this.getUserProfile()
         this.nowProfile = this.currUser
-        this.nowProfile = this.userProfile
-        console.log(this.userProfile)
       }
     },
     follow() {
-      console.log(this.token)
       axios({
         method: 'post',
-        url: api.accounts.follow(this.nowProfile[0].username),
+        url: api.accounts.follow(this.$route.params.username),
         headers: {
           Authorization: `Token ${this.token}`
         }
       })
       .then((res) => {
-        console.log('팔로잉워', res)
+        // console.log('팔로잉워', res)
         this.isFollowed = res.data.is_follow
         this.followers = res.data.followers
         this.followings = res.data.followings
@@ -130,13 +132,17 @@ export default {
       })
     },
     getInitialFollowers() {
-      console.log(api.accounts.followers(this.nowProfile[0].username))
       axios({
         method: 'get',
-        url: api.accounts.followers(this.nowProfile[0].username)
+        url: api.accounts.followers(this.$route.params.username),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
       })
       .then((res) => {
+        console.log(res)
         this.followers = res.data.length
+        this.isFollowed = Boolean(res.data.filter(follower => follower.username === this.currUser.username).length)
         // console.log('팔로워수', res.data)
         // console.log('팔로워수', res.data.length)
       })
@@ -145,10 +151,12 @@ export default {
       })
     },
     getInitialFollowings() {
-      console.log(api.accounts.followers(this.nowProfile[0].username))
       axios({
         method: 'get',
-        url: api.accounts.followings(this.nowProfile[0].username)
+        url: api.accounts.followings(this.$route.params.username),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
       })
       .then((res) => {
         this.followings = res.data.length
@@ -160,18 +168,24 @@ export default {
     },
   },
   created() {
+    this.getUserReviews()
     this.getNowProfile()
     this.getInitialFollowers()
     this.getInitialFollowings()
-    console.log(this.currUser.username, this.nowProfile.username)
   }
 }
 </script>
 
 <style lang="scss">
+#profile-pic {
+  max-width: 17em;
+}
+
 .profile {
   /* border: 1px solid $primary; */
-  background-color: rgb(44, 44, 44);
+  background-color: rgb(0, 0, 0);
+  opacity: 0.85;
+  border-radius: $borderRadius;
 }
 
 .profile-stats > ul {
@@ -314,6 +328,7 @@ img {
 }
 
 .gallery-item {
+  border-radius: $borderRadius;
     position: relative;
     flex: 1 0 22em;
     margin: 1em;
