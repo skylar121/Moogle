@@ -7,8 +7,13 @@
         <div class="row g-0">
           <!-- 왼쪽 포스터 영역 -->
           <div class="col-md-4">
-            <img :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start  w-100" alt="">
-            <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
+            <div id="movie-detail-poster">
+              <button><i class="fa-regular fa-heart me-2 fs-1" id="movie-detail-like"></i></button>
+              <img
+                :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start w-100" alt="">
+                <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews"
+              />
+            </div>
             <!-- <div v-if="userReview">
               <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
             </div>
@@ -163,6 +168,15 @@ export default {
 <style lang="scss">
 #app > nav > div:nth-child(3) > a {
   color: $primary;
+}
+
+#movie-detail-poster {
+  position: relative;
+}
+#movie-detail-like {
+  position: absolute;
+  top: 1em;
+  left: 1em;
 }
 
 .background-img {

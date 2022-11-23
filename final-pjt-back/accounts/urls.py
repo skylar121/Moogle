@@ -19,7 +19,9 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('<username>/follow/',views.follow, name='follow'),
+    # path('follow/<username>/',views.follow, name='follow'),
+    # path('<username>/followers/',views.followers_list, name='followers'),
+    # path('<username>/followings/',views.followings_list, name='followings'),
     path('<int:user_pk>/post_img/',views.post_img),
     # path('profile/<username>/',views.profile, name='profile'),
     # path('get_movie/',views.get_movie)

@@ -18,7 +18,7 @@
           <label for="password2"> 비밀번호 확인 </label><br>
           <input type="password" id="password2" v-model="password2" required>
           <br>
-          <label for="profileImg" class="form-label">프로필 이미지 업로드</label>
+          <label for="profileImg" class="form-label">프로필 이미지 업로드 (선택)</label>
           <v-file-input accept="image/*" type="file" id="profileImg" @change="selectFile"></v-file-input>
           <!-- <input accept="image/*" type="file" ref="profileImg" @change="selectFile"> -->
           <br>

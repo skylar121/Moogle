@@ -70,9 +70,9 @@ def user_info(request, username):
 from django.http import JsonResponse , HttpResponse
 
 
+# 팔로우, 언팔로우
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-# 팔로우, 언팔로우
 def follow(request, username):
     # person = User.objects.get(pk=user_pk)
     person = get_object_or_404(User, username=username)
@@ -95,6 +95,7 @@ def follow(request, username):
         return JsonResponse(res)
     return HttpResponse(status=200)
 
+# 팔로워 값
 @api_view(['GET'])
 def followers_list(request, username):
     person = get_object_or_404(User, username=username)
@@ -102,7 +103,7 @@ def followers_list(request, username):
     serializer = UserSerializer(followerslist, many=True)
     return Response(serializer.data)
 
-
+# 팔로잉 값
 @api_view(['GET'])
 def followings_list(request, username):
     person = get_object_or_404(User, username=username)

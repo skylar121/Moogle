@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Movie, Genre, Review, ReviewComment
 from accounts.serializers import UserSerializer
 
+
 class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -79,14 +80,23 @@ class ReviewListSerializer(serializers.ModelSerializer):
     #     return obj.movie.genres
 
     username = serializers.SerializerMethodField()
+    nickname = serializers.SerializerMethodField()
+    # profile_image = serializers.SerializerMethodField()
 
     def get_username(self,obj):
         return obj.user.username
+    def get_nickname(self,obj):
+        return obj.user.nickname
+    # def get_profile_image(self,obj):
+        # return obj.user.profile_image
+        # data = obj.user.profile_image.read()
+
+        # return HttpResponse(data, content_type=obj["ContentType"])
 
     class Meta:
         model = Review
-        fields = ('id', 'user', 'username', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title', 'movie_poster_path', 'movie_backdrop_path', 'like')
-        read_only_fields = ('user', 'movie', 'like')
+        fields = ('id', 'user', 'username', 'nickname', 'title', 'content', 'movie', 'rank', 'created_at', 'updated_at', 'movie_title', 'movie_poster_path', 'movie_backdrop_path', 'like')
+        read_only_fields = ('user', 'movie', 'nickname', 'like')
 
 
 class ReviewCommentSerializer(serializers.ModelSerializer):

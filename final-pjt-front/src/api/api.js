@@ -1,7 +1,7 @@
 const LOCAL = 'http://127.0.0.1:8000/'
 
 const ACCOUNTS = 'accounts/'
-const CUSTOM = 'account/'
+// const CUSTOM = 'account/'
 const MOVIES = 'movies/'
 
 export default {
@@ -15,12 +15,12 @@ export default {
     currUserInfo: (username) => LOCAL + ACCOUNTS + 'userinfo/' + username,
     // 기본 유저 정보
     profile: username => LOCAL + ACCOUNTS + username + '/',
-    // 팔로우, 언팔로우
-    follow: username => LOCAL + CUSTOM + username + 'follow/',
-    // follow: id => LOCAL + ACCOUNTS + id + '/',
-    // 팔로우 초기값
-    follower: username => LOCAL + ACCOUNTS + 'follower' + username + '/',
-    following: username => LOCAL + ACCOUNTS + 'following' + username + '/',
+    // 팔로우, 언팔로우 (팔로우하고자 하는 유저네임)
+    follow: username => LOCAL + ACCOUNTS + 'follow/' + username + '/',
+    // 팔로워 값
+    followers: username => LOCAL + ACCOUNTS + 'followers/' + username +  '/',
+    // 팔로잉 값
+    followings: username => LOCAL + ACCOUNTS + 'followings/' + username + '/',
   },
   movies: {
     recommendMovies: () => LOCAL + MOVIES + 'recommend/',

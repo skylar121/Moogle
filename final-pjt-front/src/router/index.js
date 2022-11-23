@@ -7,6 +7,7 @@ import ProfileView from '@/views/accounts/ProfileView'
 import DetailView from '@/views/movie/DetailView'
 import ReviewDetailView from '@/views/movie/ReviewDetailView'
 import MovieSearchView from '@/views/movie/MovieSearchView'
+import NotFoundView from '@/views/NotFoundView'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,15 @@ const routes = [
     path: '/search/:query',
     name: 'MovieSearchView',
     component: MovieSearchView
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: NotFoundView
+  },
+  {
+    path: '*',
+    redirect: '/404',
   },
 ]
 

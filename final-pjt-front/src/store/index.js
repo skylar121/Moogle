@@ -34,7 +34,7 @@ export default new Vuex.Store({
     romanceMovies: null,
     query: '',
     searchResults: '',
-    currentMoviePk: null,
+    currProfile: null, // {username: '', nickname: ''}
     selectedMovies: [],
   },
   getters: {
@@ -79,6 +79,9 @@ export default new Vuex.Store({
     SAVE_ACTION: (state, payload) => state.actionMovies = payload,
     SAVE_ROMANCE: (state, payload) => state.romanceMovies = payload,
     SET_SEARCH_RESULTS: (state, payload) => state.searchResults = payload,
+
+    // 지금 클릭한 리뷰의 작성자 유저 정보
+    SAVE_CURR_PROFILE: (state, payload) => state.currProfile = payload,
   },
   actions: {
     //////////////// accounts ////////////////
@@ -335,8 +338,8 @@ export default new Vuex.Store({
         }
       })
         .then((res) => {
-          console.log('유저가쓴리뷰')
-          console.log(res)
+          // console.log('유저가쓴리뷰')
+          // console.log(res)
           context.commit('SAVE_USER_PROFILE', res.data)
         })
         .catch((err) => {

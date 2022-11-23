@@ -1,21 +1,29 @@
 <template>
   <div>
     <header>
-      <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`">
+      <!-- <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`"> -->
       <div class="container">
         <div class="profile">
           <div class="profile-image">
-            <img :src="currUser.profile_image ? 'http://127.0.0.1:8000' + currUser.profile_image : null" alt="">
+            <img :src="this.$route.params.username.profile_image ? 'http://127.0.0.1:8000' + this.$route.params.username.profile_image : null" alt="">
           </div>
           <div class="profile-user-settings">
-            <h1 class="profile-user-name">{{ currUser.nickname }}</h1>
+            <h1 v-if="currUser.username !== currProfile.username" class="profile-user-name">{{ currProfile.nickname }}</h1>
+            <h1 v-else class="profile-user-name">{{ currUser.nickname }}</h1>
             <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
-            <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+            <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
+            <span v-if="currUser.username !== currProfile">
+              <button @click="follow" v-if="isFollowed">언팔로우</button>
+              <button @click="follow" v-if="!isFollowed">팔로우</button>
+            </span>
+            <!-- <span v-else>
+              프로필 수정
+            </span> -->
           </div>
           <div class="profile-stats">
             <ul>
-              <li><span class="profile-stat-count">188</span> followers</li>
-              <li><span class="profile-stat-count">206</span> following</li>
+              <li><span class="profile-stat-count">{{ followers }}</span> followers</li>
+              <li><span class="profile-stat-count">{{ followings }}</span> following</li>
             </ul>
           </div>
           <div class="profile-stats">
@@ -25,7 +33,7 @@
             </ul>
           </div>
           <!-- <div class="profile-bio">
-            <p><span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
+            <p><span class="profile-real-name">Jane Doe</span> Loem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
           </div> -->
 
 
@@ -49,8 +57,8 @@
 </template>
 
 <script>
-// import axios from 'axios'
-// import api from "@/api/api"
+import axios from 'axios'
+import api from "@/api/api"
 import { mapState, mapActions } from 'vuex'
 import ProfileListItem from '@/components/profile/ProfileListItem'
 
@@ -59,11 +67,19 @@ export default {
   components: {
     ProfileListItem,
   },
+  data() {
+    return {
+      followers: 0,
+      followings: 0,
+      isFollowed: false,
+    }
+  },
   computed: {
     ...mapState([
       'token',
       'currUser',
-      'userProfile'
+      'userProfile',
+      'currProfile',
     ])
   },
   methods: {
@@ -74,9 +90,59 @@ export default {
       console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     },
+    follow() {
+      console.log(this.token)
+      axios({
+        method: 'post',
+        url: api.accounts.follow(this.$route.params.username),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+      .then((res) => {
+        console.log('팔로잉워', res)
+        this.isFollowed = res.data.is_follow
+        this.followers = res.data.followers
+        this.followings = res.data.followings
+        // this.isFollowed = res.data.length
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    getInitialFollowers() {
+      console.log(api.accounts.followers(this.$route.params.username))
+      axios({
+        method: 'get',
+        url: api.accounts.followers(this.$route.params.username)
+      })
+      .then((res) => {
+        this.followers = res.data.length
+        console.log('팔로워수', res.data.length)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    getInitialFollowings() {
+      console.log(api.accounts.followers(this.$route.params.username))
+      axios({
+        method: 'get',
+        url: api.accounts.followings(this.$route.params.username)
+      })
+      .then((res) => {
+        this.followings = res.data.length
+        console.log('팔로잉수', res.data.length)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
   },
   created() {
     this.getUserProfile()
+    this.getInitialFollowers()
+    this.getInitialFollowings()
     console.log(this.userProfile[0].movie_backdrop_path)
   }
 }
@@ -109,7 +175,7 @@ Flexbox and floats are used as a fallback so that browsers which don't support g
     min-height: 100vh;
     background-color: #fafafa;
     color: #262626;
-    padding-bottom: 3rem;
+    padding-bottom: 3em;
 }
 
 img {
@@ -117,9 +183,9 @@ img {
 }
 
 .container {
-    max-width: 93.5rem;
+    max-width: 93.5em;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 2em;
 } */
 
 .ig-btn {
@@ -133,7 +199,7 @@ img {
 }
 
 .ig-btn:focus {
-    outline: 0.5rem auto #4d90fe;
+    outline: 0.5em auto #4d90fe;
 }
 
 .visually-hidden {
@@ -147,7 +213,7 @@ img {
 /* Profile Section */
 
 .profile {
-    padding: 5rem 0;
+    padding: 5em 0;
 }
 
 .profile::after {
@@ -158,11 +224,11 @@ img {
 
 .profile-image {
     float: left;
-    /* width: calc(33.333% - 1rem); */
+    /* width: calc(33.333% - 1em); */
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 3rem;
+    margin-right: 3em;
 }
 
 .profile-image img {
@@ -173,42 +239,42 @@ img {
 .profile-stats,
 .profile-bio {
     float: left;
-    /* width: calc(66.666% - 2rem); */
+    /* width: calc(66.666% - 2em); */
 }
 
 .profile-user-settings {
-    margin-top: 1.1rem;
+    margin-top: 1.1em;
 }
 
 .profile-user-name {
     display: inline-block;
-    font-size: 3.2rem;
+    font-size: 3.2em;
     font-weight: 300;
 }
 
 .profile-edit-ig-btn {
-    font-size: 1.4rem;
+    font-size: 1.4em;
     line-height: 1.8;
-    border: 0.1rem solid #dbdbdb;
-    border-radius: 0.3rem;
-    padding: 0 2.4rem;
-    margin-left: 2rem;
+    border: 0.1em solid #dbdbdb;
+    border-radius: 0.3em;
+    padding: 0 2.4em;
+    margin-left: 2em;
 }
 
 .profile-settings-ig-btn {
-    font-size: 2rem;
-    margin-left: 1rem;
+    font-size: 2em;
+    margin-left: 1em;
 }
 
 .profile-stats {
-    margin-top: 2.3rem;
+    margin-top: 2.3em;
 }
 
 .profile-stats li {
     display: inline-block;
-    font-size: 1.6rem;
+    font-size: 1.6em;
     line-height: 1.5;
-    margin-right: 4rem;
+    margin-right: 4em;
     cursor: pointer;
 }
 
@@ -217,10 +283,10 @@ img {
 }
 
 .profile-bio {
-    font-size: 1.6rem;
+    font-size: 1.6em;
     font-weight: 400;
     line-height: 1.5;
-    margin-top: 2.3rem;
+    margin-top: 2.3em;
 }
 
 .profile-real-name,
@@ -234,14 +300,14 @@ img {
 .gallery {
     display: flex;
     flex-wrap: wrap;
-    margin: -1rem -1rem;
-    padding-bottom: 3rem;
+    margin: -1em -1em;
+    padding-bottom: 3em;
 }
 
 .gallery-item {
     position: relative;
-    flex: 1 0 22rem;
-    margin: 1rem;
+    flex: 1 0 22em;
+    margin: 1em;
     color: #fff;
     cursor: pointer;
 }
@@ -264,20 +330,20 @@ img {
 
 .gallery-item-info li {
     display: inline-block;
-    font-size: 1.7rem;
+    font-size: 1.7em;
     font-weight: 600;
 }
 
 .gallery-item-likes {
-    /* margin-right: 2.2rem; */
+    /* margin-right: 2.2em; */
 }
 
 .gallery-item-type {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 2.5rem;
-    text-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
+    top: 1em;
+    right: 1em;
+    font-size: 2.5em;
+    text-shadow: 0.2em 0.2em 0.2em rgba(0, 0, 0, 0.1);
 }
 
 .fa-clone,
@@ -294,9 +360,9 @@ img {
 /* Loader */
 
 .loader {
-    width: 5rem;
-    height: 5rem;
-    border: 0.6rem solid #999;
+    width: 5em;
+    height: 5em;
+    border: 0.6em solid #999;
     border-bottom-color: transparent;
     border-radius: 50%;
     margin: 0 auto;
@@ -305,11 +371,11 @@ img {
 
 /* Media Query */
 
-@media screen and (max-width: 40rem) {
+@media screen and (max-width: 40em) {
     .profile {
         display: flex;
         flex-wrap: wrap;
-        padding: 4rem 0;
+        padding: 4em 0;
     }
 
     .profile::after {
@@ -325,25 +391,25 @@ img {
     }
 
     .profile-image img {
-        width: 7.7rem;
+        width: 7.7em;
     }
 
     .profile-user-settings {
-        /* flex-basis: calc(100% - 10.7rem); */
+        /* flex-basis: calc(100% - 10.7em); */
         display: flex;
         flex-wrap: wrap;
-        margin-top: 1rem;
+        margin-top: 1em;
     }
 
     .profile-user-name {
-        font-size: 2.2rem;
+        font-size: 2.2em;
     }
 
     .profile-edit-ig-btn {
         order: 1;
         padding: 0;
         text-align: center;
-        margin-top: 1rem;
+        margin-top: 1em;
     }
 
     .profile-edit-ig-btn {
@@ -351,8 +417,8 @@ img {
     }
 
     .profile-bio {
-        font-size: 1.4rem;
-        margin-top: 1.5rem;
+        font-size: 1.4em;
+        margin-top: 1.5em;
     }
 
     .profile-edit-ig-btn,
@@ -363,19 +429,19 @@ img {
 
     .profile-stats {
         order: 1;
-        margin-top: 1.5rem;
+        margin-top: 1.5em;
     }
 
     .profile-stats ul {
         display: flex;
         text-align: center;
-        padding: 1.2rem 0;
-        /* border-top: 0.1rem solid #dadada;
-        border-bottom: 0.1rem solid #dadada; */
+        padding: 1.2em 0;
+        /* border-top: 0.1em solid #dadada;
+        border-bottom: 0.1em solid #dadada; */
     }
 
     .profile-stats li {
-        font-size: 1.4rem;
+        font-size: 1.4em;
         flex: 1;
         margin: 0;
     }
@@ -397,7 +463,7 @@ img {
 
 The following code will only run if your browser supports CSS grid.
 
-Remove or comment-out the code block below to see how the browser will fall-back to flexbox & floated styling. 
+emove or comment-out the code block below to see how the browser will fall-back to flexbox & floated styling. 
 
 */
 
@@ -406,7 +472,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
         display: grid;
         grid-template-columns: 1fr 2fr;
         grid-template-rows: repeat(3, auto);
-        grid-column-gap: 3rem;
+        grid-column-gap: 3em;
         align-items: center;
     }
 
@@ -416,8 +482,8 @@ Remove or comment-out the code block below to see how the browser will fall-back
 
     .gallery {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
-        grid-gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(22em, 1fr));
+        grid-gap: 2em;
     }
 
     .profile-image,
@@ -430,10 +496,10 @@ Remove or comment-out the code block below to see how the browser will fall-back
         margin: 0;
     }
 
-    @media (max-width: 40rem) {
+    @media (max-width: 40em) {
         .profile {
             grid-template-columns: auto 1fr;
-            grid-row-gap: 1.5rem;
+            grid-row-gap: 1.5em;
         }
 
         .profile-image {
@@ -443,7 +509,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
         .profile-user-settings {
             display: grid;
             grid-template-columns: auto 1fr;
-            grid-gap: 1rem;
+            grid-gap: 1em;
         }
 
         .profile-edit-ig-btn,

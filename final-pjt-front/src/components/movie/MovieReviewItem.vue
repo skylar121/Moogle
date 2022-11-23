@@ -1,12 +1,15 @@
 <template>
-  <div class="card review-card ">
+  <div class="card review-card">
     <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
-      <strong>{{ review.username }}</strong>
-      <i v-if="currUser.username === review.username" @click="deleteReview" class="fa-solid fa-trash-can" style="cursor: pointer"></i>
+      <strong>{{ review.nickname }}</strong>
+      <div>
+        <button v-if="currUser.username !== review.username"  @click="goToProfile" class="btn">프로필 보기</button>
+        <button v-if="currUser.username === review.username" @click="deleteReview" class="btn"><i class="fa-solid fa-trash-can" style="cursor: pointer"></i></button>
+      </div>
     </div>
     <div class="card-body d-flex flex-column justify-content-center align-items-center">
       <p class="card-title fs-3">{{ review.title }}</p>
-      <p class="card-text text-muted">{{ review.content }}</p>
+      <p class="card-text text-muted">{{ `${review.content.slice(0,50)} ...더보기` }}</p>
       <div class="movieVoteAverage">
         <b-form-rating
           :value="review.rank"
@@ -89,8 +92,8 @@ export default {
         }
       })
         .then((res) => {
-          console.log('댓글정보')
-          console.log(res.data)
+          // console.log('댓글정보')
+          // console.log(res.data)
           this.likeCount = res.data.like.length
           if (res.data.like !== [] && res.data.like.includes(this.currUser.id)) {
             this.initialHeart = true
@@ -124,6 +127,15 @@ export default {
           })
         }
     },
+    goToProfile() {
+      console.log('클릭', this.review)
+      this.$router.push({ name: 'ProfileView', params: {username: this.review.username }})
+      const payload = {
+        username: this.review.username,
+        nickname: this.review.nickname
+      }
+      this.$store.commit('SAVE_CURR_PROFILE', payload)
+    }
   },
   created() {
     this.$emit('fetchAllReviews')
