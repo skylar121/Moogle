@@ -5,7 +5,7 @@
       <div class="container">
         <div class="profile">
           <div class="profile-image">
-            <img :src="this.$route.params.username.profile_image ? 'http://127.0.0.1:8000' + this.$route.params.username.profile_image : null" alt="">
+            <img :src="currUser.profile_image ? 'http://127.0.0.1:8000' + currUser.profile_image : null" alt="">
           </div>
           <div class="profile-user-settings">
             <h1 v-if="currUser.username !== currProfile.username" class="profile-user-name">{{ currProfile.nickname }}</h1>
@@ -35,22 +35,16 @@
           <!-- <div class="profile-bio">
             <p><span class="profile-real-name">Jane Doe</span> Loem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
           </div> -->
-
-
         </div>
-        <!-- End of profile section -->
       </div>
-      <!-- End of container -->
       </header>
       <main>
       <div class="container">
         <div class="gallery">
           <ProfileListItem v-for="review in userProfile" :key="review.id" :review="review" @click="goToDetail(review.movie)"  />
         </div>
-        <!-- End of gallery -->
         <!-- <div class="loader"></div> -->
       </div>
-      <!-- End of container -->
       </main>
   </div>
 
@@ -71,7 +65,7 @@ export default {
     return {
       followers: 0,
       followings: 0,
-      isFollowed: false,
+      isFollowed: null,
     }
   },
   computed: {
@@ -118,6 +112,7 @@ export default {
       })
       .then((res) => {
         this.followers = res.data.length
+        console.log('팔로워수', res.data)
         console.log('팔로워수', res.data.length)
       })
       .catch((err) => {
@@ -158,17 +153,6 @@ export default {
   border: none;
 }
 
-/*
-
-All grid code is placed in a 'supports' rule (feature query) at the bottom of the CSS (Line 310). 
-        
-The 'supports' rule will only run if your browser supports CSS grid.
-
-Flexbox and floats are used as a fallback so that browsers which don't support grid will still recieve a similar layout.
-
-*/
-
-/* Base Styles */
 
 /* body {
     font-family: "Open Sans", Arial, sans-serif;

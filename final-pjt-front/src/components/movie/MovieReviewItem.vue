@@ -1,5 +1,5 @@
 <template>
-  <div class="card review-card">
+  <div @click="goToReviewDetail" class="card review-card">
     <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
       <strong>{{ review.nickname }}</strong>
       <div>
@@ -9,7 +9,8 @@
     </div>
     <div class="card-body d-flex flex-column justify-content-center align-items-center">
       <p class="card-title fs-3">{{ review.title }}</p>
-      <p class="card-text text-muted">{{ `${review.content.slice(0,50)} ...더보기` }}</p>
+      <p v-if="review.content.length > 50" class="card-text text-muted">{{ `${review.content.slice(0,50)} ...더보기` }}</p>
+      <p v-else>{{review.content}}</p>
       <div class="movieVoteAverage">
         <b-form-rating
           :value="review.rank"
@@ -33,7 +34,7 @@
         </span>
         <span class="me-2">{{ likeCount }}</span>
         <i class="fa-regular fa-comment" style="cursor: pointer"></i>
-        <span class="me-2">댓글 개수</span>
+        <span class="me-2">댓글 보기</span>
       </div>
       {{ review.updated_at.slice(0, 10) }}
     </div>
@@ -135,6 +136,10 @@ export default {
         nickname: this.review.nickname
       }
       this.$store.commit('SAVE_CURR_PROFILE', payload)
+    },
+    goToReviewDetail() {
+      console.log('클릭', this.review)
+      this.$router.push({ name: 'ReviewDetailView', params: {review_id: this.review.id }})
     }
   },
   created() {

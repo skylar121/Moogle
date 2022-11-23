@@ -64,9 +64,9 @@ urlpatterns = [
 
     
     # 영화에 좋아요 누르기
-    path('<int:my_pk>/<movie_title>/like/', views.movie_like),
+    path('<int:my_pk>/<movie_pk>/like/', views.movie_like),
     path('<int:my_pk>/like/', views.my_movie_like),
-    path('<int:my_pk>/like/users/', views.like_movie_users),
+    path('<int:movie_pk>/like/users/', views.like_movie_users),
     # 리뷰에 좋아요 누르기
     path('<int:review_pk>/like_toggle/', views.like_toggle),
     # 리뷰 좋아요 세기

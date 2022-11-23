@@ -12,6 +12,7 @@ import json
 from .models import Movie,Genre,Review,ReviewComment
 from django.http import HttpResponse
 from .serializer import MovieDetailSerializer, MovieListSerializer, ReviewListSerializer, ReviewCommentSerializer
+from accounts.serializers import UserSerializer
 import random
 
 
@@ -355,11 +356,11 @@ def review_comment_delete(request, review_pk, review_comment_pk):
 
 
 # 영화 좋아요 ~
-@api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
+@api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def movie_like(request, my_pk, movie_title):
-    movie = get_object_or_404(Movie, title=movie_title)
+def movie_like(request, my_pk, movie_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
     me = get_object_or_404(get_user_model(), pk=my_pk)
     if me.like_movies.filter(pk=movie.pk).exists():
         me.like_movies.remove(movie.pk)
@@ -372,8 +373,8 @@ def movie_like(request, my_pk, movie_title):
     return Response(liking)
 
 # 내가 좋아요 누른 것들 내놔 !!!!!!!!!!!
-@api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
+@api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def my_movie_like(request, my_pk):
     me = get_object_or_404(get_user_model(), pk=my_pk)
@@ -389,23 +390,24 @@ def my_movie_like(request, my_pk):
 
 
 # 좋아요 누른 유저 조회
-@api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
+@api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def like_movie_users(request, my_pk):
+def like_movie_users(request, movie_pk):
     # print(request.data)
-    users = []
-    movies = request.data.get('movies')
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    users = movie.like_users.all()
+    serializer = UserSerializer(users, many=True)
     # print(movies)
-    for movie in movies:
-        movie = get_object_or_404(Movie, pk=movie)
-        serializer = MovieListSerializer(movie)
-        # print(serializer.data)
-        for user in serializer.data.get('like_users'):
-            if user not in users:
-                users.append(user)
+    # for movie in movies:
+    #     movie = get_object_or_404(Movie, pk=movie)
+    #     serializer = MovieListSerializer(movie)
+    #     # print(serializer.data)
+    #     for user in serializer.data.get('like_users'):
+    #         if user not in users:
+    #             users.append(user)
 
-    return Response(users)
+    return Response(serializer.data)
 
 
 
