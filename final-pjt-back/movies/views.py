@@ -12,9 +12,12 @@ import json
 from .models import Movie,Genre,Review,ReviewComment
 from django.http import HttpResponse
 from .serializer import MovieDetailSerializer, MovieListSerializer, ReviewListSerializer, ReviewCommentSerializer
-from accounts.serializers import UserSerializer
 import random
-
+import pandas as pd 
+import json
+import numpy as np
+from numpy.linalg import norm
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 TMDB_API_KEY = 'b4e0be7fe675a0e4fdd96cca62fc6dbd'
 # Create your views here.
@@ -80,27 +83,6 @@ def profile(request, username):
     reviews = get_list_or_404(Review, user_id=user.pk)
     serializer = ReviewListSerializer(reviews, many=True)
     return Response(serializer.data)
-    # movie_title = []
-    # review_movie = []
-    # review_title = []
-    # review_content = []
-    # review_like = []
-
-    # for review in reviews:
-    #     review_movie.append(review.movie_id)
-    #     review_title.append(review.title)
-    #     review_content.append(review.content)
-
-    # movies = get_list_or_404(Movie)
-    # print(movies)
-    # for movie in movies:
-    #     if movie.pk in review_movie:
-    #         movie_title.append(movie.title)
-    #         print(movie_title)
-
-    # return Response({'userid':user.pk, 'review_movie':review_movie, 'movie_list':movie_title})
-    # 장르 넣어줘 ~!
-    # 팔로우 ~~
 
 
 # 게시글 좋아요 !
@@ -125,115 +107,12 @@ def like_toggle(request, review_pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def like_count(request, review_pk):
-    # review_id = request.GET['review_id']
     post = Review.objects.get(id=review_pk)
     serializer = ReviewListSerializer(post)
     return Response(serializer.data)
-    # if request.user.is_authenticated:
-        
-        # serializer = ReviewListSerializer()
-        # context = {'like_count' : post.like.count()}
-        # return JsonResponse(context)
-
-
-
-
 
 
 # ----------------------------------------------------------------------
-
-# # 커뮤니티
-# @api_view(['GET', 'POST'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def community_list_create(request):
-#   if request.method == 'GET':
-#     communities = Community.objects.all()
-#     serializer = CommunityListSerializer(communities, many=True)
-#     return Response(serializer.data)
-#   else:
-#     serializer = CommunityListSerializer(data=request.data)
-#     if serializer.is_valid(raise_exception=True):
-#       serializer.save(user=request.user)
-#       return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-
-
-# # 커뮤니티 단일 조회
-# @api_view(['GET'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def community_detail(request, community_pk):
-#   community = get_object_or_404(Community, pk=community_pk)
-
-#   serializer = CommunityListSerializer(community)
-#   return Response(serializer.data)
-
-
-
-# @api_view(['GET'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# # @permission_classes([IsAuthenticated])
-# def comment_list(request, community_pk):
-#     community = get_object_or_404(Community, pk=community_pk)
-#     comments = community.comment_set.all()
-#     serializer = CommentSerializer(comments, many=True)
-#     return Response(serializer.data)
-
-
-
-# # 댓글 생성
-# @api_view(['POST'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def create_comment(request, community_pk):
-#     community = get_object_or_404(Community, pk=community_pk)
-#     serializer = CommentSerializer(data=request.data)
-#     if serializer.is_valid(raise_exception=True):
-
-#         serializer.save(user=request.user, community=community)
-
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-
-# # 커뮤니티 게시글 삭제
-# @api_view(['PUT', 'DELETE'])
-# # @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def community_update_delete(request, community_pk):
-#   community = get_object_or_404(Community, pk=community_pk)
-
-#   if not request.user.communities.filter(pk=community_pk).exists():
-#     return Response({'message': '권한이 없습니다.'})
-
-#   if request.method == 'PUT':
-#       serializer = CommunityListSerializer(community, data=request.data)
-#       if serializer.is_valid(raise_exception=True):
-#           serializer.save(user=request.user)
-#           return Response(serializer.data)
-#   else:
-#       community.delete()
-#       return Response({ 'id': community_pk })
-
-
-
-# # 댓글 삭제
-# @api_view(['DELETE'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def comment_delete(request, community_pk, comment_pk):
-#   community = get_object_or_404(Community, pk=community_pk)
-#   comment = community.comment_set.get(pk=comment_pk)
-
-#   if not request.user.comments.filter(pk=comment_pk).exists():
-#     return Response({'message': '권한이 없습니다.'})
-#   else:
-#     comment.delete()
-#     return Response({ 'id': comment_pk })
-
-
 
 # 리뷰 생성 및 조회 (로그인 된 상태)
 @api_view(['GET', 'POST'])
@@ -340,12 +219,104 @@ def review_comment_delete(request, review_pk, review_comment_pk):
 # 리뷰 좋아요
 
 
-# @api_view(['POST'])
-# # @authentication_classes([JSONWebTokenAuthentication])
+@api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
 # @permission_classes([IsAuthenticated])
-# def recommend(request):
-#     pass
+def recommend(request,user_pk):
+    print(request)
+    file_path = "movies/fixtures/movies.json"
 
+    with open(file_path, 'r', encoding="UTF-8") as f:
+        data = json.load(f)
+    new_data = []
+    for d in data:
+        new_data.append({
+            'pk': d['pk'],
+            'adult': d['fields']['adult'],
+            'overview': d['fields']['overview'],
+            'title': d['fields']['title'],
+            'poster_path': d['fields']['poster_path'],
+            'genres': d['fields']['genres']
+        })
+
+    new_data = pd.DataFrame(new_data)
+
+    # print(new_data)
+    #데이터가 많은 관계로 20000개까지 짜름 
+
+    # sys.stdout.close()
+
+    new_data['overview'].isnull().sum() #135
+    new_data['overview']=new_data['overview'].fillna('')
+    new_data['overview'].isnull().sum() #0 으로 바뀜 내적하면 모두 0 나옴 
+    # print(new_data['overview'])
+    # print('111111111111')
+
+    tfidf=TfidfVectorizer(stop_words='english')#불용어 제거
+    print(type(tfidf))
+    tfidf_mat=tfidf.fit_transform(new_data['overview']).toarray()
+
+    def cos_sim2(X,Y):
+        return np.dot(X,Y)/((norm(X)*norm(Y))+1e-7)
+
+    print(new_data['title'])
+    # print(new_data['original_title'][10])
+    def top_match_ar2(new_data, name, rank=5,simf=cos_sim2):
+        sim=[]
+        for i in range(len(new_data)):
+            if name != i:
+                sim.append((simf(new_data[i],new_data[name]),i))
+        sim.sort()
+        sim.reverse()
+        return sim[:rank]
+
+#     
+
+#     # 유저가 좋아요 한 영화 넘겨 받기 ( 3개 )
+    
+    user = get_object_or_404(get_user_model(),pk = user_pk)
+    print(user)
+    lst1 = list(user.like_movies.all().values())
+    
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    print(lst1)
+    movieList = []
+    if lst1:
+        for elt in lst1:
+            movieList.append(elt['title'])
+            if len(movieList) == 3:
+                break
+    else:
+        movieall = list(Movie.objects.all().values)
+        
+        movieList = movieList + movieall[:3]
+    
+    # print(user.movie_set.all())
+
+#     # 좋아요 한 영화의 리스트를 for문 돌려서
+#     # 영화 이름마다 밑에 함수를 돌려주기
+#     # 최종적으로 영화 추천 리스트가 담긴 recommend_lst 넘겨주기  
+    recommend_lst = set()
+    res_list = []
+    for movie_name in movieList:
+
+    #     movie_name = '돈 리브'
+    #     # 여기에 영화 이름 동적으로 할당
+    #     # movie_name = 영화 이름
+        movie_idx = list(new_data['title']).index(movie_name)
+
+        for sim, movie_id in top_match_ar2(tfidf_mat, movie_idx ,20):
+            res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
+
+        for res in res_list[:30]:
+            recommend_lst.add(res)
+    
+
+    #     return Response(recommend_lst)
+    #     # print(movieList[:10])
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(recommend_lst)
+    return Response({'recommend_lst': recommend_lst})
 
 
 
@@ -419,7 +390,7 @@ def like_movie_users(request, movie_pk):
 
 # 영화 다 가져와 !
 def get_movie(request):
-    for i in range(1, 10):
+    for i in range(1, 50):
         request_url = f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=ko-KR&page={i}"
         movies = requests.get(request_url).json()
         for movie in movies['results']:

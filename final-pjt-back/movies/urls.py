@@ -71,5 +71,6 @@ urlpatterns = [
     path('<int:review_pk>/like_toggle/', views.like_toggle),
     # 리뷰 좋아요 세기
     path('<int:review_pk>/like_count/', views.like_count),
+    path('<int:user_pk>/recommend',views.recommend)
     
 ]
