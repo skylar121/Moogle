@@ -1,7 +1,7 @@
 <template>
-  <div class="container mb-3 p-4">
-    <div class="text-center">
-      <h3 class="fw-bold">My Review</h3>
+  <div class="container ms-3 mb-3">
+    <div class="text-center mt-3">
+      <h3 class="fw-bold">MY REVIEW</h3>
     </div>
     <form @submit.prevent="createReview">
       <div class="star-box d-flex align-items-center justify-content-center mb-3">
@@ -40,20 +40,21 @@
       <!-- 수정중 X & 리뷰 있다면 내용 + 수정 + 삭제 버튼 보여주기 -->
       <div v-if="(!isEditing && userReview && userReview.length > 0)" class="text-center">
         <p class="fs-3">{{ userReview?.[0]?.title }}</p>
-        <p>{{ userReview?.[0]?.content }}</p>
+        <p style="color: #999;">{{ userReview?.[0]?.content }}</p>
         <div class="d-flex justify-content-end">
+          <!-- 수정 -->
           <button @click="onEdit" 
             class="btn btn-primary review-submit-btn me-2"
           >
-            <!-- 수정 -->
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
+          <!-- 삭제 -->
           <button @click.prevent="deleteReview" 
             type="submit" 
-            class="btn btn-primary review-submit-btn"
+            class="btn review-submit-btn"
+            style="color: #999;"
           >
-            <!-- 삭제 -->
-            <i class="fa-solid fa-trash"></i>
+          <i class="fa-solid fa-trash-can" style="cursor: pointer"></i>
           </button>
         </div>
       </div>

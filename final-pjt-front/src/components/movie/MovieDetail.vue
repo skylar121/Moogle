@@ -27,6 +27,7 @@
               precision="1"
               color="#ffd21e"
               class="border-0 text-light"
+              size="lg"
             ></b-form-rating>
             <!-- <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p> -->
           </div>

@@ -22,6 +22,11 @@ const routes = [
     name: 'DetailView',
     component: DetailView
   },
+  // {
+  //   path: '/movie/:movie_id/:review_id',
+  //   name: 'ReviewDetailView',
+  //   component: ReviewDetailView
+  // },
   {
     path: '/signup',
     name: 'SignUpView',

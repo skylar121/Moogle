@@ -18,7 +18,7 @@
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
-            <div class="card-body p-4">
+            <div class="card-body">
               <MovieDetail :movie="movie" :cast="cast" :director="director" />
               <MovieSimilar />
             </div>

@@ -304,30 +304,34 @@ export default new Vuex.Store({
         })
     },
     fetchActionMovies(context) {
-      axios({
-        mehod: 'get',
-        url: api.movies.actionMovies()
-      })
-        .then((response) => {
-          // console.log(response.data)
-          context.commit('SAVE_ACTION', response.data)
+      if (!context.state.actionMovies) {
+        axios({
+          mehod: 'get',
+          url: api.movies.actionMovies()
         })
-        .catch((error) => {
-          console.log(error)
-        })
+          .then((response) => {
+            // console.log(response.data)
+            context.commit('SAVE_ACTION', response.data)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     fetchRomanceMovies(context) {
-      axios({
-        mehod: 'get',
-        url: api.movies.romanceMovies()
-      })
-        .then((response) => {
-          // console.log(response.data)
-          context.commit('SAVE_ROMANCE', response.data)
+      if (!context.state.romanceMovies) {
+        axios({
+          mehod: 'get',
+          url: api.movies.romanceMovies()
         })
-        .catch((error) => {
-          console.log(error)
-        })
+          .then((response) => {
+            // console.log(response.data)
+            context.commit('SAVE_ROMANCE', response.data)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     showSearchPage(context, query) {  
       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_TMDB}&language=ko&query=` + query + '&include_adult=false')

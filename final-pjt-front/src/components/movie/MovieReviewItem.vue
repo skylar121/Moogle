@@ -1,17 +1,21 @@
 <template>
-  <div class="card review-card">
+  <div class="card review-card col">
     <!-- <div @click="goToReviewDetail" class="card review-card"> -->
-    <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
-      <strong>{{ review.nickname }}</strong>
+    <div class="text-bg-dark card-header d-flex justify-content-between align-items-center">
       <div>
-        <button v-if="currUser.username !== review.username"  @click="goToProfile" class="btn">프로필 보기</button>
-        <button v-if="currUser.username === review.username" @click="deleteReview" class="btn"><i class="fa-solid fa-trash-can" style="cursor: pointer"></i></button>
+        <strong>{{ review.nickname }}</strong>
+        <button v-if="currUser.username !== review.username"  @click="goToProfile" class="btn btn-primary">프로필 보기</button>
+      </div>
+      <div class="text-light">
+        <button v-if="currUser.username === review.username" @click="deleteReview" class="btn btn-primary"><i class="fa-solid fa-trash-can" style="cursor: pointer"></i></button>
       </div>
     </div>
+
     <div class="card-body d-flex flex-column justify-content-center align-items-center">
-      <p class="card-title fs-3">{{ review.title }}</p>
-      <p v-if="review.content.length > 50" class="card-text text-muted">{{ `${review.content.slice(0,50)} ...더보기` }}</p>
-      <p v-else>{{review.content}}</p>
+      <p class="card-title text-light fs-3">{{ review.title }}</p>
+      <p class="card-text text-muted">{{ review.content }}</p>
+      <!-- <p v-if="review.content.length > 50" class="card-text text-muted">{{ `${review.content.slice(0,50)} ...더보기` }}</p>
+      <p v-else class="card-text text-muted">{{review.content}}</p> -->
       <div class="movieVoteAverage">
         <b-form-rating
           :value="review.rank"
@@ -20,47 +24,25 @@
           precision="1"
           color="#ffd21e"
           class="border-0 text-light"
+          size="lg"
         ></b-form-rating>
         <!-- <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p> -->
       </div>
       <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
     </div>
+
     <div class="card-footer text-muted d-flex justify-content-between">
       <div class="fs-5">
         <span v-if="!initialHeart">
-          <i class="fa-regular fa-heart me-2" id="toggleLike" @click="toggleLike"></i>
+          <i class="fa-regular fa-heart me-2"  style="color: #dd3c3c;" id="toggleLike" @click="toggleLike"></i>
         </span>
         <span v-else>
-          <i class="fa-solid fa-heart me-2" id="toggleLike" @click="toggleLike"> </i>
+          <i class="fa-solid fa-heart me-1"  style="color: #dd3c3c;" id="toggleLike" @click="toggleLike"></i>
         </span>
-        <span class="me-2">{{ likeCount }}</span>
-        <i class="fa-regular fa-comment" style="cursor: pointer"></i>
-        <span class="me-2">댓글 보기</span>
-        <MovieCommentItem />
-        <div>
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-      Launch demo modal
-    </button>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        <span class="me-2" style="color: #dd3c3c;">{{ likeCount }}</span>
+        <i class="fa-regular fa-comment mx-1" style="cursor: pointer"></i>
+        <span class="me-2">댓글 개수</span>
+        <MovieCommentItem :review="review" />
       </div>
       {{ review.updated_at.slice(0, 10) }}
     </div>
@@ -76,17 +58,17 @@ import MovieCommentItem from '@/components/movie/MovieCommentItem'
 import { mapState } from 'vuex'
 export default {
   name: 'MovieReviewItem',
-  data() {
-    return {
-      likeCount: null,
-      initialHeart: false,
-    }
-  },
   components: {
     MovieCommentItem,
   },
   props: {
     review: Object,
+  },
+  data() {
+    return {
+      likeCount: null,
+      initialHeart: false,
+    }
   },
   computed: {
     ...mapState([

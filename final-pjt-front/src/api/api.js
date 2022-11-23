@@ -9,8 +9,6 @@ export default {
     login: () => LOCAL + ACCOUNTS + 'login/',
     logout: () => LOCAL + ACCOUNTS + 'logout/',
     signup: () => LOCAL + ACCOUNTS + 'signup/',
-    // 유저 정보 가져오기
-    // currUserData: username => LOCAL + ACCOUNTS + 'userinfo/' + username,
     currUserName: () => LOCAL + ACCOUNTS + 'user/',
     currUserInfo: (username) => LOCAL + ACCOUNTS + 'userinfo/' + username,
     // // 기본 유저 정보
@@ -37,15 +35,16 @@ export default {
     // 리뷰
     createReview: movieId => LOCAL + MOVIES + movieId + '/review_list_create/',
     updateDeleteReview: reviewId => LOCAL + MOVIES + 'review/' + reviewId + '/',
-    // 영화 리뷰 좋아요
+    // 리뷰 댓글
+    countReviewComments: reviewId => LOCAL + MOVIES + 'review_comments/' + reviewId + '/',
+    createReviewComment: reviewId => LOCAL + MOVIES + reviewId + 'review_comment/',
+    deleteReviewComment: (reviewId, commentId) => LOCAL + MOVIES + 'review_comment/' + reviewId + '/' + commentId + '/',
+
+    // 리뷰 좋아요
     toggleReviewLike: reviewId => LOCAL + MOVIES + reviewId + '/like_toggle/',
-    // 영화 리뷰 좋아요 초기값
+    // 리뷰 좋아요 개수
     getReviewCount: reviewId => LOCAL + MOVIES + reviewId + '/like_count/',
-    // 유저가 쓴 리뷰 및 프로필에 보여줄 정보
+    // 유저가 쓴 리뷰들
     getUserReviews: username => LOCAL + MOVIES + 'profile/' + username + '/',
-    
-    // path('<int:my_pk>/<movie_pk>/like/', views.movie_like),
-    // path('<int:my_pk>/like/', views.my_movie_like),
-    // path('<int:my_pk>/like/users/', views.like_movie_users),
   },
 }

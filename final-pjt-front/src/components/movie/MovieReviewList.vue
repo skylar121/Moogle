@@ -1,20 +1,30 @@
 <template>
-  <div class="row g-0 p-4">
+  <div class="row g-0 p-4 text-center text-primary">
     <h3 class="fw-bold">Reviews</h3>
-    <div class="container overflow-hidden">
-      <div v-if="isLogin" class="row col-6 col-md-4 p-3">
-        <div v-if="reviews && reviews.length > 0" class="col">
-          <MovieReviewItem v-for="review in reviews" :review="review" :key="review.id" @fetchAllReviews="fetchAllReviews" />
-        </div>
-        <div v-else>
-          <p>아직 리뷰가 없어요ㅠㅠ</p>
-        </div>
-      </div>
-      <div v-else>
-        <p>유저들의 리뷰를 보려면 로그인 하세요~!</p>
+    <div v-if="isLogin && reviews && reviews.length > 0" class="col">
+      <MovieReviewItem v-for="review in reviews" :review="review" :key="review.id" @fetchAllReviews="fetchAllReviews" />
+      <div class="d-flex">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center" >
+            <li class="page-item disabled" style="background-color: #191817">
+              <a class="page-link">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="">1</a></li>
+            <li class="page-item"><a class="page-link" href="">2</a></li>
+            <li class="page-item"><a class="page-link" href="">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="">Next</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
-    
+    <div v-else>
+      <p>아직 리뷰가 없어요 😿</p>
+    </div>
+    <div v-if="!isLogin">
+      <p>유저들의 리뷰를 보려면 로그인 하세요 😸</p>
+    </div>
   </div>
 </template>
 

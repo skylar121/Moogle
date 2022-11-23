@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="display">
-      <div v-if="currUser" class="row-title">
+      <div v-if="currUser" class="row-title text-center fs-2">
         <span class="text-primary">{{ currUser.nickname }}</span>
         님을 위해 준비했어요!
       </div>
