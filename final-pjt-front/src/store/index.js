@@ -36,6 +36,7 @@ export default new Vuex.Store({
     searchResults: '',
     // reviewReviews: null, // {username: '', nickname: ''}
     selectedMovies: [],
+    saveSearch: null
   },
   getters: {
     isLogin: state => !!state.token,
@@ -79,6 +80,7 @@ export default new Vuex.Store({
     SAVE_ACTION: (state, payload) => state.actionMovies = payload,
     SAVE_ROMANCE: (state, payload) => state.romanceMovies = payload,
     SET_SEARCH_RESULTS: (state, payload) => state.searchResults = payload,
+    SAVE_SEARCH: (state, payload) => state.saveSearch = payload,
 
     // 지금 클릭한 리뷰의 작성자 유저 정보
     // SAVE_CURR_Reviews: (state, payload) => state.reviewReviews = payload,
@@ -324,6 +326,7 @@ export default new Vuex.Store({
     showSearchPage(context, query) {  
       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_TMDB}&language=ko&query=` + query + '&include_adult=false')
         .then((res) => {
+          context.commit('SAVE_SEARCH', query)
           context.commit('SET_SEARCH_RESULTS', res.data.results)
           router.push({name: 'MovieSearchView', params: { query: query }})
         })
