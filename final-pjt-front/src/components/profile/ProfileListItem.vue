@@ -1,6 +1,6 @@
 <template>
-  <div class="gallery-item" tabindex="0">
-    <img @click="goToDetail" :src="review.movie_backdrop_path ? 'https://image.tmdb.org/t/p/original' + review.movie_backdrop_path : 'https://image.tmdb.org/t/p/original' + review.movie_poster_path" class="gallery-image" alt="">
+  <div @click="goToDetail" class="gallery-item" tabindex="0">
+    <img :src="review.movie_backdrop_path ? 'https://image.tmdb.org/t/p/original' + review.movie_backdrop_path : 'https://image.tmdb.org/t/p/original' + review.movie_poster_path" class="gallery-image" alt="">
     <div class="gallery-item-info">
       <ul>
         <div class="mx-auto my-0 text-center">

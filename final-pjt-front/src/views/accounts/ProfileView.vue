@@ -5,7 +5,7 @@
       <div class="container">
         <div class="profile p-5">
           <div class="profile-image">
-            <img id="profile-pic" :src="nowProfile.profile_image ? nowProfile.profile_image: require(`@/assets/default.png`)" alt="">
+            <img id="profile-pic" :src="nowProfile.profile_image ? 'http://127.0.0.1:8000' + nowProfile.profile_image: require(`@/assets/default.png`)" alt="">
           </div>
           <div class="profile-user-settings">
             <h1>{{ nowProfile.nickname }}</h1>
@@ -82,14 +82,14 @@ export default {
       'getUserReviews',
     ]),
     goToDetail(id) {
-      console.log('클릭', id)
+      // console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     },
     getNowProfile() {
       // 리뷰에서 타고 넘어왔으면 스토어의 리뷰 유저 정보 가져오기
-      console.log('프로필페이지')
+      // console.log('프로필페이지')
       if (this.$route.params.username !== this.currUser.username) {
-        console.log('리뷰타고왔어')
+        // console.log('리뷰타고왔어')
         axios({
           method: 'get',
           url: api.accounts.currUserInfo(this.$route.params.username),
@@ -140,7 +140,7 @@ export default {
         }
       })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         this.followers = res.data.length
         this.isFollowed = Boolean(res.data.filter(follower => follower.username === this.currUser.username).length)
         // console.log('팔로워수', res.data)
@@ -159,8 +159,8 @@ export default {
         }
       })
       .then((res) => {
+        // console.log('팔로잉수', res.data.length)
         this.followings = res.data.length
-        console.log('팔로잉수', res.data.length)
       })
       .catch((err) => {
         console.log(err)

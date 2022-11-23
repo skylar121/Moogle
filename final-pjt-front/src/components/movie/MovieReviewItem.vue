@@ -71,7 +71,7 @@
 <script>
 import axios from 'axios'
 import api from '@/api/api'
-// import MovieCommentItem from '@/components/movie/MovieCommentItem'
+import MovieCommentItem from '@/components/movie/MovieCommentItem'
 
 import { mapState } from 'vuex'
 export default {
@@ -79,12 +79,11 @@ export default {
   data() {
     return {
       likeCount: null,
-      // msg: null,
       initialHeart: false,
     }
   },
   components: {
-    // MovieCommentItem,
+    MovieCommentItem,
   },
   props: {
     review: Object,

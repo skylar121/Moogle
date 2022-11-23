@@ -8,7 +8,8 @@
           <!-- 왼쪽 포스터 영역 -->
           <div class="col-md-4">
             <div id="movie-detail-poster">
-              <button @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-regular fa-heart me-2 fs-1"></i></span></button>
+                <button v-if="!isLiked" @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-regular fa-heart me-2 fs-1"></i></span></button>
+                <button v-else @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-solid fa-heart me-2 fs-1"></i></span></button>
               <img
                 :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start w-100" alt="">
                 <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews"
@@ -64,7 +65,7 @@ export default {
       userReview: null,
       totalComments: null,
       reviews: null,
-      initialHeart: null,
+      isLiked: null,
     }
   },
   computed: {
@@ -77,41 +78,38 @@ export default {
     this.getMovieDetail()
     this.getCredits()
     this.fetchAllReviews()
+    this.getInitialMovieLike()
   },
   methods: {
-    toggleLike() {
+    toggleMovieLike() {
       axios({
         method: 'get',
-        url: api.movies.toggleMovieLike(this.currUser.username, this.review.id),
+        url: api.movies.toggleMovieLike(this.currUser.id, this.$route.params.movie_id),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((res) => {
+          this.isLiked = res.data
+          console.log(this.isLiked)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getInitialMovieLike() {
+      console.log(this.$route.params.movie_id)
+      axios({
+        method: 'get',
+        url: api.movies.getMovieLikedUsers(this.$route.params.movie_id),
         headers: {
           Authorization: `Token ${this.token}`
         }
       })
         .then((res) => {
           console.log(res.data)
-          this.likeCount = res.data.like_count
-          // this.msg = res.data.message
-          this.initialHeart = !this.initialHeart
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-    getLikeCount() {
-      axios({
-        method: 'get',
-        url: api.movies.getReviewCount(this.review.id),
-        headers: {
-          Authorization: `Token ${this.token}`
-        }
-      })
-        .then((res) => {
-          // console.log('댓글정보')
-          // console.log(res.data)
-          this.likeCount = res.data.like.length
-          if (res.data.like !== [] && res.data.like.includes(this.currUser.id)) {
-            this.initialHeart = true
-          }
+          this.isLiked = Boolean(res.data.filter(follower => follower.username === this.currUser.username).length)
+          console.log(this.isLiked)
         })
         .catch((err) => {
           console.log(err)
@@ -189,20 +187,17 @@ export default {
         }
       })
         .then((response)=>{
-          console.log('찐데이터')
+          // console.log('찐데이터')
           this.reviews = response.data.reverse()
-          console.log(this.reviews)
+          // console.log(this.reviews)
           this.userReview = response.data.filter(review => this.currUser.username === review.username)
-          console.log(this.userReview)
+          // console.log(this.userReview)
         })
         .catch((error)=>{
           console.log(error);
         })
       }
     },
-    toggleMovieLike() {
-
-    }
   },
 }
 </script>
