@@ -22,8 +22,6 @@ urlpatterns = [
     path('',views.movie_list),
 
 
-    # 단일 영화 조회
-    path('<int:id>/',views.movie_detail),
 
 
     # 유저 관련
@@ -42,7 +40,6 @@ urlpatterns = [
     #drf-spectacular
     path('schema/', SpectacularAPIView.as_view(),name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'),name='swagger-ui'),
-
 
     # 커뮤니티 
     # path('community_list_create/', views.community_list_create),
@@ -71,6 +68,9 @@ urlpatterns = [
     path('<int:review_pk>/like_toggle/', views.like_toggle),
     # 리뷰 좋아요 세기
     path('<int:review_pk>/like_count/', views.like_count),
-    path('<int:user_pk>/recommend/',views.recommend)
+    path('<int:user_pk>/recommend/',views.recommend),
+
+    # 단일 영화 조회
+    path('<int:id>/',views.movie_detail),
     
 ]

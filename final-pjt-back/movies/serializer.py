@@ -150,5 +150,5 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewComment
-        fields = ('id', 'userName', 'user', 'content', 'review', 'rank', 'created_at', 'updated_at',)
+        fields = ('id', 'userName', 'user', 'content', 'review', 'created_at', 'updated_at',)
         read_only_fields = ('user', 'review',)
