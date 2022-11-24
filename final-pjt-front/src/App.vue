@@ -83,6 +83,7 @@ export default ({
   computed: {
     ...mapState([
       'currUser',
+      'searchCompleted',
     ]),
     ...mapGetters([
       'isLogin',
@@ -108,6 +109,11 @@ export default ({
       this.sidebarStatus = false
     },
   },
+  watch: {
+    searchCompleted() {
+      this.query = null
+    }
+  }
 })
 
 </script>

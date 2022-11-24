@@ -35,7 +35,8 @@ export default new Vuex.Store({
     romanceMovies: null,
     query: '',
     searchResults: '',
-    saveSearch: null
+    saveSearch: null,
+    searchCompleted: false,
   },
   getters: {
     isLogin: state => !!state.token,
@@ -333,12 +334,13 @@ export default new Vuex.Store({
           })
       }
     },
-    showSearchPage(context, query) {  
+    showSearchPage(context, query) {
       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_TMDB}&language=ko&query=` + query + '&include_adult=false')
         .then((res) => {
           context.commit('SAVE_SEARCH', query)
           context.commit('SET_SEARCH_RESULTS', res.data.results)
           router.push({name: 'MovieSearchView', params: { query: query }})
+          context.state.searchCompleted = !context.state.searchCompleted
         })
         .catch((err) => {
           console.log(err)
