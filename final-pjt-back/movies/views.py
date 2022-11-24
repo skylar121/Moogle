@@ -235,7 +235,7 @@ def recommend(request,user_pk):
             'title': d['fields']['title'],
             'poster_path': d['fields']['poster_path'],
             'genres': d['fields']['genres'],
-            'genres': d['fields']['vote_average'],
+            'vote_average': d['fields']['vote_average'],
         })
 
     new_data = pd.DataFrame(new_data)
@@ -275,29 +275,22 @@ def recommend(request,user_pk):
     
     user = get_object_or_404(get_user_model(),pk = user_pk)
     # print(user)
-    lst1 = list(user.like_movies.all().values())
+    lst1 = list(user.like_movies.all().values())                            # 좋아요 누른 영화 리스트
     
-    # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    # print(lst1)
-    lst = []
+    lst = []                                                                # 새로운 리스트
     movieList = []
-    # if lst1:
-    #     for elt in lst1:
-    #         lst.append(elt['title'])
-    #         if len(movieList) == 3:
-    #             break
-    # else:
-    #     movieall = list(Movie.objects.all().values)
-        
-    #     movieList = movieList + movieall[:3]
-    if len(lst1) >= 3:                   # 좋아요를 누른 영화가 3개 이상일 경우
+
+    if len(lst1) >= 3:                      # 좋아요를 누른 영화가 3개 이상일 경우
         for elt in lst1:
             lst.append(elt['title'])
-        movieList = random.sample(lst,3)
-    else:                           # 좋아요를 누른 영화가 3개 미만일 경우
-        movieall = random.sample(list(Movie.objects.all().values),(3 - len(lst1)))
+        print(movieList)
+    else:                                   # 좋아요를 누른 영화가 3개 미만일 경우
+        lst1.append(list(Movie.objects.all().values),3 )
+        for elt in lst1:
+            lst.append(elt['title'])                        
         
-        movieList = movieall
+        print(lst) 
+    movieList = random.sample(lst,3)
     # print(user.movie_set.all())
 
 #     # 좋아요 한 영화의 리스트를 for문 돌려서
@@ -314,7 +307,7 @@ def recommend(request,user_pk):
 #   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         for sim, movie_id in top_match_ar2(tfidf_mat, movie_idx ,20):
             # res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
-            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path'], 'poster_path' :new_data.loc[movie_id,'vote_average']}))
+            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path'], 'vote_average' :new_data.loc[movie_id,'vote_average']}))
             # print({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']})
         for res in res_list[:30]:
             recommend_lst.add(res)
