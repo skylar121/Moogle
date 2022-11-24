@@ -44,13 +44,13 @@
         <span class="me-2" style="color: #dd3c3c;">{{ likeCount }}</span>
         <i class="fa-regular fa-comment mx-1" style="cursor: pointer"></i>
         <span class="me-2">{{ commentCount }}</span>
+        <button @click="goToReviewDetail()">자세히 보기</button>
         <div class="accordion" id="accordionExample">
-          자세히 보기
-          <MovieReviewDetail :comments="comments" />
+          <MovieCommentItem v-for="comment in comments" :comment="comment" :key="comment.id" />
         </div>
       </div>
-    </div>
       {{ review.updated_at.slice(0, 10) }}
+    </div>
 
   </div>
 </template>
@@ -58,13 +58,13 @@
 <script>
 import axios from 'axios'
 import api from '@/api/api'
-import MovieReviewDetail from '@/components/movie/MovieReviewDetail'
+import MovieCommentItem from '@/components/movie/MovieCommentItem'
 
 import { mapState } from 'vuex'
 export default {
   name: 'MovieReviewItem',
   components: {
-    MovieReviewDetail
+    MovieCommentItem
   },
   props: {
     review: Object,
