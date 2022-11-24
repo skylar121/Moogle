@@ -45,9 +45,9 @@ def movie_list(request):
 def movie_detail(request,id):
     request_url = f"https://api.themoviedb.org/3/movie/{id}?api_key={TMDB_API_KEY}&language=ko-KR"
     movie = requests.get(request_url).json()
-    inmovie = Movie.objects.filter(pk=id)
+    
         
-    if len(inmovie):
+    if Movie.objects.filter(pk=id).exists():
         print('yes')
         movie = get_object_or_404(Movie,pk=id)
         serializer = MovieDetailSerializer(movie)
@@ -65,9 +65,10 @@ def movie_detail(request,id):
         abc.poster_path = movie['poster_path']
         abc.backdrop_path = movie['backdrop_path']
         abc.save()
-        if movie.get('genre_ids'):
-            for genre in movie.get('genre_ids'):
-                abc.genres.add(genre)
+        print(movie.get('genres'))
+        if movie.get('genres'):
+            for genre in movie.get('genres'):
+                abc.genres.add(genre['id'])
     print('yes')
     movie = get_object_or_404(Movie,pk=id)
     serializer = MovieDetailSerializer(movie)
@@ -233,8 +234,7 @@ def recommend(request,user_pk):
             'overview': d['fields']['overview'],
             'title': d['fields']['title'],
             'poster_path': d['fields']['poster_path'],
-            'genres': d['fields']['genres'],
-            'vote_average': d['fields']['vote_average']
+            'genres': d['fields']['genres']
         })
 
     new_data = pd.DataFrame(new_data)
@@ -278,17 +278,25 @@ def recommend(request,user_pk):
     
     # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     # print(lst1)
+    lst = []
     movieList = []
-    if lst1:
-        for elt in lst1:
-            movieList.append(elt['title'])
-            if len(movieList) == 3:
-                break
-    else:
-        movieall = list(Movie.objects.all().values)
+    # if lst1:
+    #     for elt in lst1:
+    #         lst.append(elt['title'])
+    #         if len(movieList) == 3:
+    #             break
+    # else:
+    #     movieall = list(Movie.objects.all().values)
         
-        movieList = movieList + movieall[:3]
-    
+    #     movieList = movieList + movieall[:3]
+    if len(lst1) >= 3:                   # 좋아요를 누른 영화가 3개 이상일 경우
+        for elt in lst1:
+            lst.append(elt['title'])
+        movieList = random.sample(lst,3)
+    else:                           # 좋아요를 누른 영화가 3개 미만일 경우
+        movieall = random.sample(list(Movie.objects.all().values),(3 - len(lst1)))
+        
+        movieList = movieall
     # print(user.movie_set.all())
 
 #     # 좋아요 한 영화의 리스트를 for문 돌려서
@@ -305,7 +313,7 @@ def recommend(request,user_pk):
 #   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         for sim, movie_id in top_match_ar2(tfidf_mat, movie_idx ,20):
             # res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
-            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path'], 'vote_average' : new_data.loc[movie_id,'vote_average']}))
+            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']}))
             # print({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']})
         for res in res_list[:30]:
             recommend_lst.add(res)
