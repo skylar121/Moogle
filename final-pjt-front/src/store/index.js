@@ -242,6 +242,7 @@ export default new Vuex.Store({
     },
     fetchNowPlayingMovies(context) {
       const MOVIE_URL = 'https://api.themoviedb.org/3/movie/now_playing'
+      console.log(1)
       axios({
         method: 'get',
         // url: api.movies.nowPlayingMovies(),
@@ -252,6 +253,7 @@ export default new Vuex.Store({
         }
       })
         .then((response) => {
+          console.log('success')
           let res = response.data.results
           // console.log(res)
           context.commit('SAVE_NOW_PLAYING', res)
@@ -260,8 +262,8 @@ export default new Vuex.Store({
             // DB에 있다면 DB 정보 가져오기
             const API_URL = 'http://127.0.0.1:8000'
             axios.get(API_URL + `/movies/${movie.id}/`)
-            .then(() => {
-              // console.log(res.data)
+            .then((res) => {
+              console.log(res.data)
               // this.movie = res.data
             })
             .catch((error) => {
@@ -304,7 +306,7 @@ export default new Vuex.Store({
         })
     },
     fetchActionMovies(context) {
-      if (!context.state.actionMovies) {
+      if (context.state.actionMovies === null) {
         axios({
           mehod: 'get',
           url: api.movies.actionMovies()
@@ -319,7 +321,7 @@ export default new Vuex.Store({
       }
     },
     fetchRomanceMovies(context) {
-      if (!context.state.romanceMovies) {
+      if (context.state.romanceMovies === null) {
         axios({
           mehod: 'get',
           url: api.movies.romanceMovies()
@@ -366,6 +368,9 @@ export default new Vuex.Store({
     },
     // 로그인 유저 좋아요 조회
     getUserLikes(context) {
+      console.log('likes')
+      console.log(api.movies.getUserLikedMovie(context.state.currUser.id))
+      console.log(`Token ${context.state.token}`)
       axios({
         method: 'get',
         url: api.movies.getUserLikedMovie(context.state.currUser.id),
@@ -380,6 +385,7 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err)
         })
-    }
+        console.log('likes 2')
+      }
   },
 })

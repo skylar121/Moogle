@@ -34,7 +34,6 @@ export default {
       'userReviews',  // 로그인 유저 (리뷰 정보)
       'userLikes',  // 로그인 유저 (리뷰 정보)
     ]),
-
   },
   methods: {
     ...mapActions([
@@ -46,6 +45,10 @@ export default {
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     },
   },
+  created() {
+    this.getUserLikes()
+    this.getUserReviews()
+  }
 }
 </script>
 

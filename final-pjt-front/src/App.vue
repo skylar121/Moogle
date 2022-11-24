@@ -91,6 +91,11 @@ export default ({
   methods: {
     ...mapActions([
       'showSearchPage',
+      'fetchRecommendMovies',
+      'fetchNowPlayingMovies',
+      'fetchActionMovies',
+      'fetchRomanceMovies',
+      'getUserLikes',
     ]),
     logOut() {
       if (confirm('로그아웃 하실건가요?') == true){ 
@@ -107,6 +112,14 @@ export default ({
     closeNav() {
       this.sidebarStatus = false
     },
+  },
+  created() {
+  //   console.log('빅캐러셀등장')
+  //   this.getUserLikes()
+  //   this.fetchRecommendMovies()
+  //   this.fetchNowPlayingMovies()
+  //   this.fetchActionMovies()
+  //   this.fetchRomanceMovies()
   },
 })
 

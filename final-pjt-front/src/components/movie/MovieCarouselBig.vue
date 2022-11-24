@@ -1,6 +1,6 @@
 <template>
   <carousel-3d
-    v-if="shuffledRecommendMovies"
+    v-if="recommendMovies"
     :controls-visible="true"
     :inverse-scaling="200"
     :disable3d="false"
@@ -9,7 +9,7 @@
     autoplay
   >
     <slide 
-      v-for="(movie, idx) in shuffledRecommendMovies" 
+      v-for="(movie, idx) in recommendMovies" 
       :key="movie.id" 
       :index="idx" 
       @click="routeDetail(movie.id)"
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 
 export default {
@@ -38,15 +38,21 @@ export default {
     Slide,
   },
   computed: {
-    ...mapGetters([
-      'shuffledRecommendMovies',
+    ...mapState([
+      'recommendMovies'
     ]),
   },
   methods: {
+    ...mapActions([
+      'fetchRecommendMovies',
+    ]),
     routeDetail(id) {
       // console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     }
   },
+  created() {
+    this.fetchRecommendMovies()
+  }
 }
 </script>

@@ -1,28 +1,48 @@
 <template>
   <div>
     <section class="display">
-      <div v-if="currUser" class="row-title text-center fs-2">
-        <span class="text-primary">{{ currUser.nickname }}</span>
-        님을 위해 준비했어요!
+      <div v-if="currUser && userLikes && userLikes.length > 0">
+        <div class="row-title text-center fs-2">
+          <span class="text-primary">{{ currUser.nickname }}</span>
+          님만을 위해 준비했어요!
+        </div>
+        <MovieCarouselBig />
       </div>
-      <div v-else class="row-title">
-        <span class="text-primary">추천 영화 <span class="text-muted fs-6"> 나만을 위한 추천을 보고싶다면 로그인!</span></span>
+      <div v-else-if="!currUser && currUser === null">
+        <div class="row-title text-center fs-2">
+          <div class="text-primary">
+            지금 인기있는 영화
+            <p class="text-muted fs-6">당신만의 욕구셔테리어를 보고싶다면 로그인! 🐶</p>
+          </div>
+        </div>
+        <MovieCarouselBig />
       </div>
-      <MovieCarouselBig />
+      <div v-else-if="userLikes.length < 1 " class="row-title text-center">
+        <div class="text-primary fs-2">
+          지금 인기있는 영화
+          <div class="text-muted fs-6">더 자세한 추천을 위해 좋아요 남기러 갈까요?
+          </div>
+        </div>
+        <MovieCarouselBig />
+      </div>
     </section>
     
-    <section class="display">
-      <div class="row-title">
+    <section class="display p-0">
+      <div class="row-title px-4">
         현재 상영중인 영화
       </div>
-      <MovieCarouselSmall :movie-data="shuffledNowPlayingMovies" />
+      <div v-if="shuffledNowPlayingMovies">
 
-      <div class="row-title">
+      <MovieCarouselSmall
+       :movie-data="shuffledNowPlayingMovies" />
+      </div>
+
+      <div class="row-title px-4">
         영화도 나는 멜로
       </div>
       <MovieCarouselSmall :movie-data="romanceMovies" />
 
-      <div class="row-title">
+      <div class="row-title px-4">
         너는 액션<span class="text-muted fs-6"> 난 피자 너는 순두부</span>
       </div>
       <MovieCarouselSmall :movie-data="actionMovies" />
@@ -47,6 +67,8 @@ export default {
   computed: {
     ...mapState([
       'currUser',
+      'userLikes',
+      'recommendMovies',
       'actionMovies',
       'romanceMovies',
     ]),
@@ -54,23 +76,31 @@ export default {
       'shuffledNowPlayingMovies',
     ]),
     recommendLength() {
-      return this.shuffledNowPlayingMovies.length
+      return this.shuffledNowPlayingMovies?.length
     }
   },
   methods: {
     ...mapActions([
-      'fetchRecommendMovies',
       'fetchNowPlayingMovies',
       'fetchActionMovies',
       'fetchRomanceMovies',
+      'fetchRecommendMovies',
+      'getUserLikes',
     ]),
   },
   created() {
-    this.fetchRecommendMovies()
+    console.log('빅캐러셀등장')
     this.fetchNowPlayingMovies()
-    this.fetchActionMovies()
-    this.fetchRomanceMovies()
+    // this.fetchActionMovies()
+    // this.fetchRomanceMovies()
+    // this.getUserLikes()
+    // this.fetchRecommendMovies()
   },
+  watch:{
+    shuffledNowPlayingMovies(){
+      console.log(this.shuffledNowPlayingMovies)
+    }
+  }
 }
 </script>
 
@@ -136,7 +166,7 @@ export default {
     }
 
     .movie-title-big {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       font-weight: 700;
     }
 

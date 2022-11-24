@@ -1,5 +1,5 @@
 <template>
-  <div class="card review-card col">
+  <div class="card review-card col w-75 text-center mx-auto my-0">
     <!-- <div @click="goToReviewDetail" class="card review-card"> -->
     <div class="text-bg-dark card-header d-flex justify-content-between align-items-center">
       <div>
@@ -42,7 +42,7 @@
         <span class="me-2" style="color: #dd3c3c;">{{ likeCount }}</span>
         <i class="fa-regular fa-comment mx-1" style="cursor: pointer"></i>
         <span class="me-2">댓글 개수</span>
-        <MovieCommentItem :review="review" />
+        <MovieCommentItem :comments="comments" />
       </div>
       {{ review.updated_at.slice(0, 10) }}
     </div>
@@ -68,6 +68,7 @@ export default {
     return {
       likeCount: null,
       initialHeart: false,
+      comments: null,
     }
   },
   computed: {
@@ -151,11 +152,31 @@ export default {
     goToReviewDetail() {
       console.log('클릭', this.review)
       this.$router.push({ name: 'ReviewDetailView', params: {review_id: this.review.id }})
+    },
+    getReviewComments() {
+      axios({
+        method: 'get',
+        url: api.movies.getReviewComments(this.review.id),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((res) => {
+          console.log(this.review)
+          if (res.data.length > 0) {
+            console.log(res.data)
+            this.comments = res.data
+          }
+        })
+        .then((err) => {
+          console.log(err)
+        })
     }
   },
   created() {
     this.$emit('fetchAllReviews')
     this.getLikeCount()
+    this.getReviewComments()
   }
 }
 </script>
