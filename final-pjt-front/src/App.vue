@@ -13,7 +13,7 @@
             size="64"
           ></v-avatar>
 
-          <div style="color: white">{{ currUser?.username }}님의 프로필</div>
+          <!-- <div style="color: white">{{ currUser?.username }}님의 프로필</div> -->
         </v-sheet>
 
         <v-divider></v-divider>
@@ -34,6 +34,7 @@
           </v-list-item>
         </v-list>
       </div>
+
       <div class="logo" @click="reload">
         <router-link :to="{ name: 'MainView' }">
           <span>
@@ -42,17 +43,23 @@
         </router-link>
       </div>
       <div class="search">
-        <input id="search-bar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="" v-model="query" @keyup.enter="showSearchPage(query)">
+        <input id="search-bar" class="form-control mt-2 me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="" v-model="query" @keyup.enter="showSearchPage(query)">
       </div>
       <div v-if="!isLogin" class="user-menu">
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
-      <div v-else>
-        <router-link :to="{ name: 'ProfileView', params: {username: currUser?.username} }" class="menu-items">
-        {{ currUser?.nickname }}
+      <div v-else style="margin-top: -.5em;">
+        <router-link :to="{ name: 'ProfileView', params: {username: currUser?.username} }" class="openbtn menu-items">
+          <img 
+          class="openbtn "
+          id="navbar-profile-img"
+          :src="currUser.profile_image ? 'http://127.0.0.1:8000' + currUser.profile_image: require(`@/assets/default.png`)" 
+          style="margin-right: -.5em; border-radius: 50%; width: 3.5em; height: 3em;"
+          alt="">
+          {{ currUser?.nickname }}
         </router-link>
-        <button class="openbtn" @click="openNav">☰</button> 
-        <span @click="logOut" class="logout-btn">
+        <button @click="openNav" class="openbtn menu-items" style="margin-left: -.5em;">☰</button> 
+        <span @click="logOut" class="openbtn logout-btn menu-items">
           <i class="fa-solid fa-right-to-bracket fa-lg"></i>
         </span>
       </div>
@@ -152,6 +159,10 @@ ul,li,ol{list-style:none; padding: 0 !important;}
   /* text-align: center; */
   color: #fff;
 }
+
+// #navbar-profile-img {
+//   position: relative;
+// }
 
 a {
   text-decoration:none;
@@ -310,7 +321,7 @@ input {
 .openbtn {
   font-size: 20px;
   cursor: pointer;
-  background-color: #111;
+  background-color: $body-bg;
   color: white;
   padding: 10px 15px;
   border: none;

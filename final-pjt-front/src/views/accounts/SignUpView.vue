@@ -2,7 +2,7 @@
   <div>
     <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`">
     <section class="section">
-      <img class="section-left" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
+      <img class="section-left rounded-start" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
       <div class="section-right">
         <h1>회원가입</h1>
         <form @submit.prevent="signUp" class="form">

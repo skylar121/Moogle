@@ -17,7 +17,7 @@
         </div>
         <MovieCarouselBig />
       </div>
-      <div v-else-if="userLikes.length < 1 " class="row-title text-center">
+      <div v-else-if="userLikes?.length < 1 " class="row-title text-center">
         <div class="text-primary fs-2">
           지금 인기있는 영화
           <div class="text-muted fs-6">더 자세한 추천을 위해 좋아요 남기러 갈까요?
@@ -76,30 +76,30 @@ export default {
       'shuffledNowPlayingMovies',
     ]),
     recommendLength() {
-      
       return this?.shuffledNowPlayingMovies.length
     }
   },
   methods: {
     ...mapActions([
+      'getUserLikes',
+      'getUserReviews',
+      'fetchRecommendMovies',
       'fetchNowPlayingMovies',
       'fetchActionMovies',
       'fetchRomanceMovies',
-      'fetchRecommendMovies',
-      'getUserLikes',
     ]),
   },
   created() {
-    console.log('빅캐러셀등장')
+    // console.log('빅캐러셀등장')
     this.fetchNowPlayingMovies()
     this.fetchActionMovies()
     this.fetchRomanceMovies()
-    // this.getUserLikes()
-    // this.fetchRecommendMovies()
+    this.getUserLikes()
+    this.fetchRecommendMovies()
   },
-  watch:{
-    shuffledNowPlayingMovies(){
-      console.log(this.shuffledNowPlayingMovies)
+  watch: {
+    getUserLikes(){
+      console.log(this.userLikes)
     }
   }
 }
@@ -167,7 +167,7 @@ export default {
     }
 
     .movie-title-big {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       font-weight: 700;
     }
 
