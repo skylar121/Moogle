@@ -50,7 +50,7 @@ export default new Vuex.Store({
     },
     shuffledNowPlayingMovies(state) {
       const arr = state.nowPlayingMovies
-      let m = arr.length;
+      let m = arr?.length;
       while (m) {
         const i = Math.floor(Math.random() * m--);
         [arr[m], arr[i]] = [arr[i], arr[m]];

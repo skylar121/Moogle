@@ -76,7 +76,8 @@ export default {
       'shuffledNowPlayingMovies',
     ]),
     recommendLength() {
-      return this.shuffledNowPlayingMovies?.length
+      
+      return this?.shuffledNowPlayingMovies.length
     }
   },
   methods: {
@@ -91,8 +92,8 @@ export default {
   created() {
     console.log('빅캐러셀등장')
     this.fetchNowPlayingMovies()
-    // this.fetchActionMovies()
-    // this.fetchRomanceMovies()
+    this.fetchActionMovies()
+    this.fetchRomanceMovies()
     // this.getUserLikes()
     // this.fetchRecommendMovies()
   },
