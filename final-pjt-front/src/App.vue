@@ -34,7 +34,6 @@
           </v-list-item>
         </v-list>
       </div>
-
       <div class="logo" @click="reload">
         <router-link :to="{ name: 'MainView' }">
           <span>
@@ -51,14 +50,15 @@
       <div v-else class="nav-right" style="height:60px; margin-top: -.5em;">
         <router-link :to="{ name: 'ProfileView', params: {username: currUser?.username} }" class="openbtn menu-items">
           <img 
-          class="openbtn "
+          class="openbtn"
           id="navbar-profile-img"
           :src="currUser.profile_image ? 'http://127.0.0.1:8000' + currUser.profile_image: require(`@/assets/default.png`)" 
           style="margin-right: -.5em; border-radius: 50%; width: 3.5em; height: 3em;"
           alt="">
           {{ currUser?.nickname }}
+          <span><i class="fa-solid fa-medal" :style="{color: userRank}"></i></span>
         </router-link>
-        <button @click="openNav" class="openbtn menu-items" style="margin-left: -.5em;">☰</button> 
+        <!-- <button @click="openNav" class="openbtn menu-items" style="margin-left: -.5em;"><i class="fa-solid fa-bars"></i></button>  -->
         <span @click="logOut" class="openbtn logout-btn menu-items">
           <i class="fa-solid fa-right-to-bracket fa-lg"></i>
         </span>
@@ -91,6 +91,7 @@ export default ({
     ...mapState([
       'currUser',
       'searchCompleted',
+      'userRank'
     ]),
     ...mapGetters([
       'isLogin',
@@ -104,6 +105,7 @@ export default ({
       'fetchActionMovies',
       'fetchRomanceMovies',
       'getUserLikes',
+      'calcUserRank',
     ]),
     logOut() {
       if (confirm('로그아웃 하실건가요?') == true){ 
@@ -125,6 +127,10 @@ export default ({
     searchCompleted() {
       this.query = null
     }
+  },
+  created() {
+    this.getUserLikes()
+    this.calcUserRank()
   }
 })
 
@@ -321,7 +327,7 @@ input {
 .openbtn {
   font-size: 20px;
   cursor: pointer;
-  background-color: $body-bg;
+  background-color: transparent;
   color: white;
   padding: 10px 15px;
   border: none;

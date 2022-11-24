@@ -1,5 +1,6 @@
 <template>
   <div>
+    <img class="background-img" :src="require(`@/assets/background.jpg`)" style="height: 110%; background-color: #000; opacity: 0.2;">
     <section class="display">
       <div v-if="currUser && userLikes && userLikes?.length > 0">
         <div class="row-title text-center fs-2">
@@ -34,7 +35,7 @@
       <div v-if="shuffledNowPlayingMovies">
 
       <MovieCarouselSmall
-       :movie-data="shuffledNowPlayingMovies" />
+      :movie-data="shuffledNowPlayingMovies" />
       </div>
 
       <div class="row-title px-4">
@@ -87,15 +88,16 @@ export default {
       'fetchNowPlayingMovies',
       'fetchActionMovies',
       'fetchRomanceMovies',
+      'calcUserRank',
     ]),
   },
   created() {
-    // console.log('빅캐러셀등장')
     this.fetchNowPlayingMovies()
     this.fetchActionMovies()
     this.fetchRomanceMovies()
     this.getUserLikes()
     this.fetchRecommendMovies()
+    this.calcUserRank()
   },
   watch: {
     getUserLikes(){

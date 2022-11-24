@@ -12,19 +12,21 @@
                 <button v-else @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-solid fa-heart me-2 fs-1"></i></span></button>
               <img
                 :src="movie.poster_path ? 'https://image.tmdb.org/t/p/original' + movie.poster_path : 'https://image.tmdb.org/t/p/original' + movie.backdrop_path" class="img-fluid rounded-start w-100" alt="">
-                <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews"
-              />
+              <!-- <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" /> -->
             </div>
           </div>
           <!-- 오른쪽 영역 -->
           <div class="col-md-8">
             <div class="card-body">
               <MovieDetail :movie="movie" :cast="cast" :director="director" />
-              <MovieSimilar />
             </div>
           </div>
         </div>
         <!-- 영화 리뷰 목록 -->
+        <MovieSimilar />
+        <hr>
+        <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
+        <hr>
         <MovieReviewList :reviews="reviews" />
       </div>
     </div>

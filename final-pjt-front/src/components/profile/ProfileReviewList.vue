@@ -9,7 +9,6 @@
           <div>아직 남긴 리뷰가 없어요! 첫번째 리뷰를 남기러 갈까요?</div>
         </div>
       </div>
-      <hr>
     </main>
 </template>
 

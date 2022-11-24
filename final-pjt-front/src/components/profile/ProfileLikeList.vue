@@ -6,10 +6,9 @@
         </div>
         <div v-else class="gallery w-100">
           <div class="loader d-block"></div>
-          <div>아직 좋아요 한 영화가 없어요! 추천 영화는 어떤가요?</div>
+          <div>아직 좋아요 한 영화가 없어요!</div>
         </div>
       </div>
-      <hr>
     </main>
 </template>
 

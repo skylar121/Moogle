@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-4">
+  <div class="container mt-4 p-4">
     <h6>비슷한 영화 추천</h6>
     <carousel-3d
       v-if="similarMovies"

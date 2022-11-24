@@ -28,6 +28,7 @@ export default new Vuex.Store({
     currUser: null,
     userReviews: null,
     userLikes: null,
+    userRank: null,
 
     recommendMovies: null,
     nowPlayingMovies: null,
@@ -77,6 +78,9 @@ export default new Vuex.Store({
     SAVE_USER_LIKES(state, userData) {
       state.userLikes = userData
     },
+    SAVE_USER_RANK(state, userData) {
+      state.userRank = userData
+    },
 
     SAVE_RECOMMEND: (state, payload) => state.recommendMovies = payload,
     SAVE_NOW_PLAYING: (state, payload) => state.nowPlayingMovies = payload,
@@ -89,6 +93,21 @@ export default new Vuex.Store({
   },
   actions: {
     //////////////// accounts ////////////////
+    calcUserRank(context) {
+      if (context.state.userReviews && context.state.userReviews?.length > 0) {
+        const cnt = context.state.userReviews?.length
+        // BRONZE
+        if (1<= cnt < 5) {
+          context.commit('SAVE_USER_RANK', '#EC8E46')
+        // SILVER
+        } else if (5 <= cnt < 10) {
+          context.commit('SAVE_USER_RANK', '#CDD2D8')
+        // GOLD
+        } else if (15 <= cnt) {
+          context.commit('SAVE_USER_RANK', '#FDAA00')
+        }
+      }
+    },
     signUp(context, userData) {
       const formData = new FormData()
       formData.append('username', userData.userId)
@@ -263,9 +282,8 @@ export default new Vuex.Store({
             // DB에 있다면 DB 정보 가져오기
             const API_URL = 'http://127.0.0.1:8000'
             axios.get(API_URL + `/movies/${movie.id}/`)
-            .then((res) => {
-              console.log(res.data)
-              // this.movie = res.data
+            .then(() => {
+              // console.log(res.data)
             })
             .catch((error) => {
               console.log('DB에 없어')

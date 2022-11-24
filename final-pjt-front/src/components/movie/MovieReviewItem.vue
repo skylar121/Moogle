@@ -16,8 +16,6 @@
       class="card-body d-flex flex-column justify-content-center align-items-center">
       <p class="card-title text-light fs-3">{{ review.title }}</p>
       <p class="card-text text-muted">{{ review.content }}</p>
-      <!-- <p v-if="review.content.length > 50" class="card-text text-muted">{{ `${review.content.slice(0,50)} ...더보기` }}</p>
-      <p v-else class="card-text text-muted">{{review.content}}</p> -->
       <div class="movieVoteAverage">
         <b-form-rating
           :value="review.rank"
@@ -28,11 +26,8 @@
           class="border-0 text-light"
           size="lg"
         ></b-form-rating>
-        <!-- <p>{{ movie?.vote_average.toFixed(1) > 0.0 ? `⭐${movie?.vote_average.toFixed(1)} / 10` : '아직 별점이 없어요!' }} </p> -->
       </div>
-      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
     </div>
-
     <div class="card-footer text-muted d-flex justify-content-between">
       <div class="fs-5">
         <span v-if="!initialHeart">
@@ -44,14 +39,30 @@
         <span class="me-2" style="color: #dd3c3c;">{{ likeCount }}</span>
         <i class="fa-regular fa-comment mx-1" style="cursor: pointer"></i>
         <span class="me-2">{{ commentCount }}</span>
-        <button @click="goToReviewDetail()">자세히 보기</button>
-        <div class="accordion" id="accordionExample">
-          <MovieCommentItem v-for="comment in comments" :comment="comment" :key="comment.id" />
-        </div>
+        <button v-if="this.comments && this.comments?.length > 0">자세히 보기</button>
       </div>
       {{ review.updated_at.slice(0, 10) }}
     </div>
 
+    <!-- 리뷰 댓글 남기기 -->
+    <form class="text-light" @click.prevent="createComment">
+      <div class="mb-3 review-input text-center" >
+        <label for="commentContent" class="form-label">제목</label>
+        <input
+          v-model="commentContent"
+          class="" id="commentContent" rows="3"
+          placeholder="2자 이상 남겨주세요."
+          style="border-bottm: 1px solid white;"
+        >
+      </div>
+      <div class="d-flex justify-content-end">
+        <!-- 저장  -->
+        <button @click.prevent="createComment" type="submit" class="btn btn-primary review-submit-btn me-2">
+          <i class="fa-solid fa-floppy-disk"></i></button>
+      </div>
+    </form>
+
+    <MovieCommentItem v-for="comment in comments" :key="comment.id" />
   </div>
 </template>
 
@@ -74,6 +85,7 @@ export default {
       likeCount: null,
       initialHeart: false,
       comments: null,
+      commentContent: null,
     }
   },
   computed: {
@@ -151,11 +163,6 @@ export default {
     goToProfile() {
       console.log('클릭', this.review)
       this.$router.push({ name: 'ProfileView', params: {username: this.review.username }})
-      const payload = {
-        username: this.review.username,
-        nickname: this.review.nickname
-      }
-      this.$store.commit('SAVE_CURR_PROFILE', payload)
     },
     goToReviewDetail() {
       console.log('클릭', this.review)
@@ -177,6 +184,9 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    createComment() {
+      
     }
   },
   created() {

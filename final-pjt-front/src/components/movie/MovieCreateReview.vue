@@ -1,7 +1,7 @@
 <template>
-  <div class="container ms-3 mb-3">
+  <div class="container" >
     <div class="text-center mt-3">
-      <h3 class="fw-bold">MY REVIEW</h3>
+      <h3 class="fw-bold fs-2" >MY REVIEW</h3>
     </div>
     <form @submit.prevent="createReview">
       <div class="star-box d-flex align-items-center justify-content-center mb-3">
@@ -41,7 +41,7 @@
       <div v-if="(!isEditing && userReview && userReview?.length > 0)" class="text-center">
         <p class="fs-3">{{ userReview?.[0]?.title }}</p>
         <p style="color: #999;">{{ userReview?.[0]?.content }}</p>
-        <div class="d-flex justify-content-end">
+        <div>
           <!-- 수정 -->
           <button @click="onEdit" 
             class="btn btn-primary review-submit-btn me-2"
@@ -60,7 +60,7 @@
       </div>
 
       <!-- 수정중 OR 리뷰 없다면 리뷰 form -->
-      <div v-else>
+      <div v-else class="w-75 my-0 mx-auto">
         <!-- 리뷰 있다면 UPDATE -->
         <div v-if="isEditing && userReview && userReview?.length > 0">
           <div class="mb-3 review-input text-center" @change="onRate" >
@@ -98,7 +98,7 @@
           </div>
           <div class="d-flex justify-content-end">
             <!-- 별점 & 리뷰 저장 -->
-            <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn">리뷰 생성<i class="fa-solid fa-floppy-disk"></i></button>
+            <button @click.prevent="createReview" type="submit" class="btn btn-primary review-submit-btn"><i class="fa-solid fa-floppy-disk"></i></button>
           </div>
         </div>
       </div>
@@ -353,7 +353,6 @@ textarea {
   width: 100%;
   border: none;
   outline: none;
-  border-bottom: 1px solid #BF93FF;
   border-bottom: 1px solid #BF93FF;
   outline: none;
   margin-bottom: 1.2em;
