@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <nav>
-      <div :class="sidebarStatus ? 'sidebar-opened sidebar' : 'sidebar-closed sidebar'" @mouseleave="closeNav">
+      <!-- <div :class="sidebarStatus ? 'sidebar-opened sidebar' : 'sidebar-closed sidebar'" @mouseleave="closeNav">
         <p class="closebtn" @click="closeNav">&times;</p>
         <v-sheet
           color="rgb(17, 17, 17)"
@@ -13,7 +12,7 @@
             size="64"
           ></v-avatar>
 
-          <!-- <div style="color: white">{{ currUser?.username }}님의 프로필</div> -->
+          <div style="color: white">{{ currUser?.username }}님의 프로필</div>
         </v-sheet>
 
         <v-divider></v-divider>
@@ -33,11 +32,15 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-      </div>
+      </div> -->
+    <nav
+      :id="navBarStatus ? 'scroll-down' : ''"
+      class="navbar navbar-expand-md ps-4 pe-3 pt-4-md pt-5-sm pb-4"
+    >
       <div class="logo" @click="reload">
         <router-link :to="{ name: 'MainView' }">
           <span>
-            neon lights
+            Moogle
           </span>
         </router-link>
       </div>
@@ -77,14 +80,14 @@ export default ({
   data() {
     return {
       query: null,
-      sidebarStatus: false,
+      // sidebarStatus: false,
       drawer: null,
-      links: [
-        ['mdi-send', '내가 좋아요한 영화'],
-        ['mdi-inbox-arrow-down', '내가 작성한 리뷰'],
-        ['mdi-delete', '팔로잉'],
-        ['mdi-alert-octagon', 'Spam'],
-    ],
+    //   links: [
+    //     ['mdi-send', '내가 좋아요한 영화'],
+    //     ['mdi-inbox-arrow-down', '내가 작성한 리뷰'],
+    //     ['mdi-delete', '팔로잉'],
+    //     ['mdi-alert-octagon', 'Spam'],
+    // ],
     }
   },  
   computed: {
@@ -122,6 +125,14 @@ export default ({
     closeNav() {
       this.sidebarStatus = false
     },
+    onScroll() {
+      this.windowTop = window.top.scrollY;
+      if (this.windowTop > 50) {
+        this.navBarStatus = true;
+      } else {
+        this.navBarStatus = false;
+      }
+    },
   },
   watch: {
     searchCompleted() {
@@ -131,7 +142,13 @@ export default ({
   created() {
     this.getUserLikes()
     this.calcUserRank()
-  }
+  },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
+  },
 })
 
 </script>
@@ -332,4 +349,10 @@ input {
   padding: 10px 15px;
   border: none;
 }
+
+#scroll-down {
+  background-color: rgb(0, 0, 0, 0.5);
+  position: sticky;
+}
+
 </style>
