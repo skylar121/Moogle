@@ -45,14 +45,15 @@ def movie_list(request):
 def movie_detail(request,id):
     request_url = f"https://api.themoviedb.org/3/movie/{id}?api_key={TMDB_API_KEY}&language=ko-KR"
     movie = requests.get(request_url).json()
-    inmovie = Movie.objects.filter(pk=id)
         
-    if len(inmovie):
+    if Movie.objects.filter(pk=id).exists():
         print('yes')
         movie = get_object_or_404(Movie,pk=id)
         serializer = MovieDetailSerializer(movie)
         return Response(serializer.data)
     else:
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        print(movie)
         abc = Movie()
         abc.title = movie['title']
         abc.overview = movie['overview'] 
@@ -65,10 +66,9 @@ def movie_detail(request,id):
         abc.poster_path = movie['poster_path']
         abc.backdrop_path = movie['backdrop_path']
         abc.save()
-        if movie.get('genre_ids'):
-            for genre in movie.get('genre_ids'):
-                abc.genres.add(genre)
-    print('yes')
+        if movie.get('genres'):
+            for genre in movie.get('genres'):
+                abc.genres.add(genre['id'])
     movie = get_object_or_404(Movie,pk=id)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
@@ -214,6 +214,7 @@ def review_comment_delete(request, review_pk, review_comment_pk):
         comment.delete()
         return Response({ 'id': review_comment_pk })
 
+#
 
 # 좋아요 기반 추천 !!!!!!
 @api_view(['GET'])
@@ -322,7 +323,7 @@ def recommend(request,user_pk):
     # print(recommend_lst)
     return Response(result)
 
-
+#_______________________________________________________________________________________________________________________________________________________________________
 
 
 

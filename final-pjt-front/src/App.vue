@@ -83,6 +83,7 @@ export default ({
   computed: {
     ...mapState([
       'currUser',
+      'searchCompleted',
     ]),
     ...mapGetters([
       'isLogin',
@@ -113,14 +114,11 @@ export default ({
       this.sidebarStatus = false
     },
   },
-  created() {
-  //   console.log('빅캐러셀등장')
-  //   this.getUserLikes()
-  //   this.fetchRecommendMovies()
-  //   this.fetchNowPlayingMovies()
-  //   this.fetchActionMovies()
-  //   this.fetchRomanceMovies()
-  },
+  watch: {
+    searchCompleted() {
+      this.query = null
+    }
+  }
 })
 
 </script>
