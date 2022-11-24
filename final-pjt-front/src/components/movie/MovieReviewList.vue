@@ -3,7 +3,7 @@
     <h3 class="fw-bold fs-2">Reviews</h3>
     <div v-if="isLogin && reviews && reviews.length > 0" class="col">
       <MovieReviewItem v-for="review in reviews" :review="review" :key="review.id" @fetchAllReviews="fetchAllReviews" />
-      <div class="d-flex">
+      <!-- <div class="d-flex">
         <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-center" >
             <li class="page-item disabled" style="background-color: #191817">
@@ -17,7 +17,7 @@
             </li>
           </ul>
         </nav>
-      </div>
+      </div> -->
     </div>
     <div v-else>
       <p class="text-muted fs-5">아직 리뷰가 없어요 😿 첫번째 리뷰를 남겨주세요!</p>

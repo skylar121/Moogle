@@ -2,16 +2,18 @@
   <div class="card review-card col w-75 text-center mx-auto my-0">
     <!-- <div @click="goToReviewDetail" class="card review-card"> -->
     <div class="text-bg-dark card-header d-flex justify-content-between align-items-center">
-      <div>
+      <div class="text-light">
+        <!-- <img :src="review?.user" alt=""> -->
         <strong>{{ review.nickname }}</strong>
-        <button v-if="currUser.username !== review.username"  @click="goToProfile" class="btn btn-primary">프로필 보기</button>
       </div>
       <div class="text-light">
+        <button v-if="currUser.username !== review.username"  @click="goToProfile" class="btn btn-primary">프로필 보기</button>
         <button v-if="currUser.username === review.username" @click="deleteReview" class="btn btn-primary"><i class="fa-solid fa-trash-can" style="cursor: pointer"></i></button>
       </div>
     </div>
 
-    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+    <div
+      class="card-body d-flex flex-column justify-content-center align-items-center">
       <p class="card-title text-light fs-3">{{ review.title }}</p>
       <p class="card-text text-muted">{{ review.content }}</p>
       <!-- <p v-if="review.content.length > 50" class="card-text text-muted">{{ `${review.content.slice(0,50)} ...더보기` }}</p>
@@ -41,11 +43,14 @@
         </span>
         <span class="me-2" style="color: #dd3c3c;">{{ likeCount }}</span>
         <i class="fa-regular fa-comment mx-1" style="cursor: pointer"></i>
-        <span class="me-2">댓글 개수</span>
-        <MovieCommentItem :comments="comments" />
+        <span class="me-2">{{ commentCount }}</span>
+        <div class="accordion" id="accordionExample">
+          자세히 보기
+          <MovieReviewDetail :comments="comments" />
+        </div>
       </div>
-      {{ review.updated_at.slice(0, 10) }}
     </div>
+      {{ review.updated_at.slice(0, 10) }}
 
   </div>
 </template>
@@ -53,13 +58,13 @@
 <script>
 import axios from 'axios'
 import api from '@/api/api'
-import MovieCommentItem from '@/components/movie/MovieCommentItem'
+import MovieReviewDetail from '@/components/movie/MovieReviewDetail'
 
 import { mapState } from 'vuex'
 export default {
   name: 'MovieReviewItem',
   components: {
-    MovieCommentItem,
+    MovieReviewDetail
   },
   props: {
     review: Object,
@@ -76,6 +81,9 @@ export default {
       'token',
       'currUser'
     ]),
+    commentCount() {
+      return this.comments?.length
+    }
   },
   methods: {
     toggleLike() {
@@ -151,7 +159,7 @@ export default {
     },
     goToReviewDetail() {
       console.log('클릭', this.review)
-      this.$router.push({ name: 'ReviewDetailView', params: {review_id: this.review.id }})
+      this.$router.push({ name: 'ReviewDetailView', params: {review_id: this.review.id}})
     },
     getReviewComments() {
       axios({
@@ -162,13 +170,11 @@ export default {
         }
       })
         .then((res) => {
-          console.log(this.review)
-          if (res.data.length > 0) {
-            console.log(res.data)
-            this.comments = res.data
-          }
+          console.log(res.data)
+          this.comments = res.data
+          console.log(this.comments)
         })
-        .then((err) => {
+        .catch((err) => {
           console.log(err)
         })
     }
@@ -177,6 +183,7 @@ export default {
     this.$emit('fetchAllReviews')
     this.getLikeCount()
     this.getReviewComments()
+    console.log('리뷰정보' , this.review)
   }
 }
 </script>

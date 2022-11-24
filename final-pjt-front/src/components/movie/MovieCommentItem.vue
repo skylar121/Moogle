@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Button trigger modal -->
     <button type="button" class="btn text-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
       자세히 보기
     </button>
@@ -34,12 +33,7 @@
 export default {
   name: 'MovieCommentItem',
   props: {
-    review: Object,
-  },
-  data() {
-    return {
-      comments: null
-    }
+    comments: Object,
   },
   methods: {
     

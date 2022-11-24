@@ -182,7 +182,6 @@ export default {
         }
       })
         .then((response)=>{
-          // console.log('찐데이터')
           this.reviews = response.data.reverse()
           // console.log(this.reviews)
           this.userReview = response.data.filter(review => this.currUser.username === review.username)

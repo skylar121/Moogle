@@ -2,7 +2,9 @@
   <div>
     <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`">
     <section class="section">
-      <img class="section-left rounded-start" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
+      <div class="section-left">
+        <img class="rounded-start" :src="`https://source.unsplash.com/featured/?cinema`" alt="">
+      </div>
       <div class="section-right">
         <h1>로그인</h1>
         <form @submit.prevent="logIn" class="form">
@@ -14,7 +16,9 @@
           <input type="password" id="password" v-model.trim="password">
           <!-- <span class="underline"></span> -->
           <br>
-          <input type="submit" value="로그인" class="btn btn-primary" @click.prevent="logIn">
+          <input type="submit" value="로그인" class="btn btn-primary"
+            style="border-radius: 10px;"
+           @click.prevent="logIn">
           <router-link :to="{ name: 'SignUpView' }" class="link">아직 회원이 아니신가요? 회원가입하기</router-link>
         </form>
       </div>
@@ -59,11 +63,13 @@ export default {
 
 <style lang="scss">
 .section {
-  width: 80%;
-  height: 600px;
+  margin-top: -2em;
+  min-width: 600px;
+  max-width: 60vw;
+  max-height: 900px;
   background-color: white;
   color: black;
-  margin: 5em auto;
+  margin: 3em auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,7 +87,6 @@ export default {
 }
 
 .section-right {
-  height: 100%;
   flex-basis: 60%;
   display: flex;
   justify-content: center;
@@ -98,14 +103,16 @@ export default {
   width: 50%;
   margin: 3em auto;
   text-align: left;
-  position: relative;
+  
 }
 
 .section-right form input {
   width: 100%;
-  border-bottom: 1px solid #BF93FF;
+  border: none;
   outline: none;
+  border-bottom: 1px solid #BF93FF;
   margin-bottom: 1.2em;
+  border-radius: 0;
 }
 
 .link {

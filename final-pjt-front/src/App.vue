@@ -48,7 +48,7 @@
       <div v-if="!isLogin" class="user-menu">
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
-      <div v-else style="margin-top: -.5em;">
+      <div v-else class="nav-right" style="height:60px; margin-top: -.5em;">
         <router-link :to="{ name: 'ProfileView', params: {username: currUser?.username} }" class="openbtn menu-items">
           <img 
           class="openbtn "

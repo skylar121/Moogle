@@ -2,7 +2,9 @@
   <div>
     <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`">
     <section class="section">
-      <img class="section-left rounded-start" :src="`https://source.unsplash.com/featured/?cinema`" alt="" width="300">
+      <div class="section-left">
+        <img class="rounded-start" :src="`https://source.unsplash.com/featured/?cinema`" alt="">
+      </div>
       <div class="section-right">
         <h1>회원가입</h1>
         <form @submit.prevent="signUp" class="form">
@@ -22,7 +24,9 @@
           <v-file-input accept="image/*" type="file" id="profileImg" @change="selectFile"></v-file-input>
           <!-- <input accept="image/*" type="file" ref="profileImg" @change="selectFile"> -->
           <br>
-          <input type="submit" value="회원가입"  class="btn btn-primary" @click.prevent="signUp">
+          <input type="submit" value="회원가입" class="btn btn-primary" 
+          style="border-radius: 10px;"
+          @click.prevent="signUp">
           <router-link :to="{ name: 'LogInView' }" class="link">이미 회원이신가요? 로그인하기</router-link>
         </form>
       </div>
@@ -103,11 +107,13 @@ export default {
 
 <style lang="scss">
 .section {
-  width: 80%;
-  height: 600px;
+  margin-top: -2em;
+  min-width: 600px;
+  max-width: 60vw;
+  max-height: 900px;
   background-color: white;
   color: black;
-  margin: 5em auto;
+  margin: 3em auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,15 +131,15 @@ export default {
 }
 
 .section-right {
-  height: 100%;
   flex-basis: 60%;
   display: flex;
   justify-content: center;
   flex-direction: column;
   text-align: center;
   margin: 0 auto;
-  
 }
+
+
 .section-right h1 {
   margin: 1em auto;
 }
@@ -146,9 +152,11 @@ export default {
 
 .section-right form input {
   width: 100%;
-  border-bottom: 1px solid #BF93FF;
+  border: none;
   outline: none;
+  border-bottom: 1px solid #BF93FF;
   margin-bottom: 1.2em;
+  border-radius: 0;
 }
 
 .link {

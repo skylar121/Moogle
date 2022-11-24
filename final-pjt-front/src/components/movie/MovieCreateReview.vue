@@ -345,11 +345,15 @@ textarea {
   border: none;
   border-bottom: 1px solid $primary;
   color: white;
+  border-radius: 0;
 }
 
 .review-input input {
   color: white;
   width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #BF93FF;
   border-bottom: 1px solid #BF93FF;
   outline: none;
   margin-bottom: 1.2em;
