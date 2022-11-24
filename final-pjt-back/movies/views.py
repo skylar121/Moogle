@@ -234,7 +234,8 @@ def recommend(request,user_pk):
             'overview': d['fields']['overview'],
             'title': d['fields']['title'],
             'poster_path': d['fields']['poster_path'],
-            'genres': d['fields']['genres']
+            'genres': d['fields']['genres'],
+            'genres': d['fields']['vote_average'],
         })
 
     new_data = pd.DataFrame(new_data)
@@ -313,7 +314,7 @@ def recommend(request,user_pk):
 #   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         for sim, movie_id in top_match_ar2(tfidf_mat, movie_idx ,20):
             # res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
-            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']}))
+            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path'], 'poster_path' :new_data.loc[movie_id,'vote_average']}))
             # print({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']})
         for res in res_list[:30]:
             recommend_lst.add(res)
