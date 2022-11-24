@@ -2,9 +2,6 @@
   <div>
     <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`">
     <section class="section">
-      <div class="section-left">
-        <img class="rounded-start" :src="`https://source.unsplash.com/featured/?cinema`" alt="">
-      </div>
       <div class="section-right">
         <h1>회원가입</h1>
         <form @submit.prevent="signUp" class="form">
@@ -21,13 +18,13 @@
           <input type="password" id="password2" v-model="password2" required>
           <br>
           <label for="profileImg" class="form-label">프로필 이미지 업로드 (선택)</label>
-          <v-file-input accept="image/*" type="file" id="profileImg" @change="selectFile"></v-file-input>
+          <v-file-input class="file-input theme--dark" accept="image/*" type="file" id="profileImg" @change="selectFile" theme="dark"></v-file-input>
           <!-- <input accept="image/*" type="file" ref="profileImg" @change="selectFile"> -->
           <br>
-          <input type="submit" value="회원가입" class="btn btn-primary" 
+          <input type="submit" value="회원가입" class="btn btn-primary mb-5" 
           style="border-radius: 10px;"
           @click.prevent="signUp">
-          <router-link :to="{ name: 'LogInView' }" class="link">이미 회원이신가요? 로그인하기</router-link>
+          <router-link :to="{ name: 'LogInView' }" class="link" style="font-size: 1em;">이미 회원이신가요? 로그인하기</router-link>
         </form>
       </div>
     </section>
@@ -107,12 +104,10 @@ export default {
 
 <style lang="scss">
 .section {
-  margin-top: -2em;
+  margin-top: 1em;
   min-width: 600px;
   max-width: 60vw;
   max-height: 900px;
-  background-color: white;
-  color: black;
   margin: 3em auto;
   display: flex;
   justify-content: center;
@@ -120,6 +115,9 @@ export default {
   text-align: center;
   flex: 20%;
   border-radius: $borderRadius+3;
+  opacity: 0.9;
+  background-color: #181818;
+  color: white;
 }
 
 .section-left {
@@ -165,6 +163,7 @@ export default {
   font-size: .8rem;
   margin-top: -.8em;
 }
+
 
 // .link:hover {
 //   color: orange;

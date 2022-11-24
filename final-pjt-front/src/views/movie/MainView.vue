@@ -1,9 +1,9 @@
 <template>
   <div>
-    <img class="background-img" :src="require(`@/assets/background.jpg`)" style="height: 110%; background-color: #000; opacity: 0.2;">
-    <section class="display">
+    <img class="background-img" :src="require(`@/assets/background.jpg`)" style="height: 100%; background-color: #000; opacity: 0.2;">
+    <section class="display mt-5">
       <div v-if="currUser && userLikes && userLikes?.length > 0">
-        <div class="row-title text-center fs-2">
+        <div class="row-title text-center fs-2 mb-5">
           <span class="text-primary">{{ currUser.nickname }}</span>
           님만을 위해 준비했어요!
         </div>
@@ -28,7 +28,7 @@
       </div>
     </section>
     
-    <section class="display p-0">
+    <section class="display">
       <div class="row-title px-4">
         현재 상영중인 영화
       </div>
@@ -38,12 +38,12 @@
       :movie-data="shuffledNowPlayingMovies" />
       </div>
 
-      <div class="row-title px-4">
+      <div class="row-title px-4 mt-5">
         영화도 나는 멜로
       </div>
       <MovieCarouselSmall :movie-data="romanceMovies" />
 
-      <div class="row-title px-4">
+      <div class="row-title px-4 mt-5">
         너는 액션<span class="text-muted fs-6"> 난 피자 너는 순두부</span>
       </div>
       <MovieCarouselSmall :movie-data="actionMovies" />
@@ -92,12 +92,10 @@ export default {
     ]),
   },
   created() {
+    this.fetchRecommendMovies()
     this.fetchNowPlayingMovies()
     this.fetchActionMovies()
     this.fetchRomanceMovies()
-    this.getUserLikes()
-    this.fetchRecommendMovies()
-    this.calcUserRank()
   },
   watch: {
     getUserLikes(){

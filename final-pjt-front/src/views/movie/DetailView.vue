@@ -1,7 +1,7 @@
 <template>
   <div v-if="movie">
     <picture><img class="background-img" :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path"></picture>
-    <div class="container-lg mt-3">
+    <div class="container-md mt-3">
       <div class="card mb-3">
         <!-- 영화 디테일 + 리뷰 작성 + 추천 -->
         <div class="row g-0">
@@ -27,7 +27,7 @@
         <hr>
         <MovieCreateReview :movie="movie" :userReview="userReview" @fetchAllReviews="fetchAllReviews" />
         <hr>
-        <MovieReviewList :reviews="reviews" />
+        <MovieReviewList :reviews="reviews" @fetchAllReviews="fetchAllReviews"/>
       </div>
     </div>
   </div>
@@ -73,7 +73,7 @@ export default {
   created() {
     this.getMovieDetail()
     this.getCredits()
-    this.fetchAllReviews()
+    // this.fetchAllReviews()
     this.getInitialMovieLike()
   },
   methods: {
@@ -203,28 +203,9 @@ export default {
   color: $primary;
 }
 
-#movie-detail-poster {
-  position: relative;
-}
-#movie-detail-like {
-  position: absolute;
-  top: 1em;
-  left: 1em;
-  color: #dd3c3c;
-  /* ::after {
-    content: '보고싶어요';
-    display: block;
-    font-weight: 500;
-    margin-top: .3em;
-    font-size: .8rem;
-    color: #e64949;
-    inset: 0;
-  } */
-}
-
 .background-img {
   width: 100%;
-  height: 160%;
+  height: 120%;
   object-fit: cover;
   position: absolute;
   top: 0;
@@ -241,6 +222,7 @@ export default {
   height: 100vh; */
 
 .card {
+  position: relative;
   background: $body-bg;
   border: none;
   .card-title {
@@ -253,5 +235,25 @@ export default {
   h6 {
     color: $primary;
   }
+}
+
+/* 
+#movie-detail-poster {
+  position: relative;
+} */
+#movie-detail-like {
+  position: absolute;
+  top: 2em;
+  right: 2em;
+  color: #dd3c3c;
+  /* ::after {
+    content: '보고싶어요';
+    display: block;
+    font-weight: 500;
+    margin-top: .3em;
+    font-size: .8rem;
+    color: #e64949;
+    inset: 0;
+  } */
 }
 </style>

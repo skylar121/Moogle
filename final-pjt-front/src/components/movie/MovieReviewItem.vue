@@ -39,15 +39,15 @@
         <span class="me-2" style="color: #dd3c3c;">{{ likeCount }}</span>
         <i class="fa-regular fa-comment mx-1" style="cursor: pointer"></i>
         <span class="me-2">{{ commentCount }}</span>
-        <button v-if="this.comments && this.comments?.length > 0">자세히 보기</button>
       </div>
-      {{ review.updated_at.slice(0, 10) }}
+      리뷰 작성일 {{ review.updated_at.slice(0, 10) }}
     </div>
 
     <!-- 리뷰 댓글 남기기 -->
-    <form class="text-light" @click.prevent="createComment">
-      <div class="mb-3 review-input text-center" >
-        <label for="commentContent" class="form-label">제목</label>
+    <MovieCommentItem v-for="comment in comments" :key="comment.id" :comment="comment" :review="review" @fetchAllReviews="fetchAllReviews" />
+    <form class="text-light" @sumbnit.prevent="createComment">
+      <div class="mb-3 review-input text-center">
+        <label for="commentContent" class="form-label text-primary mt-3 fs-5">리뷰 댓글 작성하기</label>
         <input
           v-model="commentContent"
           class="" id="commentContent" rows="3"
@@ -61,8 +61,6 @@
           <i class="fa-solid fa-floppy-disk"></i></button>
       </div>
     </form>
-
-    <MovieCommentItem v-for="comment in comments" :key="comment.id" />
   </div>
 </template>
 
@@ -180,17 +178,39 @@ export default {
           console.log(res.data)
           this.comments = res.data
           console.log(this.comments)
+          this.$emit('fetchAllReviews')
         })
         .catch((err) => {
           console.log(err)
         })
     },
     createComment() {
-      
-    }
+      axios({
+        method: 'POST',
+        url: api.movies.createReviewComment(this.review.id),
+        data: {
+          content: this.commentContent
+        },
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((res) => {
+          console.log(res)
+          console.log('댓글', this.comments)
+          this.getReviewComments()
+          this.commentContent = null
+          this.$emit('fetchAllReviews')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
   },
   created() {
     this.$emit('fetchAllReviews')
+    this.$emit('getReviewComments')
+    this.getReviewComments()
     this.getLikeCount()
     this.getReviewComments()
     console.log('리뷰정보' , this.review)

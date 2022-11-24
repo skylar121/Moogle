@@ -2,8 +2,8 @@
   <div class="search-result">
     <v-row v-if="searchResults?.length > 0">
       <p class="result">
-        <span class="result-span">{{ this.$store.state.saveSearch }}</span
-        >에 대한 검색 결과입니다.
+        <span class="result-span text-primary">{{ this.$store.state.saveSearch }}</span
+        >에 대한 검색 결과
       </p>
       <v-col
         v-for="result in searchResults"
@@ -37,7 +37,7 @@
         <p @mouseover="isHovering = result.id" v-show="isHovering === result.id" class="hovering">{{ result.title }}</p>
       </v-col>
     </v-row>
-    <p v-else class="result">검색 결과가 없습니다.</p>
+    <p v-else class="result">검색 결과가 없습니다 😿</p>
     <!-- </v-hover> -->
   </div>
 </template>
@@ -74,7 +74,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .overlay {
   padding: 15px 20px;
   background-color: #444444;
@@ -103,23 +103,38 @@ export default {
   position: absolute;
   margin-top: -19%;
   margin-left: 5.7%;
-  font-size: 1.5vw;
+  font-weight: 600;
   background-color: rgb(0, 0, 0, 0.5);
   width: 10vw;
   text-align: center;
   word-break: keep-all;
+  color: $primary;
 }
+
+/* .hovering {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
+  left: 10%;
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid $primary;
+  text-align: center;
+  text-decoration: none;
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  padding: .4em;
+  overflow: hidden;
+} */
 
 .result {
   text-align: center;
   font-weight: 600;
-  font-size: 2.5vw;
-  margin-bottom: 6%;
-  margin-top: -2%;
-}
-
-.result-span {
-  color: violet;
+  font-size: 2em;
+  margin-bottom: 1em;
+  margin-top: .5em;
 }
 
 </style>

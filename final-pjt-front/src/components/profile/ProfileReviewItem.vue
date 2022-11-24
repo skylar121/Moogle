@@ -6,8 +6,8 @@
         <div class="mx-auto my-0 text-center">
           <li class="gallery-item-likes">{{ review?.movie_title }}</li>
           <div class="mx-auto my-0 text-center">
-            <li class="gallery-item-likes"><i class="fas fa-heart" aria-hidden="true"></i><span class="me-4"> {{ likeCount }}</span></li>
-            <li class="gallery-item-comments"><i class="fas fa-comment" aria-hidden="true"></i> 댓글개수</li>
+            <li class="gallery-item-likes">리뷰 <i class="fas fa-heart" aria-hidden="true"></i><span class="me-4"> {{ likeCount }}</span></li>
+            <!-- <li class="gallery-item-comments"><i class="fas fa-comment" aria-hidden="true"></i> 댓글개수</li> -->
           </div>
         </div>
       </ul>

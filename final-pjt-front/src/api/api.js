@@ -37,7 +37,7 @@ export default {
     updateDeleteReview: reviewId => LOCAL + MOVIES + 'review/' + reviewId + '/',
     // 리뷰 댓글
     getReviewComments: reviewId => LOCAL + MOVIES + 'review_comments/' + reviewId + '/',
-    createReviewComment: reviewId => LOCAL + MOVIES + reviewId + 'review_comment/',
+    createReviewComment: reviewId => LOCAL + MOVIES + reviewId + '/review_comment/',
     deleteReviewComment: (reviewId, commentId) => LOCAL + MOVIES + 'review_comment/' + reviewId + '/' + commentId + '/',
 
     // 리뷰 좋아요

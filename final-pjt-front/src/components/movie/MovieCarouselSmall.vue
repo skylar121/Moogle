@@ -4,7 +4,7 @@
     :controls-visible="true"
     :inverse-scaling="200"
     :disable3d="true"
-    :space="360" :display="8"
+    :space="360" :display="10"
     :height="200"
   >
     <slide 
@@ -12,7 +12,6 @@
       :key="movie.id" 
       :index="idx" 
     >
-      
       <template slot-scope="{ index }" >
         <div @click="goToDetail(movie.id)" class="movie-item" :data-index="index">
           <img :src="movie.backdrop_path ? 'https://image.tmdb.org/t/p/original' + movie.backdrop_path : 'https://image.tmdb.org/t/p/original' + movie.poster_path"  :height="180">

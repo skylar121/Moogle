@@ -35,7 +35,7 @@
       </div> -->
     <nav
       :id="navBarStatus ? 'scroll-down' : ''"
-      class="navbar navbar-expand-md ps-4 pe-3 pt-4-md pt-5-sm pb-4"
+      class="ps-5 pe-4 pt-4-md pt-5-sm pb-4"
     >
       <div class="logo" @click="reload">
         <router-link :to="{ name: 'MainView' }">
@@ -45,12 +45,13 @@
         </router-link>
       </div>
       <div class="search">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
         <input id="search-bar" class="form-control mt-2 me-2" type="search" placeholder="Search" aria-label="Search" autocomplete="" v-model="query" @keyup.enter="showSearchPage(query)">
       </div>
       <div v-if="!isLogin" class="user-menu">
         <router-link :to="{ name: 'LogInView' }" class="menu-items"><i class="fa-solid fa-user-plus fa-lg"></i></router-link>
       </div>
-      <div v-else class="nav-right" style="height:60px; margin-top: -.5em;">
+      <div v-else @click="routeDetail(currUser?.username)" class="nav-right" style="height:60px; margin-top: -.5em;">
         <router-link :to="{ name: 'ProfileView', params: {username: currUser?.username} }" class="openbtn menu-items">
           <img 
           class="openbtn"
@@ -68,6 +69,14 @@
       </div>
     </nav>
     <router-view />
+    <!-- <v-footer absolute inset app bottom padless>
+      <v-col
+        class="text-center footer"
+        cols="12"
+      >
+        {{ new Date().getFullYear() }} — <strong>Moogle</strong>
+      </v-col>
+    </v-footer> -->
   </div>
 </template>
 
@@ -80,8 +89,10 @@ export default ({
   data() {
     return {
       query: null,
-      // sidebarStatus: false,
       drawer: null,
+      windowTop: window.top.scrollY,
+      navBarStatus: false,
+    // sidebarStatus: false,
     //   links: [
     //     ['mdi-send', '내가 좋아요한 영화'],
     //     ['mdi-inbox-arrow-down', '내가 작성한 리뷰'],
@@ -115,6 +126,10 @@ export default ({
         //true는 확인버튼을 눌렀을 때 코드 작성
         this.$store.dispatch('logOut')
       }
+    },
+    routeDetail(id) {
+      this.$router.replace({ name: 'ProfileView', params: { username: id }}).catch(()=>{})
+      this.$router.go()
     },
     reload() {
       // this.$router.go() // 새로고침
@@ -226,7 +241,13 @@ input {
 .search {
   margin-top: -.4em;
   width: 30%;
+  position: relative;
+}
 
+.search-icon {
+  position: absolute;
+  right: 5%;
+  top: 40%;
 }
 
 .user-menu {
@@ -257,7 +278,7 @@ input {
   padding: 1.2em 2em;
   border: 0.3rem solid #fff;
   border-radius: 2rem;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   animation: flicker 3s infinite alternate;
   ::-moz-selection {
     background-color: var(--neon-border-color);
@@ -355,4 +376,7 @@ input {
   position: sticky;
 }
 
+.footer {
+  background-color: rgb(0, 0, 0, 0.2);
+}
 </style>

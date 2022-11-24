@@ -1,27 +1,53 @@
 <template>
-    <div class="accordion" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            Accordion Item #2
-          </button>
-        </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-          <div class="accordion-body">
-            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-    <MovieCommentItem v-for="comment in comments" :comment="comment" :key="comment.id" />
+  <div class="mt-3 w-75 mx-auto mb-0">
+    <p class="text-light">{{ comment?.content }}&nbsp;
+      <span class="delete-comment-btn" style="color: darkred;" @click="deleteComment(review?.id, comment?.id)">X</span>
+    </p>
   </div>
 </template>
 
 <script>
+import api from '@/api/api'
+import axios from 'axios'
+import { mapState } from 'vuex'
+
 export default {
   name: 'MovieCommentItem',
+  props: {
+    review: Object,
+    comment: Object,
+  },
+  computed: {
+    ...mapState([
+      'token'
+    ])
+  },
+  methods: {
+    deleteComment(reviewId, commentId) {
+      axios({
+        method: 'delete',
+        url: api.movies.deleteReviewComment(reviewId, commentId),
+        headers: {
+            Authorization: `Token ${this.token}`
+          }
+        })
+        .then((res) => {
+          console.log(res)
+          alert('정상적으로 삭제되었어요.')
+          // 새로고침 안해도 알아서 재렌더링되게 수정해야함..
+          // this.$router.go()
+          this.$emit('fetchAllReviews')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+  }
 }
 </script>
 
 <style>
-
+.delete-comment-btn {
+  cursor: pointer;
+}
 </style>

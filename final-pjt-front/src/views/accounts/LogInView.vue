@@ -2,10 +2,7 @@
   <div>
     <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`">
     <section class="section">
-      <div class="section-left">
-        <img class="rounded-start" :src="`https://source.unsplash.com/featured/?cinema`" alt="">
-      </div>
-      <div class="section-right">
+      <div class="section-right signup">
         <h1>로그인</h1>
         <form @submit.prevent="logIn" class="form">
           <label for="username">아이디 </label><br>
@@ -16,10 +13,10 @@
           <input type="password" id="password" v-model.trim="password">
           <!-- <span class="underline"></span> -->
           <br>
-          <input type="submit" value="로그인" class="btn btn-primary"
+          <input type="submit" value="로그인" class="btn btn-primary mt-5 mb-5"
             style="border-radius: 10px;"
-           @click.prevent="logIn">
-          <router-link :to="{ name: 'SignUpView' }" class="link">아직 회원이 아니신가요? 회원가입하기</router-link>
+            @click.prevent="logIn">
+          <router-link :to="{ name: 'SignUpView' }" class="link" style="font-size: 1em;">아직 회원이 아니신가요? 회원가입하기</router-link>
         </form>
       </div>
     </section>
@@ -62,20 +59,27 @@ export default {
 </script>
 
 <style lang="scss">
+#username, #id {
+  margin-bottom: 3em;
+}
+
 .section {
-  margin-top: -2em;
-  min-width: 600px;
-  max-width: 60vw;
-  max-height: 900px;
-  background-color: white;
-  color: black;
+  margin-top: 1em;
+  max-height: 90vh;
+  max-width: 50vw;
   margin: 3em auto;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  flex: 20%;
+  /* flex: 20%; */
   border-radius: $borderRadius+3;
+  background-color: #191817;
+  color: white;
+  input {
+    color: white;
+    margin-bottom: 2em;
+  }
 }
 
 .section-left {
@@ -87,7 +91,7 @@ export default {
 }
 
 .section-right {
-  flex-basis: 60%;
+  /* flex-basis: 60%; */
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -113,6 +117,7 @@ export default {
   border-bottom: 1px solid #BF93FF;
   margin-bottom: 1.2em;
   border-radius: 0;
+  margin-bottom: 1.5em;
 }
 
 .link {

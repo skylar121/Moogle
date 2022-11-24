@@ -316,6 +316,9 @@ export default {
           })
         }
     },
+    fetchAllReviews() {
+      this.$emit('fetchAllReviews')
+    },
   },
   created() {
     this.$emit('fetchAllReviews')

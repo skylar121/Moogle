@@ -94,16 +94,17 @@ export default new Vuex.Store({
   actions: {
     //////////////// accounts ////////////////
     calcUserRank(context) {
-      if (context.state.userReviews && context.state.userReviews?.length > 0) {
-        const cnt = context.state.userReviews?.length
+      if (context.state.userLikes && context.state.userLikes?.length > 0) {
+        const cnt = context.state.userLikes?.length
         // BRONZE
-        if (1<= cnt < 5) {
+        if (1<= cnt && cnt < 5) {
           context.commit('SAVE_USER_RANK', '#EC8E46')
-        // SILVER
-        } else if (5 <= cnt < 10) {
+          // SILVER
+        } else if (5 <= cnt && cnt < 10) {
+          console.log('솔브드따라하기', cnt)
           context.commit('SAVE_USER_RANK', '#CDD2D8')
         // GOLD
-        } else if (15 <= cnt) {
+        } else if (10 <= cnt) {
           context.commit('SAVE_USER_RANK', '#FDAA00')
         }
       }
@@ -406,6 +407,6 @@ export default new Vuex.Store({
           console.log(err)
         })
         console.log('likes 2')
-      }
+      },
   },
 })

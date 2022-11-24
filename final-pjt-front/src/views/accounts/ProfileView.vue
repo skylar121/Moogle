@@ -1,69 +1,67 @@
 <template>
-  <div class="mx-0 my-auto">
-    <div class="">
-      <!-- <img class="background-img" :src="backgroundImg"> -->
-      <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`" style="background-color: #000; opacity: 0.2;">
-      <div id="profile-view" class="container p-4 h-120">
-        <header>
-          <div class="container">
-            <div class="profile p-5">
-              <div class="profile-image">
-                <img id="profile-pic" :src="nowProfile?.profile_image ? 'http://127.0.0.1:8000' + nowProfile?.profile_image: require(`@/assets/default.png`)" alt="">
-              </div>
-              <div class="profile-user-settings">
-                <h1 class="fw-bold text-primary">{{ nowProfile?.nickname }}</h1>
-                <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
-                <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
-                <!-- 다르면 버튼 보이게 -->
-                <div v-if="currUser.username !== nowProfile?.username">
-                  <button class="btn btn-primary" @click="follow" v-if="isFollowed">언팔로우</button>
-                  <button class="btn btn-primary" @click="follow" v-if="!isFollowed">팔로우</button>
-                </div>
-                <!-- <span v-else>
-                  프로필 수정
-                </span> -->
-              </div>
-              <div class="profile-stats">
-                <ul>
-                  <li><span class="profile-stat-count fs-4">{{ followers }}</span> followers</li>
-                  <li><span class="profile-stat-count fs-4">{{ followings }}</span> following</li>
-                </ul>
-              </div>
-              <div class="profile-stats">
-                <ul>
-                  <li><span class="profile-stat-count fs-4">{{ reviewed }}</span> reviewed</li>
-                  <li><span class="profile-stat-count fs-4">{{ liked }}</span> liked</li>
-                </ul>
-              </div>
-              <!-- <div class="profile-bio">
-                <p><span class="profile-real-name">Jane Doe</span> Loem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
-              </div> -->
+  <div class="">
+    <!-- <img class="background-img" :src="backgroundImg"> -->
+    <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`" style="background-color: #000; opacity: 0.2;">
+    <div id="profile-view" class="container mt-5 p-4 h-120" style="opacity: 0.8;">
+      <header>
+        <div class="container">
+          <div class="profile p-5">
+            <div class="profile-image">
+              <img id="profile-pic" :src="nowProfile?.profile_image ? 'http://127.0.0.1:8000' + nowProfile?.profile_image: require(`@/assets/default.png`)" alt="">
             </div>
-          </div>
-        </header>
-        <div id="user-rank">
-          <i class="fa-solid fa-medal" :style="{color: userRank}"></i>
-        </div>
-        <div id="profile-box" class="d-flex align-items-start">
-          <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">REVIEW</button>
-            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">LIKE</button>
-            <!-- <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">COMMENT</button> -->
-          </div>
-          <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-              <ProfileReviewList :data="userReviews" />
+            <div class="profile-user-settings">
+              <h1 class="fw-bold text-primary">{{ nowProfile?.nickname }}</h1>
+              <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
+              <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
+              <!-- 다르면 버튼 보이게 -->
+              <div class="user-follow-btn my-3" v-if="currUser.username !== nowProfile?.username">
+                <button class="btn btn-primary" @click="follow" v-if="isFollowed">언팔로우</button>
+                <button class="btn btn-primary" @click="follow" v-if="!isFollowed">팔로우</button>
+              </div>
+              <!-- <span v-else>
+                프로필 수정
+              </span> -->
             </div>
-            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
-              <ProfileLikeList :data="userLikes" />
+            <div class="profile-stats">
+              <ul>
+                <li><span class="profile-stat-count fs-4">{{ followers }}</span> followers</li>
+                <li><span class="profile-stat-count fs-4">{{ followings }}</span> following</li>
+              </ul>
             </div>
-            <!-- <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
-              <ProfileCommentList :data="userLikes" />
+            <div class="profile-stats">
+              <ul>
+                <li><span class="profile-stat-count fs-4">{{ reviewed }}</span> reviewed</li>
+                <li><span class="profile-stat-count fs-4">{{ liked }}</span> liked</li>
+              </ul>
+            </div>
+            <!-- <div class="profile-bio">
+              <p><span class="profile-real-name">Jane Doe</span> Loem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
             </div> -->
           </div>
         </div>
+      </header>
+      <!-- 다른 유저 랭킹 비공개 -->
+      <div v-if="nowProfile?.username === currUser?.username" id="user-rank">
+        <i class="fa-solid fa-medal" :style="{color: userRank}"></i>
       </div>
-      
+      <div id="profile-box" class="d-flex align-items-start">
+        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">REVIEW</button>
+          <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">LIKE</button>
+          <!-- <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">COMMENT</button> -->
+        </div>
+        <div class="tab-content" id="v-pills-tabContent">
+          <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+            <ProfileReviewList :data="userReviews" />
+          </div>
+          <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+            <ProfileLikeList :data="userLikes" />
+          </div>
+          <!-- <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
+            <ProfileCommentList :data="userLikes" />
+          </div> -->
+        </div>
+      </div>
     </div>
   </div>
 
@@ -205,6 +203,10 @@ export default {
     this.getInitialFollowings()
     this.getUserLikes()
     this.calcUserRank()
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.username = to.params.username;
+    next();
   }
 }
 </script>
@@ -226,8 +228,8 @@ export default {
 #user-rank {
   position: absolute;
   top: -.2em;
-  right: .7em;
-  font-size: 10em;
+  right: 1em;
+  font-size: 12em;
 }
 
 #profile-box {
