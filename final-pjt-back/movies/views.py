@@ -46,7 +46,13 @@ def movie_detail(request,id):
     request_url = f"https://api.themoviedb.org/3/movie/{id}?api_key={TMDB_API_KEY}&language=ko-KR"
     movie = requests.get(request_url).json()
     inmovie = Movie.objects.filter(pk=id)
-        
+    request_url2 = f"https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_API_KEY}&language=ko-KR"
+    genres = requests.get(request_url2).json()
+    for genre in genres['genres']:
+        jjang = Genre()
+        jjang.id = genre['id']
+        jjang.name = genre['name']
+        jjang.save()
     if len(inmovie):
         print('yes')
         movie = get_object_or_404(Movie,pk=id)
@@ -214,8 +220,124 @@ def review_comment_delete(request, review_pk, review_comment_pk):
         comment.delete()
         return Response({ 'id': review_comment_pk })
 
+# _____________________________________________________________________________________________________________________________________________________________________________________________________________
 
-# 좋아요 기반 추천 !!!!!!
+# # 좋아요 기반 추천 !!!!!!
+# @api_view(['GET'])
+# # @authentication_classes([JSONWebTokenAuthentication])
+# # @permission_classes([IsAuthenticated])
+# def recommend(request,user_pk):
+#     print(request)
+#     file_path = "movies/fixtures/movies.json"
+
+#     with open(file_path, 'r', encoding="UTF-8") as f:
+#         data = json.load(f)
+#     new_data = []
+#     for d in data:
+#         new_data.append({
+#             'pk': d['pk'],
+#             'adult': d['fields']['adult'],
+#             'overview': d['fields']['overview'],
+#             'title': d['fields']['title'],
+#             'poster_path': d['fields']['poster_path'],
+#             'genres': d['fields']['genres'],
+#             'vote_average': d['fields']['vote_average']
+#         })
+
+#     new_data = pd.DataFrame(new_data)
+
+#     # print(new_data)
+#     #데이터가 많은 관계로 20000개까지 짜름 
+
+#     # sys.stdout.close()
+
+#     new_data['overview'].isnull().sum() #135
+#     new_data['overview']=new_data['overview'].fillna('')
+#     new_data['overview'].isnull().sum() #0 으로 바뀜 내적하면 모두 0 나옴 
+#     # print(new_data['overview'])
+#     # print('111111111111')
+
+#     tfidf=TfidfVectorizer(stop_words='english')#불용어 제거
+#     # print(type(tfidf))
+#     tfidf_mat=tfidf.fit_transform(new_data['overview']).toarray()
+
+#     def cos_sim2(X,Y):
+#         return np.dot(X,Y)/((norm(X)*norm(Y))+1e-7)
+
+#     # print(new_data['title'])
+#     # print(new_data['original_title'][10])
+#     def top_match_ar2(new_data, name, rank=5,simf=cos_sim2):
+#         sim=[]
+#         for i in range(len(new_data)):
+#             if name != i:
+#                 sim.append((simf(new_data[i],new_data[name]),i))
+#         sim.sort()
+#         sim.reverse()
+#         return sim[:rank]
+
+# #     
+
+# #     # 유저가 좋아요 한 영화 넘겨 받기 ( 3개 )
+    
+#     user = get_object_or_404(get_user_model(),pk = user_pk)
+#     # print(user)
+#     lst1 = list(user.like_movies.all().values())
+    
+#     # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+#     # print(lst1)
+#     movieList = []
+#     if lst1:
+#         for elt in lst1:
+#             movieList.append(elt['title'])
+#             if len(movieList) == 3:
+#                 break
+#     else:
+#         movieall = list(Movie.objects.all().values)
+        
+#         movieList = movieList + movieall[:3]
+    
+#     # print(user.movie_set.all())
+
+# #     # 좋아요 한 영화의 리스트를 for문 돌려서
+# #     # 영화 이름마다 밑에 함수를 돌려주기
+# #     # 최종적으로 영화 추천 리스트가 담긴 recommend_lst 넘겨주기  
+#     recommend_lst = set()
+#     res_list = []
+#     for movie_name in movieList:
+
+#     #     movie_name = '돈 리브'
+#     #     # 여기에 영화 이름 동적으로 할당
+#     #     # movie_name = 영화 이름
+#         movie_idx = list(new_data['title']).index(movie_name)
+# #   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+#         for sim, movie_id in top_match_ar2(tfidf_mat, movie_idx ,20):
+#             # res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
+#             res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path'], 'vote_average' : new_data.loc[movie_id,'vote_average']}))
+#             # print({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']})
+#         for res in res_list[:30]:
+#             recommend_lst.add(res)
+#     result = []
+#     for i in recommend_lst:
+#         i = eval(i)
+#         result.append(i)
+#         # i = i.lstrip('\'')
+
+#     #     return Response(recommend_lst)
+#     #     # print(movieList[:10])
+#     # print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+#     # print(recommend_lst)
+#     # print(recommend_lst)
+#     return Response(result)
+
+#_______________________________________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+
 @api_view(['GET'])
 # @authentication_classes([JSONWebTokenAuthentication])
 # @permission_classes([IsAuthenticated])
@@ -233,8 +355,7 @@ def recommend(request,user_pk):
             'overview': d['fields']['overview'],
             'title': d['fields']['title'],
             'poster_path': d['fields']['poster_path'],
-            'genres': d['fields']['genres'],
-            'vote_average': d['fields']['vote_average']
+            'genres': d['fields']['genres']
         })
 
     new_data = pd.DataFrame(new_data)
@@ -278,17 +399,25 @@ def recommend(request,user_pk):
     
     # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     # print(lst1)
+    lst = []
     movieList = []
-    if lst1:
-        for elt in lst1:
-            movieList.append(elt['title'])
-            if len(movieList) == 3:
-                break
-    else:
-        movieall = list(Movie.objects.all().values)
+    # if lst1:
+    #     for elt in lst1:
+    #         lst.append(elt['title'])
+    #         if len(movieList) == 3:
+    #             break
+    # else:
+    #     movieall = list(Movie.objects.all().values)
         
-        movieList = movieList + movieall[:3]
-    
+    #     movieList = movieList + movieall[:3]
+    if len(lst1) >= 3:                   # 좋아요를 누른 영화가 3개 이상일 경우
+        for elt in lst1:
+            lst.append(elt['title'])
+        movieList = random.sample(lst,3)
+    else:                           # 좋아요를 누른 영화가 3개 미만일 경우
+        movieall = random.sample(list(Movie.objects.all().values),(3 - len(lst1)))
+        
+        movieList = movieall
     # print(user.movie_set.all())
 
 #     # 좋아요 한 영화의 리스트를 for문 돌려서
@@ -305,7 +434,7 @@ def recommend(request,user_pk):
 #   print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         for sim, movie_id in top_match_ar2(tfidf_mat, movie_idx ,20):
             # res_list.append((new_data.loc[movie_id,'pk'], new_data.loc[movie_id,'title'], new_data.loc[movie_id,'poster_path']))
-            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path'], 'vote_average' : new_data.loc[movie_id,'vote_average']}))
+            res_list.append(str({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']}))
             # print({'id': new_data.loc[movie_id,'pk'], 'title' :new_data.loc[movie_id,'title'], 'poster_path' :new_data.loc[movie_id,'poster_path']})
         for res in res_list[:30]:
             recommend_lst.add(res)
@@ -321,6 +450,27 @@ def recommend(request,user_pk):
     # print(recommend_lst)
     # print(recommend_lst)
     return Response(result)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
