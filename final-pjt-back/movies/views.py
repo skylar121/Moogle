@@ -461,8 +461,7 @@ def goto_main(request):
 @api_view(['GET'])
 def action10(request):
     genre = get_object_or_404(Genre, pk=28)
-    movies = list(genre.movie_set.order_by('-vote_average'))
-    l = min(10, len(movies))
+    movies = list(genre.movie_set.order_by('-vote_average','-popularity'))
     movies = movies[0:10]
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
@@ -473,8 +472,7 @@ def action10(request):
 def romance10(request):
     genre = get_object_or_404(Genre, pk=10749)
 
-    movies = list(genre.movie_set.order_by('-vote_average'))
-    l = min(10, len(movies))
+    movies = list(genre.movie_set.order_by('-vote_average','-popularity'))
     movies = movies[0:10]
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
