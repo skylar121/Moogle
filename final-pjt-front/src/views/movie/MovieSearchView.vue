@@ -1,6 +1,6 @@
 <template>
   <div class="search-result">
-    <v-row v-if="searchResults.length > 0">
+    <v-row v-if="searchResults?.length > 0">
       <p class="result">
         <span class="result-span">{{ this.$store.state.saveSearch }}</span
         >에 대한 검색 결과입니다.

@@ -102,7 +102,7 @@ export default {
       })
         .then((res) => {
           console.log(res.data)
-          this.isLiked = Boolean(res.data.filter(follower => follower.username === this.currUser.username).length)
+          this.isLiked = Boolean(res.data.filter(follower => follower.username === this.currUser.username)?.length)
           console.log(this.isLiked)
         })
         .catch((err) => {
@@ -153,12 +153,12 @@ export default {
         },
       })
         .then((res) => {
-          if (res.data.cast.length > 5) {
+          if (res.data.cast?.length > 5) {
             this.cast = res.data.cast.slice(0, 5)
           } else {
             this.cast = res.data.cast
           }
-          this.director = res.data.crew.filter((person) => {
+          this.director = res.data.crew?.filter((person) => {
             return person['job'] === 'Director'
           })[0]
           // console.log(res.data.crew.filter((person) => {

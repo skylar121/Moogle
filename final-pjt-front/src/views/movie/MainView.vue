@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="display">
-      <div v-if="currUser && userLikes && userLikes.length > 0">
+      <div v-if="currUser && userLikes && userLikes?.length > 0">
         <div class="row-title text-center fs-2">
           <span class="text-primary">{{ currUser.nickname }}</span>
           님만을 위해 준비했어요!
@@ -76,7 +76,7 @@ export default {
       'shuffledNowPlayingMovies',
     ]),
     recommendLength() {
-      return this?.shuffledNowPlayingMovies.length
+      return this?.shuffledNowPlayingMovies?.length
     }
   },
   methods: {

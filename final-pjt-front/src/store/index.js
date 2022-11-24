@@ -42,7 +42,7 @@ export default new Vuex.Store({
     isLogin: state => !!state.token,
     shuffledRecommendMovies(state) {
       const arr = state.recommendMovies
-      let m = arr.length;
+      let m = arr?.length;
       while (m) {
         const i = Math.floor(Math.random() * m--);
         [arr[m], arr[i]] = [arr[i], arr[m]];

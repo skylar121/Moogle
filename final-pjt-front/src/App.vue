@@ -112,7 +112,7 @@ export default ({
       }
     },
     reload() {
-      this.$router.go() // 새로고침
+      // this.$router.go() // 새로고침
     },
     openNav() {
       this.sidebarStatus = true

@@ -23,13 +23,13 @@ export default {
   },
   computed: {
     likeCount() {
-      return this.review.like.length
+      return this.review?.like?.length
     }
   },
   methods: {
     goToDetail() {
       // console.log('클릭', id)
-      this.$router.push({ name: 'DetailView', params: { movie_id: this.review.movie }})
+      this.$router.push({ name: 'DetailView', params: { movie_id: this.review?.movie }})
     }
   },
 }

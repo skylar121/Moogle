@@ -38,7 +38,7 @@
       </div>
 
       <!-- 수정중 X & 리뷰 있다면 내용 + 수정 + 삭제 버튼 보여주기 -->
-      <div v-if="(!isEditing && userReview && userReview.length > 0)" class="text-center">
+      <div v-if="(!isEditing && userReview && userReview?.length > 0)" class="text-center">
         <p class="fs-3">{{ userReview?.[0]?.title }}</p>
         <p style="color: #999;">{{ userReview?.[0]?.content }}</p>
         <div class="d-flex justify-content-end">
@@ -62,7 +62,7 @@
       <!-- 수정중 OR 리뷰 없다면 리뷰 form -->
       <div v-else>
         <!-- 리뷰 있다면 UPDATE -->
-        <div v-if="isEditing && userReview && userReview.length > 0">
+        <div v-if="isEditing && userReview && userReview?.length > 0">
           <div class="mb-3 review-input text-center" @change="onRate" >
             <label for="reviewTitle" class="form-label">제목</label>
             <input 
@@ -246,7 +246,7 @@ export default {
       console.log(this.isEditing)
     },
     updateReview() {
-      if (!this.reviewRating || this.reviewRating <= 0.0 ) {
+      if (!this?.reviewRating || this?.reviewRating <= 0.0 ) {
         alert('별점은 필수입니다!')
         this.reviewRating = null
         return
@@ -256,7 +256,7 @@ export default {
         this.reviewTitle = null
         return
       }
-      if (this.reviewTitle.length < 2) {
+      if (this.reviewTitle?.length < 2) {
         alert('2자 이상 작성해주세요 :)')
         return
       }
@@ -265,7 +265,7 @@ export default {
         this.reviewContent = null
         return
       }
-      if (this.reviewContent.length < 2) {
+      if (this.reviewContent?.length < 2) {
         alert('2자 이상 작성해주세요 :)')
         return
       }

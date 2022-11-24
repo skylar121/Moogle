@@ -75,7 +75,7 @@ export default {
       // console.log('클릭', id)
       this.$router.push({ name: 'DetailView', params: { movie_id: id }})
     },
-     toggleMovieLike(userId, movieId) {
+    toggleMovieLike(userId, movieId) {
       console.log(userId, movieId)
       axios({
         method: 'get',

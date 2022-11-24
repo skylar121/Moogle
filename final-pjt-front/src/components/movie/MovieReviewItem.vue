@@ -115,7 +115,7 @@ export default {
         .then((res) => {
           // console.log('댓글정보')
           // console.log(res.data)
-          this.likeCount = res.data.like.length
+          this.likeCount = res.data.like?.length
           if (res.data.like !== [] && res.data.like.includes(this.currUser.id)) {
             this.initialHeart = true
           }

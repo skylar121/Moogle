@@ -1,7 +1,7 @@
 <template>
   <div class="row g-0 p-4 text-center text-primary">
     <h3 class="fw-bold fs-2">Reviews</h3>
-    <div v-if="isLogin && reviews && reviews.length > 0" class="col">
+    <div v-if="isLogin && reviews && reviews?.length > 0" class="col">
       <MovieReviewItem v-for="review in reviews" :review="review" :key="review.id" @fetchAllReviews="fetchAllReviews" />
       <!-- <div class="d-flex">
         <nav aria-label="Page navigation example">

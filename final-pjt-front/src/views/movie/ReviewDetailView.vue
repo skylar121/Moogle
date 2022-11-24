@@ -14,17 +14,17 @@
           <!-- review -->
           <div>
             <div class="review-title my-4">
-              <h2>{{ review.title }}</h2>
+              <h2>{{ review?.title }}</h2>
             </div>
             <div class="review-info mb-5 d-flex justify-content-between">
               <div>
-                <router-link :to="{ name: 'profile', params: { username: review.user.username }}">
-                  {{ review.user.username }}
+                <router-link :to="{ name: 'profile', params: { username: review?.user.username }}">
+                  {{ review?.user.username }}
                 </router-link>&nbsp;|&nbsp;
                 {{ review.created_at | date }} 작성&nbsp;|&nbsp;
                 {{ review.updated_at | date }} 수정&nbsp;|&nbsp;
-                <i class="fa-regular fa-thumbs-up"></i> {{ review.like_count }}&nbsp;
-                <i class="fa-regular fa-message"></i> {{ review.comment_set.length }}
+                <i class="fa-regular fa-thumbs-up"></i> {{ review?.like_count }}&nbsp;
+                <i class="fa-regular fa-message"></i> {{ review.comment_set?.length }}
               </div>
               <div>
                 <router-link v-if="isAuthor" :to="{ name: 'reviewEdit', params: { reviewPk }}">
@@ -38,7 +38,7 @@
               </div>
             </div>
             <div class="review-content">
-              <p>{{ review.content }}</p>
+              <p>{{ review?.content }}</p>
             </div>
           </div>
 

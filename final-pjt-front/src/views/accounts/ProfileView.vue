@@ -3,7 +3,7 @@
     <div class="">
       <!-- <img class="background-img" :src="backgroundImg"> -->
       <img class="background-img" :src="`https://source.unsplash.com/featured/?cinema`" style="background-color: #000; opacity: 0.2;">
-      <div id="profile-view" class="container w-80 p-4 h-120">
+      <div id="profile-view" class="container p-4 h-120">
         <header>
           <div class="container">
             <div class="profile p-5">
@@ -11,7 +11,7 @@
                 <img id="profile-pic" :src="nowProfile.profile_image ? 'http://127.0.0.1:8000' + nowProfile.profile_image: require(`@/assets/default.png`)" alt="">
               </div>
               <div class="profile-user-settings">
-                <h1 class="fw-bold">{{ nowProfile.nickname }}</h1>
+                <h1 class="fw-bold text-primary">{{ nowProfile.nickname }}</h1>
                 <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
                 <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
                 <!-- 다르면 버튼 보이게 -->
@@ -43,20 +43,20 @@
         </header>
         <div id="profile-box" class="d-flex align-items-start">
           <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">REVIEWS</button>
-            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">LIKES</button>
-            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button>
-            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
+            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">REVIEW</button>
+            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">LIKE</button>
+            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">COMMENT</button>
           </div>
           <div class="tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-              <ProfileList />
+              <ProfileReviewList :data="userReviews" />
             </div>
             <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
-              <ProfileList />
+              <ProfileLikeList :data="userLikes" />
             </div>
-            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
-            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
+            <!-- <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
+              <ProfileCommentList :data="userLikes" />
+            </div> -->
           </div>
         </div>
       </div>
@@ -69,12 +69,14 @@
 import axios from 'axios'
 import api from "@/api/api"
 import { mapState, mapActions } from 'vuex'
-import ProfileList from '@/components/profile/ProfileList'
+import ProfileLikeList from '@/components/profile/ProfileLikeList'
+import ProfileReviewList from '@/components/profile/ProfileReviewList'
 
 export default {
   name: 'ProfileView',
   components: {
-    ProfileList,
+    ProfileLikeList,
+    ProfileReviewList,
   },
   data() {
     return {
@@ -93,10 +95,10 @@ export default {
       'userLikes',  // 로그인 유저 (리뷰 정보)
     ]),
     reviewed() {
-      return this.userReviews.length
+      return this.userReviews?.length
     },
     liked() {
-      return this.userLikes.length
+      return this.userLikes?.length
     },
   },
   methods: {
@@ -124,7 +126,7 @@ export default {
             // console.log('리뷰쓴 유저 프로필이야')
             // console.log(res)
             this.nowProfile = res.data
-            this.backgroundImg = 'https://image.tmdb.org/t/p/original' + this.userReviews[Math.floor(Math.random()*(this.userReviews.length))].movie_backdrop_path
+            this.backgroundImg = 'https://image.tmdb.org/t/p/original' + this?.userReviews[Math.floor(Math.random()*(this.userReviews?.length))].movie_backdrop_path
           })
           .catch((err) => {
             console.log(err)
@@ -165,7 +167,7 @@ export default {
       .then((res) => {
         // console.log(res)
         this.followers = res.data.length
-        this.isFollowed = Boolean(res.data.filter(follower => follower.username === this.currUser.username).length)
+        this.isFollowed = Boolean(res?.data?.filter(follower => follower.username === this.currUser.username)?.length)
         // console.log('팔로워수', res.data)
         // console.log('팔로워수', res.data.length)
       })
@@ -183,7 +185,7 @@ export default {
       })
       .then((res) => {
         // console.log('팔로잉수', res.data.length)
-        this.followings = res.data.length
+        this.followings = res.data?.length
       })
       .catch((err) => {
         console.log(err)
@@ -202,6 +204,7 @@ export default {
 
 <style lang="scss">
 #profile-view {
+  width: 60%;
   font-size: 10px;
   background-color: $body-bg;
   /* opacity: 0.85; */
