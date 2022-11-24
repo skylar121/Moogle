@@ -457,28 +457,27 @@ def goto_main(request):
         return Response(serializer.data)
 
 
-# 액션 영화 10개 랜덤으로 내놔 !
+# 액션 영화 평점 순으로 10개 내놔 !
 @api_view(['GET'])
 def action10(request):
     genre = get_object_or_404(Genre, pk=28)
     movies = list(genre.movie_set.order_by('-vote_average'))
     l = min(10, len(movies))
-    movies = random.sample(movies, l)
+    movies = movies[0:10]
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
     
     
-# 로맨스 랜덤으로 고고
+# 로맨스 평점 순으로 10개 내놔 !
 @api_view(['GET'])
 def romance10(request):
     genre = get_object_or_404(Genre, pk=10749)
 
     movies = list(genre.movie_set.order_by('-vote_average'))
     l = min(10, len(movies))
-    movies = random.sample(movies, l)
+    movies = movies[0:10]
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
-
 
 
 
