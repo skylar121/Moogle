@@ -19,6 +19,7 @@ import numpy as np
 from numpy.linalg import norm
 from sklearn.feature_extraction.text import TfidfVectorizer
 from accounts.serializers import UserSerializer
+from django.db.models import F
 
 TMDB_API_KEY = 'b4e0be7fe675a0e4fdd96cca62fc6dbd'
 # Create your views here.
@@ -461,7 +462,8 @@ def goto_main(request):
 @api_view(['GET'])
 def action10(request):
     genre = get_object_or_404(Genre, pk=28)
-    movies = list(genre.movie_set.order_by('-vote_average','-popularity'))
+    movies = list(genre.movie_set.annotate(ordering=F('vote_average') * F('vote_count')).order_by('-ordering'))
+    # movies = list(genre.movie_set.order_by('-vote_average','-popularity'))
     movies = movies[0:10]
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
@@ -471,8 +473,8 @@ def action10(request):
 @api_view(['GET'])
 def romance10(request):
     genre = get_object_or_404(Genre, pk=10749)
-
-    movies = list(genre.movie_set.order_by('-vote_average','-popularity'))
+    movies = list(genre.movie_set.annotate(ordering=F('vote_average') * F('vote_count')).order_by('-ordering'))
+    # movies = list(genre.movie_set.order_by('-vote_average','-popularity'))
     movies = movies[0:10]
     serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data)
