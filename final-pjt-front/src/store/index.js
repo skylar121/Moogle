@@ -94,6 +94,7 @@ export default new Vuex.Store({
   actions: {
     //////////////// accounts ////////////////
     calcUserRank(context) {
+      // 1개라도 있어야 색깔 지정
       if (context.state.userLikes && context.state.userLikes?.length > 0) {
         const cnt = context.state.userLikes?.length
         // BRONZE
@@ -107,6 +108,8 @@ export default new Vuex.Store({
         } else if (10 <= cnt) {
           context.commit('SAVE_USER_RANK', '#FDAA00')
         }
+      } else {
+        context.commit('SAVE_USER_RANK', null)
       }
     },
     signUp(context, userData) {

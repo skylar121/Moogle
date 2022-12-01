@@ -134,7 +134,7 @@ export default {
       position: absolute;
       width: 80%;
       left: 50%;
-      bottom: -5.2em;
+      bottom: -4.5em;
       transform: translate(-50%, -50%);
       text-align: center;
       text-decoration: none;

@@ -25,13 +25,11 @@
           >
           <div class="movie-item-info">
             <ul>
-              <div>
-                <li>
-                  {{movie.title}}
-                  <!-- <button v-if="!isLiked" @click.stop="toggleMovieLike(currUser.id, movie.id)" style="z-index: 3;"><span span id="movie-detail-like" style="color: #dd3c3c;"><i class="fa-regular fa-heart me-2 fs-1"></i></span></button>
-                  <button v-else @click.stop="toggleMovieLike(currUser.id, movie.id)" style="color: #dd3c3c; z-index: 3;"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-solid fa-heart me-2 fs-1"></i></span></button> -->
-                </li>
-              </div>
+              <li>
+                {{movie.title}}
+                <!-- <button v-if="!isLiked" @click.stop="toggleMovieLike(currUser.id, movie.id)" style="z-index: 3;"><span span id="movie-detail-like" style="color: #dd3c3c;"><i class="fa-regular fa-heart me-2 fs-1"></i></span></button>
+                <button v-else @click.stop="toggleMovieLike(currUser.id, movie.id)" style="color: #dd3c3c; z-index: 3;"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-solid fa-heart me-2 fs-1"></i></span></button> -->
+              </li>
             </ul>
           </div>
           <div class="movie-swipe-big">

@@ -41,7 +41,7 @@
         </div>
       </header>
       <!-- 다른 유저 랭킹 비공개 -->
-      <div v-if="nowProfile?.username === currUser?.username" id="user-rank">
+      <div v-if="(nowProfile?.username === currUser?.username && userRank !== null)" id="user-rank">
         <i class="fa-solid fa-medal" :style="{color: userRank}"></i>
       </div>
       <div id="profile-box" class="d-flex align-items-start">

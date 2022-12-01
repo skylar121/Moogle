@@ -6,7 +6,7 @@
         <!-- 영화 디테일 + 리뷰 작성 + 추천 -->
         <div class="row g-0">
           <!-- 왼쪽 포스터 영역 -->
-          <div class="col-md-4">
+          <div class="col-md-4 p-0">
             <div id="movie-detail-poster">
                 <button v-if="!isLiked" @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #dd3c3c;"><i class="fa-regular fa-heart me-2 fs-1"></i></span></button>
                 <button v-else @click="toggleMovieLike"><span span id="movie-detail-like" style="color: #e64949;"><i class="fa-solid fa-heart me-2 fs-1"></i></span></button>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import api from '@/api/api'
 import axios from 'axios'
 import MovieCreateReview from '@/components/movie/MovieCreateReview'
@@ -69,29 +69,43 @@ export default {
       'token',
       'currUser',
     ]),
+    ...mapGetters([
+      'isLogin',
+    ]),
+    ...mapActions([
+      'calcUserRank',
+    ])
   },
   created() {
     this.getMovieDetail()
     this.getCredits()
     // this.fetchAllReviews()
     this.getInitialMovieLike()
+    this.calcUserRank()
   },
   methods: {
     toggleMovieLike() {
-      axios({
-        method: 'get',
-        url: api.movies.toggleMovieLike(this.currUser.id, this.$route.params.movie_id),
-        headers: {
-          Authorization: `Token ${this.token}`
+      if (this.token !== null) {
+        axios({
+          method: 'get',
+          url: api.movies.toggleMovieLike(this.currUser.id, this.$route.params.movie_id),
+          headers: {
+            Authorization: `Token ${this.token}`
+          }
+        })
+          .then((res) => {
+            this.isLiked = res.data
+            console.log(this.isLiked)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      } else {
+        if (!this.isLogin) {
+          alert('리뷰를 남기려면 로그인해주세요.') 
+          this.$router.push({name: 'LogInView'})
         }
-      })
-        .then((res) => {
-          this.isLiked = res.data
-          console.log(this.isLiked)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      }
     },
     getInitialMovieLike() {
       console.log(this.$route.params.movie_id)

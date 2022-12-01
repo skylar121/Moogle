@@ -60,7 +60,7 @@
           style="margin-right: -.5em; border-radius: 50%; width: 3.5em; height: 3em;"
           alt="">
           {{ currUser?.nickname }}
-          <span><i class="fa-solid fa-medal" :style="{color: userRank}"></i></span>
+          <span v-if="(userRank !== null)"><i class="fa-solid fa-medal" :style="{color: userRank}"></i></span>
         </router-link>
         <!-- <button @click="openNav" class="openbtn menu-items" style="margin-left: -.5em;"><i class="fa-solid fa-bars"></i></button>  -->
         <span @click="logOut" class="openbtn logout-btn menu-items">
@@ -125,6 +125,7 @@ export default ({
       if (confirm('로그아웃 하실건가요?') == true){ 
         //true는 확인버튼을 눌렀을 때 코드 작성
         this.$store.dispatch('logOut')
+        this.$router.push({name: 'MainView'})
       }
     },
     routeDetail(id) {
