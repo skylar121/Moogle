@@ -134,7 +134,7 @@ export default {
       position: absolute;
       width: 80%;
       left: 50%;
-      bottom: -4.5em;
+      bottom: -5.3em;
       transform: translate(-50%, -50%);
       text-align: center;
       text-decoration: none;
@@ -145,11 +145,6 @@ export default {
 
     .movie-swipe-small {
       position: absolute;
-      /* width: 70%; */
-      /* left: 50%; */
-      /* bottom: -0.3em; */
-      /* transform: translate(-50%, -50%); */
-      /* border-radius: 10px; */
       width: 80%;
       left: 10%;
       bottom: 0;
