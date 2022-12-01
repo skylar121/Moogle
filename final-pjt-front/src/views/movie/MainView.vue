@@ -1,7 +1,7 @@
 <template>
   <div>
     <img class="background-img" :src="require(`@/assets/background.jpg`)" style="height: 100%; background-color: #000; opacity: 0.2;">
-    <section class="display mt-5">
+    <section class="display mt-3">
       <div v-if="currUser && userLikes && userLikes?.length > 0">
         <div class="row-title text-center fs-2 mb-5">
           <span class="text-primary">{{ currUser.nickname }}</span>

@@ -126,38 +126,31 @@ export default {
         })
     },
     getMovieDetail() {
-      console.log(this.$route.params.movie_id)
+      axios({
+        method: 'get',
+        url: API_URL + `/movies/${this.$route.params.movie_id}/`,
+      })
+      .then((res) => {
+        this.movie = res.data
+      })
+      .catch((error) => {
+        console.log(error)
+
+        // DB에 없으면 TMDB에서 가져온 데이터를 DB에 저장
         axios({
           method: 'get',
           url: API_URL + `/movies/${this.$route.params.movie_id}/`,
+          data: {
+            id: this.$route.params.movie_id,
+          }
         })
-        .then((res) => {
-          console.log(this.$route.params.movie_id)
-          this.movie = res.data
-          console.log(res.data)
-        })
-        .catch((error) => {
-          console.log('DB에 없어')
-          console.log(error)
-
-          // DB에 없으면 TMDB에서 가져온 데이터를 DB에 저장
-          console.log('저장하러간다')
-          axios({
-            method: 'get',
-            url: API_URL + `/movies/${this.$route.params.movie_id}/`,
-            data: {
-              id: this.$route.params.movie_id,
-            }
+          .then((response) => {
+            console.log(response)
           })
-            .then((response) => {
-              console.log(this.movie)
-              console.log('저장완료', response)
-            })
-            .catch((error) => {
-              console.log('저장안돼 ㅠㅠ', error)
-            })
-        })
-      console.log('DB에서 무비디테일가져오기 완료')
+          .catch((error) => {
+            console.log(error)
+          })
+      })
     },
     getCredits() {
       axios({
