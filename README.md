@@ -21,7 +21,7 @@
 - 개발 일정 : 11/16 ~ 11/24
 - 역할 분담
 
-| **김경림** |   **류태규** |   **정효상**   |
+| [**김경림**]([skylar121 (Gyeong Rim Kim) (github.com)](https://github.com/skylar121) "김경림의 GitHub") | [**류태규**]([estar1996 (github.com)](https://github.com/estar1996) "류태규의 GitHub") |   [**정효상**]([Hyormone (github.com)](https://github.com/Hyormone) "정효상의 GitHub")   |
 | :--------------: | :------------------: | :-----------------: |
 | Vue, JavaScript, <br> Django, Python |   Django, Python |   Vue, JavaScript, <br> Django, Python   |
 | ![FrontEnd](https://img.shields.io/badge/FrontEnd-4A06F)![BackEnd](https://img.shields.io/badge/BackEnd-0C4B33)|  ![BackEnd](https://img.shields.io/badge/BackEnd-0C4B33) | ![FrontEnd](https://img.shields.io/badge/FrontEnd-4A06F)![BackEnd](https://img.shields.io/badge/BackEnd-0C4B33) |
