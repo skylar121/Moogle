@@ -27,7 +27,7 @@
 | ![FrontEnd](https://img.shields.io/badge/FrontEnd-4A06F)![BackEnd](https://img.shields.io/badge/BackEnd-0C4B33)|  ![BackEnd](https://img.shields.io/badge/BackEnd-0C4B33) | ![FrontEnd](https://img.shields.io/badge/FrontEnd-4A06F)![BackEnd](https://img.shields.io/badge/BackEnd-0C4B33) |
 
 <br>
-  
+
 
 
 ## 4. 프로젝트 구조
@@ -64,33 +64,33 @@
 ```
 
 ## 5. UI & 주요 기능
-| 1. 로그인 | 2. 회원가입 | 3. 로그아웃 |
-|----------|----------| ----------|
-|<img src="https://user-images.githubusercontent.com/102273370/205474730-98c1283b-280b-427e-9a6a-662d17924055.gif">    |    |    |
+| 1. 회원가입 | 2. 로그인 |
+|----------|----------|
+|<img src="https://user-images.githubusercontent.com/102273370/205475511-37142ee5-ce40-4042-985e-dc3a3cc62923.gif">    | <img src="https://user-images.githubusercontent.com/102273370/205475537-b1429a98-bdc7-400a-bd39-cab80a1b6bc0.gif"> |
 
-| 3. 영화추천 (로그인 X) | 3-1. 영화추천 (로그인 O, 좋아요 X) | 3-2. 영화추천 (로그인 O, 좋아요 O) |
-|----------|----------|----------|
-|    |    |    |
+| 3. 로그아웃                                                  | 4. 영화추천 (로그인 X)                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="https://user-images.githubusercontent.com/102273370/205497331-1f4a09c1-85bd-444e-8436-6a60b2fcc7e9.gif"> | <img src="https://user-images.githubusercontent.com/102273370/205497831-151785d9-970e-44a6-9848-b6f193d6fe42.gif"> |
+
+| 3-1. 영화추천 (로그인 O, 좋아요 X) | 3-2. 영화추천 (로그인 O, 좋아요 O) |
+|----------|----------|
+| <img src="https://user-images.githubusercontent.com/102273370/205498032-5b2b1db7-5462-45cc-a167-6af41d0d6031.gif"> | <img src="https://user-images.githubusercontent.com/102273370/205498154-2e901669-7ad3-4b2d-86fd-70e61c13c0a0.gif"> |
 
 | 4. 현재 상영중, 액션, 로맨스 영화 추천 | 5. 영화 상세 정보 |
 |----------|----------|
-|    |    |
+| <img src="https://user-images.githubusercontent.com/102273370/205498344-98fd85cc-77e7-4563-a820-22b922930288.gif"> | <img src="https://user-images.githubusercontent.com/102273370/205499415-29a6ab0f-16c3-4a29-b0e3-569d64eeaf9c.gif"> |
 
 | 6. 영화 좋아요 (로그인 필요) | 7. 리뷰 작성 |
 |----------|----------|
-|    |    |
+| <img src="https://user-images.githubusercontent.com/102273370/205498452-2d4b40b0-f1db-4cc0-bf20-c9d216508b9f.gif"> | <img src="https://user-images.githubusercontent.com/102273370/205498511-13f7ce24-5be1-45aa-9951-fc6d001b2ab3.gif"> |
 
-| 8. 리뷰 수정, 삭제 | 9. 다른 사람 리뷰 좋아요 |
+| 8. 리뷰 수정, 삭제 | 9. 다른 사람 리뷰 좋아요 및 댓글 |
 |----------|----------|
-|    |    |
+| <img src="https://user-images.githubusercontent.com/102273370/205499463-ffe553b5-38ac-4152-b650-9b4cb4727c9a.gif"> | <img src="https://user-images.githubusercontent.com/102273370/205498601-fd2158e5-746d-4550-8dd0-1b16a0fd0244.gif"> |
 
-| 10. 다른 사람 리뷰 댓글 | 11. 마이 프로필 |
-|----------|----------|
-|    |    |
-
-| 12. 다른 사람 프로필 | 13. 팔로우 |
-|----------|----------|
-|    |    |
+| 10. 마이 프로필 |
+|----------|
+| <img src="https://user-images.githubusercontent.com/102273370/205498897-9a76f1e2-6b06-4de2-b269-1adab7e82845.gif"> |
 
 ## 6. 주요 기능 코드
 <details>
