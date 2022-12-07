@@ -80,7 +80,7 @@
 
 | 4. 현재 상영중, 액션, 로맨스 영화 추천 | 5. 영화 상세 정보 |
 |----------|----------|
-| <img src="https://user-images.githubusercontent.com/102273370/205498344-98fd85cc-77e7-4563-a820-22b922930288.gif"> | <img src="https://drive.google.com/uc?export=download&id=1LPaJo54BJHFvK-fBrMkfU9Kus4Px8mjf"> <br> - 줄거리, 장르, 별점, 감독, 배우 등 상세 정보 제공 <br> - 비슷한 영화 추천 제공 |
+| <img src="https://user-images.githubusercontent.com/102273370/205498344-98fd85cc-77e7-4563-a820-22b922930288.gif"> | ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/100753588/206248179-c3530317-c180-41e4-b68d-5ebe4c6199ae.gif) <br> - 줄거리, 장르, 별점, 감독, 배우 등 상세 정보 제공 <br> - 비슷한 영화 추천 제공 |
 
 | 6. 영화 좋아요 (로그인 필요) | 7. 리뷰 작성 |
 |----------|----------|
