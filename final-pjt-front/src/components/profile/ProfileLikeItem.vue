@@ -6,7 +6,7 @@
         <div class="mx-auto my-0 text-center">
           <li class="gallery-item-likes">{{ likedMovie?.title }}</li>
           <div class="mx-auto my-0 text-center">
-            <li class="gallery-item-likes"><i class="fas fa-heart" aria-hidden="true"></i><span class="me-4"> {{ likedMovie?.like_users?.length }}</span></li>
+            <li class="gallery-item-likes fs-5">좋아요 한 사람들 <i class="fas fa-heart" aria-hidden="true"></i><span class="me-4"> {{ likedMovie?.like_users?.length }}명</span></li>
             <!-- <li class="gallery-item-comments"><i class="fas fa-comment" aria-hidden="true"></i> 댓글개수</li> -->
           </div>
         </div>

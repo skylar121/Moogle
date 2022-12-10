@@ -1,5 +1,5 @@
 <template>
-  <div class="card review-card col w-75 text-center mx-auto my-0">
+  <div class="card review-card col w-75 text-center mx-auto my-0 mb-5">
     <!-- <div @click="goToReviewDetail" class="card review-card"> -->
     <div class="text-bg-dark card-header d-flex justify-content-between align-items-center">
       <div class="text-light">
@@ -58,7 +58,8 @@
       <div class="d-flex justify-content-end">
         <!-- 저장  -->
         <button @click.prevent="createComment" type="submit" class="btn btn-primary review-submit-btn me-2">
-          <i class="fa-solid fa-floppy-disk"></i></button>
+          <i class="fa-solid fa-floppy-disk"></i>
+        </button>
       </div>
     </form>
   </div>
@@ -68,8 +69,8 @@
 import axios from 'axios'
 import api from '@/api/api'
 import MovieCommentItem from '@/components/movie/MovieCommentItem'
-
 import { mapState } from 'vuex'
+
 export default {
   name: 'MovieReviewItem',
   components: {
@@ -177,7 +178,7 @@ export default {
         .then((res) => {
           console.log(res.data)
           this.comments = res.data
-          console.log(this.comments)
+          // console.log(this.comments)
           this.$emit('fetchAllReviews')
         })
         .catch((err) => {

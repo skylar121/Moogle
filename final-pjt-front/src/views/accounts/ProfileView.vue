@@ -9,8 +9,8 @@
             <div class="profile-image">
               <img id="profile-pic" :src="nowProfile?.profile_image ? 'http://127.0.0.1:8000' + nowProfile?.profile_image: require(`@/assets/default.png`)" alt="">
             </div>
-            <div class="profile-user-settings">
-              <h1 class="fw-bold text-primary">{{ nowProfile?.nickname }}</h1>
+            <div class="profile-user-settings d-flex align-items-center">
+              <h1 class="fw-bold text-primary me-4">{{ nowProfile?.nickname }}</h1>
               <!-- <button class="ig-btn profile-edit-ig-btn text-light">Edit Profile</button> -->
               <!-- <button class="ig-btn profile-settings-ig-btn text-light fs-2" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button> -->
               <!-- 다르면 버튼 보이게 -->
@@ -30,8 +30,8 @@
             </div>
             <div class="profile-stats">
               <ul>
-                <li><span class="profile-stat-count fs-4">{{ reviewed }}</span> reviewed</li>
-                <li><span class="profile-stat-count fs-4">{{ liked }}</span> liked</li>
+                <li><span class="profile-stat-count fs-4">{{ reviewCount }}</span> reviewed</li>
+                <li><span class="profile-stat-count fs-4">{{ likeCount }}</span> liked</li>
               </ul>
             </div>
             <!-- <div class="profile-bio">
@@ -52,13 +52,13 @@
         </div>
         <div class="tab-content" id="v-pills-tabContent">
           <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-            <ProfileReviewList :data="userReviews" />
+            <ProfileReviewList :profile-reviews="profileReviews" />
           </div>
           <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
-            <ProfileLikeList :data="userLikes" />
+            <ProfileLikeList :profile-likes="profileLikes" />
           </div>
           <!-- <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
-            <ProfileCommentList :data="userLikes" />
+            <ProfileCommentList :data="userComments" />
           </div> -->
         </div>
       </div>
@@ -87,26 +87,26 @@ export default {
       isFollowed: null,
       nowProfile: null,  // 프로필 페이지에서 보여줄 유저 (이미지 O)
       backgroundImg: null,
+      profileReviews: null,
+      profileLikes: null,
     }
   },
   computed: {
     ...mapState([
       'token',
       'currUser',  // 로그인 유저 (기본 정보)
-      'userReviews',  // 로그인 유저 (리뷰 정보)
-      'userLikes',  // 로그인 유저 (리뷰 정보)
+      'userLikes',
       'userRank',
     ]),
-    reviewed() {
-      return this.userReviews?.length
+    reviewCount() {
+      return this.profileReviews?.length
     },
-    liked() {
-      return this.userLikes?.length
+    likeCount() {
+      return this.profileLikes?.length
     },
   },
   methods: {
     ...mapActions([
-      'getUserReviews',
       'getUserLikes',
       'calcUserRank',
     ]),
@@ -127,18 +127,19 @@ export default {
           }
         })
           .then((res) => {
-            // console.log('리뷰쓴 유저 프로필이야')
-            // console.log(res)
             this.nowProfile = res.data
-            this.backgroundImg = 'https://image.tmdb.org/t/p/original' + this?.userReviews[Math.floor(Math.random()*(this.userReviews?.length))].movie_backdrop_path
+            this.getProfileReviews()
+            this.getProfileLikes()
+            this.backgroundImg = 'https://image.tmdb.org/t/p/original' + this?.profileReviews[Math.floor(Math.random()*(this.profileReviews?.length))].movie_backdrop_path
           })
           .catch((err) => {
             console.log(err)
           })
         } else {
-        // console.log('내프로필볼래')
         // 자기 프로필 보는거라면 로그인 유저 정보로 저장
         this.nowProfile = this.currUser
+        this.getProfileReviews()
+        this.getProfileLikes()
       }
     },
     follow() {
@@ -195,14 +196,44 @@ export default {
         console.log(err)
       })
     },
+    getProfileReviews() {
+      axios({
+        method: 'get',
+        url: api.movies.getProfileReviews(this.nowProfile?.username),
+        headers: {
+          Authorization: `Token ${ this.token }`
+        }
+      })
+        .then((res) => {
+          console.log('유저리뷰', res.data)
+          this.profileReviews = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getProfileLikes() {
+      axios({
+        method: 'get',
+        url: api.movies.getUserLikedMovie(this.nowProfile?.id),
+        headers: {
+          Authorization: `Token ${this.token}`
+        }
+      })
+        .then((res) => {
+          this.profileLikes = res.data
+          console.log(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      },
   },
   created() {
-    this.getUserReviews()
     this.getNowProfile()
     this.getInitialFollowers()
     this.getInitialFollowings()
-    this.getUserLikes()
-    this.calcUserRank()
+    // this.calcUserRank()
   },
   beforeRouteUpdate(to, from, next) {
     this.username = to.params.username;

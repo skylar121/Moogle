@@ -45,6 +45,6 @@ export default {
     // 리뷰 좋아요 개수
     getReviewCount: reviewId => LOCAL + MOVIES + reviewId + '/like_count/',
     // 유저가 쓴 리뷰들
-    getUserReviews: username => LOCAL + MOVIES + 'profile/' + username + '/',
+    getProfileReviews: username => LOCAL + MOVIES + 'profile/' + username + '/',
   },
 }
