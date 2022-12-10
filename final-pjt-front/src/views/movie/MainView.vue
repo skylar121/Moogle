@@ -41,12 +41,12 @@
       <div class="row-title px-4 mt-5">
         영화도 나는 멜로
       </div>
-      <MovieCarouselSmall :movie-data="romanceMovies" />
+      <MovieCarouselSmall :movie-data="shuffledRomanceMovies" />
 
       <div class="row-title px-4 mt-5">
         너는 액션<span class="text-muted fs-6"> 난 피자 너는 순두부</span>
       </div>
-      <MovieCarouselSmall :movie-data="actionMovies" />
+      <MovieCarouselSmall :movie-data="shuffledActionMovies" />
 
     </section>
   </div>
@@ -70,10 +70,10 @@ export default {
       'currUser',
       'userLikes',
       'recommendMovies',
-      'actionMovies',
-      'romanceMovies',
     ]),
     ...mapGetters([
+      'shuffledRomanceMovies',
+      'shuffledActionMovies',
       'shuffledNowPlayingMovies',
     ]),
     recommendLength() {
@@ -83,7 +83,6 @@ export default {
   methods: {
     ...mapActions([
       'getUserLikes',
-      'getUserReviews',
       'fetchRecommendMovies',
       'fetchNowPlayingMovies',
       'fetchActionMovies',

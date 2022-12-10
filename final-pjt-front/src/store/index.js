@@ -11,6 +11,16 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(Vuex)
 Vue.use(BootstrapVue, IconsPlugin, FormRatingPlugin)
 
+const shuffle = (movies) => {
+  const arr = movies
+  let m = movies?.length;
+  while (m) {
+    const i = Math.floor(Math.random() * m--);
+    [arr[m], arr[i]] = [arr[i], arr[m]];
+  }
+  return arr
+}
+
 export default new Vuex.Store({
   plugins: [
     createPersistedState({
@@ -26,7 +36,7 @@ export default new Vuex.Store({
   state: {
     token: null,
     currUser: null,
-    userReviews: null,
+    // userReviews: null,
     userLikes: null,
     userRank: null,
 
@@ -41,23 +51,20 @@ export default new Vuex.Store({
   },
   getters: {
     isLogin: state => !!state.token,
-    shuffledRecommendMovies(state) {
-      const arr = state.recommendMovies
-      let m = arr?.length;
-      while (m) {
-        const i = Math.floor(Math.random() * m--);
-        [arr[m], arr[i]] = [arr[i], arr[m]];
-      }
-      return arr
-    },
+    // shuffledRecommendMovies(state) {
+    //   shuffle(state.recommendMovies)
+    // },
     shuffledNowPlayingMovies(state) {
-      const arr = state.nowPlayingMovies
-      let m = arr?.length;
-      while (m) {
-        const i = Math.floor(Math.random() * m--);
-        [arr[m], arr[i]] = [arr[i], arr[m]];
-      }
-      return arr
+      let res = shuffle(state.nowPlayingMovies)
+      return res
+    },
+    shuffledRomanceMovies(state) {
+      let res = shuffle(state.romanceMovies)
+      return res
+    },
+    shuffledActionMovies(state) {
+      let res = shuffle(state.actionMovies)
+      return res
     },
   },
   mutations: {
@@ -71,9 +78,6 @@ export default new Vuex.Store({
     },
     SAVE_USER_DATA(state, userData) {
       state.currUser = userData
-    },
-    SAVE_USER_REVIEWS(state, userData) {
-      state.userReviews = userData
     },
     SAVE_USER_LIKES(state, userData) {
       state.userLikes = userData
@@ -157,6 +161,7 @@ export default new Vuex.Store({
           context.dispatch('getCurrUser')
           // 이전 페이지로는 어케가징 ?
           router.push({ name: 'MainView' })
+          context.dispatch('fetchRecommendMovies')
         })
         .catch((err) => {
           console.log(err)
@@ -173,10 +178,11 @@ export default new Vuex.Store({
           context.commit('REMOVE_TOKEN')
           // alert('로그아웃 완료')
           localStorage.removeItem('vuex')
-          router.push({ name: 'MainView' })
+          // router.push({ name: 'MainView' })
           context.commit('SAVE_USER_DATA', null)
           context.commit('SAVE_USER_REVIEWS', null)
           context.commit('SAVE_USER_LIKES', null)
+          context.commit('SAVE_USER_RANK', null)
         })
         .catch((err) => {
           console.log(err)
@@ -228,7 +234,7 @@ export default new Vuex.Store({
       if (context.state.token) {
         axios({
           method: 'get',
-          url: api.movies.recommendMovies(context.state.currUser.id),
+          url: api.movies.recommendMovies(context.state.currUser?.id),
           headers: {
             Authorization : `Token ${context.state.token}`
           }
@@ -371,30 +377,8 @@ export default new Vuex.Store({
           console.log('서치에러')
         })
     },
-    // 로그인 유저 리뷰 조회
-    getUserReviews(context) {
-      axios({
-        method: 'get',
-        url: api.movies.getUserReviews(context.state.currUser.username),
-        headers: {
-          Authorization: `Token ${ context.state.token }`
-        }
-      })
-        .then((res) => {
-          context.commit('SAVE_USER_REVIEWS', res.data)
-        })
-        .catch((err) => {
-          if (err.response.data.detail === '찾을 수 없습니다.') {
-            context.commit('SAVE_USER_REVIEWS', [])
-          }
-          console.log(err)
-        })
-    },
-    // 로그인 유저 좋아요 조회
+    // 유저 좋아요 조회
     getUserLikes(context) {
-      console.log('likes')
-      console.log(api.movies.getUserLikedMovie(context.state.currUser.id))
-      console.log(`Token ${context.state.token}`)
       axios({
         method: 'get',
         url: api.movies.getUserLikedMovie(context.state.currUser.id),
@@ -403,13 +387,12 @@ export default new Vuex.Store({
         }
       })
         .then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           context.commit('SAVE_USER_LIKES', res.data)
         })
         .catch((err) => {
           console.log(err)
         })
-        console.log('likes 2')
       },
   },
 })

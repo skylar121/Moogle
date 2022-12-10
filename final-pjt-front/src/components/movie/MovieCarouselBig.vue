@@ -93,6 +93,7 @@ export default {
     },
   },
   created() {
+    this.fetchRecommendMovies()
   }
 }
 </script>
