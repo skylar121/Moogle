@@ -82,17 +82,18 @@
 |----------|----------|
 | <img src="https://user-images.githubusercontent.com/102273370/205498344-98fd85cc-77e7-4563-a820-22b922930288.gif"> | ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/100753588/206248179-c3530317-c180-41e4-b68d-5ebe4c6199ae.gif) <br> - 줄거리, 장르, 별점, 감독, 배우 등 상세 정보 제공 <br> - 비슷한 영화 추천 제공 |
 
-| 6. 영화 좋아요 (로그인 필요) | 7. 리뷰 작성 |
+| 6. 영화 좋아요 (로그인 필요) | 7. 영화 리뷰 작성 |
 |----------|----------|
 | <img src="https://user-images.githubusercontent.com/102273370/205498452-2d4b40b0-f1db-4cc0-bf20-c9d216508b9f.gif"> | <img src="https://user-images.githubusercontent.com/102273370/205498511-13f7ce24-5be1-45aa-9951-fc6d001b2ab3.gif"> |
 
-| 8. 리뷰 수정, 삭제 | 9. 다른 유저 리뷰 좋아요 및 댓글 |
+| 8. 영화 리뷰 수정, 삭제 | 9. 영화 리뷰 좋아요 및 댓글 |
 |----------|----------|
-| <img src="https://user-images.githubusercontent.com/102273370/205499463-ffe553b5-38ac-4152-b650-9b4cb4727c9a.gif"> | <img src="https://user-images.githubusercontent.com/102273370/205498601-fd2158e5-746d-4550-8dd0-1b16a0fd0244.gif"> |
+| ![review_fix](https://user-images.githubusercontent.com/100753588/208350642-e0ceca07-6566-48bf-850f-dd0bf599fbab.gif) | <img src="https://user-images.githubusercontent.com/102273370/205498601-fd2158e5-746d-4550-8dd0-1b16a0fd0244.gif"> |
 
-| 10. 유저 프로필 (팔로우, 리뷰, 좋아요, 랭킹) |
-|----------|
-| <img src="https://user-images.githubusercontent.com/102273370/205498897-9a76f1e2-6b06-4de2-b269-1adab7e82845.gif"> |
+| 10. 유저 프로필 (팔로우, 리뷰, 좋아요, 랭킹) | 11. 유저간 팔로우, 언팔로우 |
+|----------|----------|
+| <img src="https://user-images.githubusercontent.com/102273370/205498897-9a76f1e2-6b06-4de2-b269-1adab7e82845.gif"><br> - 좋아요 기반 추천을 더욱 강화하기 위해 좋아요 개수에 따른 랭킹 시스템 도입 | ![follow](https://user-images.githubusercontent.com/100753588/208350792-e3b981f9-c40a-4398-a34b-678eaa79c989.gif)
+ |
 
 ## 6. 주요 기능 코드
 <details>
@@ -237,10 +238,9 @@ def recommend(request,user_pk):
 3. 협업시에는 서로 기본 용어에 대해 동일하게 정의하고 생각하고 있는지부터 점검해야 소통이 보다 쉬워진다는 것을 재확인하였다. (알고보면 서로 같은 이야기를 하고 있는 경우가 많다!)
 4. SCSS, Vuex 등 추가적으로 도입이 필요한 부분에 대해 고민해보고 당위성을 따져볼 수 있었다.
 5. 모듈화의 중요성, 페이지나 컴포넌트 구조를 정확히 생각하고 짜는 것의 중요성
-   예상치 못하게 구조에 변경이 필요할 때 했던 일을 다시 하는 시간과 빈도가 현저하게 줄기 때문이다.
+   - 예상치 못하게 구조에 변경이 필요할 때 했던 일을 다시 하는 시간과 빈도가 현저하게 줄기 때문이다.
 
 **아쉬운 점**
 - 프로젝트 기간이 너무 짧아 git flow, github flow 등 브랜치 전략 및 github의 이슈 등 기본 기능들을 활용하지 못한점이 아쉽다.
-- 최적화를 어떻게 더 할수 있을지 알고싶다.
+- 최적화를 어떻게 더 할수 있을지 알고싶다. (Vuex로 중앙 저장소에서 데이터 관리를 적절하게 한 것인지, 불필요하게 재렌더링이 발생한 부분이 있는지)
 - 컴포넌트 구조를 더욱 개선하고 싶다.
-- Vuex로 중앙 저장소에서 데이터 관리를 적절하게 한 것인지, 불필요하게 재렌더링이 발생한 부분이 있는지, 있다면 어떻게 더 줄여야 할지 알고 싶다.
